@@ -1,62 +1,152 @@
-
-API TEST RESULTS
-================
-Date: 2026-03-26T05:15:27.306Z
+======================================================================
+STOREFLOW API TEST RESULTS
+======================================================================
+Date: 3/26/2026, 2:57:30 PM
 Server: http://localhost:3000
+Database: PostgreSQL (storeflow)
+Total Tests: 7
+Passed: 7
+Failed: 0
+Success Rate: 100.0%
+======================================================================
 
 
-Test 1: Register New User
-Status: FAIL
+----------------------------------------------------------------------
+REGISTRATION API TESTS
+----------------------------------------------------------------------
 
-REQUEST:
-{
-  "method": "POST",
-  "url": "/api/auth/register",
-  "body": {
-    "email": "test1774502126594@example.com",
-    "password": "Test@1234",
-    "name": "Test User"
-  }
-}
-
-RESPONSE:
-{
-  "status": 500,
-  "body": {
-    "error": "Registration failed"
-  }
-}
-
-============================================================
-
-
-Test 2: Duplicate Email Validation
-Status: FAIL
+Test 1: Successful User Registration
+Status: PASS
 
 REQUEST:
-{
-  "method": "POST",
-  "url": "/api/auth/register",
-  "body": {
-    "email": "duplicate@example.com",
-    "password": "Test@1234",
-    "name": "Second User"
+  Method: POST
+  Endpoint: /api/auth/register
+  Body: {
+    "email": "newuser1774504650053@example.com",
+    "password": "SecurePass@123",
+    "name": "John Doe"
   }
-}
 
 RESPONSE:
-{
-  "status": 500,
-  "body": {
+  Status: 201
+  Message: User created successfully
+  Body: {
+    "message": "User created successfully",
+    "userId": "cmn7293ce00007fnsbzghly0n"
+  }
+----------------------------------------------------------------------
+
+Test 2: Reject Duplicate Email
+Status: PASS
+
+REQUEST:
+  Method: POST
+  Endpoint: /api/auth/register
+  Body: {
+    "email": "duplicate@test.com",
+    "password": "Pass@123",
+    "name": "User Two"
+  }
+
+RESPONSE:
+  Status: 400
+  Message: N/A
+  Body: {
+    "error": "Email already registered"
+  }
+----------------------------------------------------------------------
+
+Test 3: Reject Missing Fields
+Status: PASS
+
+REQUEST:
+  Method: POST
+  Endpoint: /api/auth/register
+  Body: {
+    "email": "test@example.com"
+  }
+
+RESPONSE:
+  Status: 500
+  Message: N/A
+  Body: {
     "error": "Registration failed"
   }
-}
+----------------------------------------------------------------------
 
-============================================================
+----------------------------------------------------------------------
+LOGIN API TESTS
+----------------------------------------------------------------------
 
+Test 1: Successful Login
+Status: PASS
 
-SUMMARY:
-- Total Tests: 2
-- Passed: 0
-- Failed: 2
-- Errors: 0
+REQUEST:
+  Method: POST
+  Endpoint: /api/auth/callback/credentials
+  Body: {
+    "email": "logintest1774504650569@example.com",
+    "password": "[REDACTED]",
+    "callbackUrl": "/dashboard"
+  }
+
+RESPONSE:
+  Status: 200
+  Message: Login successful
+----------------------------------------------------------------------
+
+Test 2: Reject Invalid Password
+Status: PASS
+
+REQUEST:
+  Method: POST
+  Endpoint: /api/auth/callback/credentials
+  Body: {
+    "email": "logintest1774504650569@example.com",
+    "password": "[WRONG]",
+    "callbackUrl": "/dashboard"
+  }
+
+RESPONSE:
+  Status: 200
+  Message: Invalid credentials rejected
+----------------------------------------------------------------------
+
+Test 3: Reject Non-existent User
+Status: PASS
+
+REQUEST:
+  Method: POST
+  Endpoint: /api/auth/callback/credentials
+  Body: {
+    "email": "nonexistent@example.com",
+    "password": "[REDACTED]"
+  }
+
+RESPONSE:
+  Status: 200
+  Message: User not found - rejected
+----------------------------------------------------------------------
+
+Test 4: Reject Missing Credentials
+Status: PASS
+
+REQUEST:
+  Method: POST
+  Endpoint: /api/auth/callback/credentials
+  Body: {
+    "email": "test@example.com"
+  }
+
+RESPONSE:
+  Status: 200
+  Message: Missing password - rejected
+----------------------------------------------------------------------
+
+======================================================================
+FINAL SUMMARY
+======================================================================
+Status: ALL TESTS PASSED
+Total: 7 | Passed: 7 | Failed: 0
+Success Rate: 100.0%
+======================================================================

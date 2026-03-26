@@ -15,33 +15,30 @@ cp .env.example .env
 npx prisma generate
 npx prisma migrate dev
 
+# Seed demo data
+npm run db:seed
+
 # Run dev server
 npm run dev
 ```
 
 Visit: http://localhost:3000
 
-## Demo Login Credentials
+## Testing
 
-### Admin User
-- Email: `admin@storeflow.com`
-- Password: `Admin@123`
+For demo login credentials, see `TEST_LOGIN.md`
 
-### Staff User
-- Email: `staff@storeflow.com`
-- Password: `Staff@123`
-
-### Customer User
-- Email: `customer@storeflow.com`
-- Password: `Customer@123`
-
-**Login URL:** http://localhost:3000/login
+Run API tests:
+```bash
+node __tests__/run-all-tests.js
+```
 
 ## Structure
 
 - `/app` - Next.js App Router (pages + API routes)
 - `/lib` - Utilities and configurations
 - `/prisma` - Database schema and migrations
+- `/__tests__` - API test files
 
 ## Tech Stack
 

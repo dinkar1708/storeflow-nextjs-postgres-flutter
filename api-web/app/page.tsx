@@ -1,25 +1,17 @@
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-50">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">StoreFlow</h1>
-        <p className="text-xl text-muted-foreground mb-8">
+        <h1 className="text-5xl font-bold mb-4 text-gray-900">StoreFlow</h1>
+        <p className="text-xl text-gray-600 mb-8">
           Universal Inventory & Order Management Platform
         </p>
-        <div className="flex gap-4 justify-center">
-          <a
-            href="/login"
-            className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:opacity-90"
-          >
-            Get Started
-          </a>
-          <a
-            href="/docs"
-            className="px-6 py-3 bg-secondary text-secondary-foreground rounded-md hover:opacity-90"
-          >
-            Documentation
-          </a>
-        </div>
+        <a
+          href="/login"
+          className="inline-block px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+        >
+          Get Started
+        </a>
       </div>
     </main>
   );
