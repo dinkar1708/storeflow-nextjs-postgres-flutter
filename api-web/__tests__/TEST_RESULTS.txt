@@ -1,0 +1,62 @@
+
+API TEST RESULTS
+================
+Date: 2026-03-26T05:15:27.306Z
+Server: http://localhost:3000
+
+
+Test 1: Register New User
+Status: FAIL
+
+REQUEST:
+{
+  "method": "POST",
+  "url": "/api/auth/register",
+  "body": {
+    "email": "test1774502126594@example.com",
+    "password": "Test@1234",
+    "name": "Test User"
+  }
+}
+
+RESPONSE:
+{
+  "status": 500,
+  "body": {
+    "error": "Registration failed"
+  }
+}
+
+============================================================
+
+
+Test 2: Duplicate Email Validation
+Status: FAIL
+
+REQUEST:
+{
+  "method": "POST",
+  "url": "/api/auth/register",
+  "body": {
+    "email": "duplicate@example.com",
+    "password": "Test@1234",
+    "name": "Second User"
+  }
+}
+
+RESPONSE:
+{
+  "status": 500,
+  "body": {
+    "error": "Registration failed"
+  }
+}
+
+============================================================
+
+
+SUMMARY:
+- Total Tests: 2
+- Passed: 0
+- Failed: 2
+- Errors: 0

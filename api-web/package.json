@@ -1,0 +1,45 @@
+{
+  "name": "storeflow-nextjs-postgres-flutter",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "db:seed": "tsx prisma/seed.ts",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "description": "Universal inventory and order management platform",
+  "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "@tailwindcss/postcss": "^4.2.2",
+    "@types/bcryptjs": "^3.0.0",
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "autoprefixer": "^10.4.18",
+    "bcryptjs": "^2.4.3",
+    "next": "^14.2.35",
+    "next-auth": "^5.0.0-beta.25",
+    "postcss": "^8.4.35",
+    "prisma": "^5.20.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^6.0.2",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/supertest": "^7.2.0",
+    "@vitest/ui": "^4.1.1",
+    "supertest": "^7.2.2",
+    "tsx": "^4.21.0",
+    "vitest": "^4.1.1"
+  }
+}
