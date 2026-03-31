@@ -100,7 +100,10 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-lg shadow p-6 mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <button className="px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium">
+              <button
+                onClick={() => router.push('/admin/users')}
+                className="px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium"
+              >
                 Manage Users
               </button>
               <button className="px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium">
@@ -125,7 +128,10 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Admin Modules</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
+              <div
+                onClick={() => router.push('/admin/users')}
+                className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer"
+              >
                 <h4 className="font-semibold text-gray-900">Users Management</h4>
                 <p className="text-sm text-gray-600 mt-1">View, edit, assign roles, approve accounts</p>
               </div>
