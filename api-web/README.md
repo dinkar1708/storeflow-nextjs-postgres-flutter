@@ -26,12 +26,47 @@ Visit: http://localhost:3000
 
 ## Testing
 
-For demo login credentials, see `TEST_LOGIN.md`
+This project uses Vitest for testing, following industry-standard patterns recommended by:
+- Vitest Official Documentation: https://vitest.dev/
+- Testing Pyramid - Martin Fowler: https://martinfowler.com/articles/practical-test-pyramid.html
+- Kent C. Dodds - Testing Best Practices: https://kentcdodds.com/blog/write-tests
 
-Run API tests:
+Quick Start:
 ```bash
-node __tests__/run-all-tests.js
+# Start dev server first
+npm run dev
+
+# Run tests (in another terminal)
+npm test
+
+# Watch mode
+npm run test:watch
+
+# Interactive UI
+npm run test:ui
 ```
+
+Test Results:
+Results are automatically saved to `docs/test-result/` after each test run:
+- test-results.json - JSON format
+- index.html - Interactive HTML report
+
+Complete Testing Guide:
+See `docs/TESTING.md` for:
+- Testing strategy and approach
+- Writing new tests
+- Standard patterns (beforeEach, afterEach, etc.)
+- Future roadmap (Unit tests, E2E tests)
+- Official documentation links
+
+Test Coverage:
+- Auth API: 100% (register, login)
+- Products API: TODO
+- Orders API: TODO
+
+### Demo Credentials
+
+For test login credentials, see `TEST_LOGIN.md`
 
 ## Structure
 

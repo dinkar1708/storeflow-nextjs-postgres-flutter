@@ -1,123 +1,123 @@
-// Registration API Tests
-const BASE_URL = 'http://localhost:3000';
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest';
+import {
+  registerUser,
+  deleteTestUserByEmail,
+  closePrisma,
+} from '../helpers/test-utils.js';
 
-async function testRegisterAPI() {
-  const results = [];
+describe('Registration API', () => {
+  const testEmails = [];
 
-  console.log('\n========== REGISTER API TESTS ==========\n');
+  // Track emails for cleanup
+  function trackEmail(email) {
+    testEmails.push(email);
+  }
 
-  // Test 1: Successful Registration
-  console.log('Test 1: Successful User Registration');
-  try {
-    const email = `newuser${Date.now()}@example.com`;
-    const response = await fetch(`${BASE_URL}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+  afterEach(async () => {
+    // Clean up all tracked emails after each test
+    for (const email of testEmails) {
+      await deleteTestUserByEmail(email);
+    }
+    testEmails.length = 0;
+  });
+
+  afterAll(async () => {
+    await closePrisma();
+  });
+
+  describe('POST /api/auth/register', () => {
+    it('should successfully register a new user', async () => {
+      const email = `newuser${Date.now()}@example.com`;
+      trackEmail(email);
+
+      const response = await registerUser({
         email,
         password: 'SecurePass@123',
         name: 'John Doe',
-      }),
+      });
+
+      expect(response.status).toBe(201);
+      expect(response.data).toHaveProperty('message');
+      expect(response.data.user).toHaveProperty('email', email);
+      expect(response.data.user).toHaveProperty('name', 'John Doe');
+      expect(response.data.user).not.toHaveProperty('password');
     });
 
-    const data = await response.json();
-    const passed = response.status === 201;
+    it('should reject duplicate email registration', async () => {
+      const email = `duplicate${Date.now()}@test.com`;
+      trackEmail(email);
 
-    results.push({
-      test: 'Successful User Registration',
-      passed,
-      request: {
-        method: 'POST',
-        endpoint: '/api/auth/register',
-        body: { email, password: 'SecurePass@123', name: 'John Doe' }
-      },
-      response: {
-        status: response.status,
-        body: data
-      }
+      // First registration
+      const firstResponse = await registerUser({
+        email,
+        password: 'Pass@123',
+        name: 'User One',
+      });
+
+      expect(firstResponse.status).toBe(201);
+
+      // Attempt duplicate registration
+      const secondResponse = await registerUser({
+        email,
+        password: 'Pass@123',
+        name: 'User Two',
+      });
+
+      expect(secondResponse.status).toBe(400);
+      expect(secondResponse.data).toHaveProperty('error');
+      expect(secondResponse.data.error).toMatch(/already exists|already registered/i);
     });
 
-    console.log(passed ? '✓ PASS' : '✗ FAIL');
-    console.log(`Response: ${JSON.stringify(data, null, 2)}\n`);
-  } catch (error) {
-    console.log('✗ ERROR:', error.message, '\n');
-  }
+    it('should reject registration with missing password', async () => {
+      const email = `nopwd${Date.now()}@example.com`;
+      trackEmail(email);
 
-  // Test 2: Duplicate Email
-  console.log('Test 2: Reject Duplicate Email');
-  try {
-    const email = 'duplicate@test.com';
+      const response = await registerUser({
+        email,
+        name: 'Test User',
+        // password missing
+      });
 
-    // First registration
-    await fetch(`${BASE_URL}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password: 'Pass@123', name: 'User One' }),
+      expect(response.status).toBeGreaterThanOrEqual(400);
+      expect(response.data).toHaveProperty('error');
     });
 
-    // Attempt duplicate
-    const response = await fetch(`${BASE_URL}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password: 'Pass@123', name: 'User Two' }),
+    it('should reject registration with missing email', async () => {
+      const response = await registerUser({
+        password: 'SecurePass@123',
+        name: 'Test User',
+        // email missing
+      });
+
+      expect(response.status).toBeGreaterThanOrEqual(400);
+      expect(response.data).toHaveProperty('error');
     });
 
-    const data = await response.json();
-    const passed = response.status === 400;
+    it('should reject registration with invalid email format', async () => {
+      const invalidEmail = 'notanemail';
 
-    results.push({
-      test: 'Reject Duplicate Email',
-      passed,
-      request: {
-        method: 'POST',
-        endpoint: '/api/auth/register',
-        body: { email, password: 'Pass@123', name: 'User Two' }
-      },
-      response: {
-        status: response.status,
-        body: data
-      }
+      const response = await registerUser({
+        email: invalidEmail,
+        password: 'SecurePass@123',
+        name: 'Test User',
+      });
+
+      expect(response.status).toBeGreaterThanOrEqual(400);
+      expect(response.data).toHaveProperty('error');
     });
 
-    console.log(passed ? '✓ PASS' : '✗ FAIL');
-    console.log(`Response: ${JSON.stringify(data, null, 2)}\n`);
-  } catch (error) {
-    console.log('✗ ERROR:', error.message, '\n');
-  }
+    it('should reject registration with weak password', async () => {
+      const email = `weakpwd${Date.now()}@example.com`;
+      trackEmail(email);
 
-  // Test 3: Missing Required Fields
-  console.log('Test 3: Reject Missing Fields');
-  try {
-    const response = await fetch(`${BASE_URL}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'test@example.com' }), // missing password & name
+      const response = await registerUser({
+        email,
+        password: '123', // Too weak
+        name: 'Test User',
+      });
+
+      expect(response.status).toBeGreaterThanOrEqual(400);
+      expect(response.data).toHaveProperty('error');
     });
-
-    const data = await response.json();
-    const passed = response.status >= 400;
-
-    results.push({
-      test: 'Reject Missing Fields',
-      passed,
-      request: {
-        method: 'POST',
-        endpoint: '/api/auth/register',
-        body: { email: 'test@example.com' }
-      },
-      response: {
-        status: response.status,
-        body: data
-      }
-    });
-
-    console.log(passed ? '✓ PASS' : '✗ FAIL');
-    console.log(`Response: ${JSON.stringify(data, null, 2)}\n`);
-  } catch (error) {
-    console.log('✗ ERROR:', error.message, '\n');
-  }
-
-  return results;
-}
-
-module.exports = { testRegisterAPI };
+  });
+});
