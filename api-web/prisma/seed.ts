@@ -6,45 +6,98 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding database...');
 
-  // Create demo users
-  const adminPassword = await bcrypt.hash('Admin@123', 12);
-  const staffPassword = await bcrypt.hash('Staff@123', 12);
-  const customerPassword = await bcrypt.hash('Customer@123', 12);
+  // Create demo users with hashed passwords
+  console.log('Creating admin accounts...');
 
-  const admin = await prisma.user.upsert({
+  // Admin accounts (CANNOT be created via public signup)
+  const admin1 = await prisma.user.upsert({
     where: { email: 'admin@storeflow.com' },
     update: {},
     create: {
       email: 'admin@storeflow.com',
-      password: adminPassword,
-      name: 'Admin User',
+      password: await bcrypt.hash('Admin@123', 12),
+      name: 'System Admin',
       role: 'ADMIN',
     },
   });
 
-  const staff = await prisma.user.upsert({
+  const admin2 = await prisma.user.upsert({
+    where: { email: 'john.admin@storeflow.com' },
+    update: {},
+    create: {
+      email: 'john.admin@storeflow.com',
+      password: await bcrypt.hash('JohnAdmin@456', 12),
+      name: 'John Anderson',
+      role: 'ADMIN',
+    },
+  });
+
+  const admin3 = await prisma.user.upsert({
+    where: { email: 'sarah.admin@storeflow.com' },
+    update: {},
+    create: {
+      email: 'sarah.admin@storeflow.com',
+      password: await bcrypt.hash('SarahAdmin@789', 12),
+      name: 'Sarah Wilson',
+      role: 'ADMIN',
+    },
+  });
+
+  console.log('Created admin accounts:', { admin1, admin2, admin3 });
+
+  // Staff accounts
+  console.log('Creating staff accounts...');
+
+  const staff1 = await prisma.user.upsert({
     where: { email: 'staff@storeflow.com' },
     update: {},
     create: {
       email: 'staff@storeflow.com',
-      password: staffPassword,
+      password: await bcrypt.hash('Staff@123', 12),
       name: 'Staff User',
       role: 'STAFF',
     },
   });
 
-  const customer = await prisma.user.upsert({
+  const staff2 = await prisma.user.upsert({
+    where: { email: 'mike.staff@storeflow.com' },
+    update: {},
+    create: {
+      email: 'mike.staff@storeflow.com',
+      password: await bcrypt.hash('MikeStaff@456', 12),
+      name: 'Mike Johnson',
+      role: 'STAFF',
+    },
+  });
+
+  console.log('Created staff accounts:', { staff1, staff2 });
+
+  // Customer accounts
+  console.log('Creating customer accounts...');
+
+  const customer1 = await prisma.user.upsert({
     where: { email: 'customer@storeflow.com' },
     update: {},
     create: {
       email: 'customer@storeflow.com',
-      password: customerPassword,
+      password: await bcrypt.hash('Customer@123', 12),
       name: 'Customer User',
       role: 'CUSTOMER',
     },
   });
 
-  console.log('Created users:', { admin, staff, customer });
+  const customer2 = await prisma.user.upsert({
+    where: { email: 'emma.customer@storeflow.com' },
+    update: {},
+    create: {
+      email: 'emma.customer@storeflow.com',
+      password: await bcrypt.hash('EmmaCustomer@456', 12),
+      name: 'Emma Davis',
+      role: 'CUSTOMER',
+    },
+  });
+
+  console.log('Created customer accounts:', { customer1, customer2 });
 
   // Create demo categories
   const electronics = await prisma.category.upsert({

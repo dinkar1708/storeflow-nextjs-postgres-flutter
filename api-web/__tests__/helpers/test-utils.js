@@ -11,6 +11,7 @@ export async function createTestUser(overrides = {}) {
   const email = overrides.email || `test${timestamp}@example.com`;
   const password = overrides.password || 'TestPassword@123';
   const name = overrides.name || 'Test User';
+  const role = overrides.role || 'CUSTOMER'; // Default to CUSTOMER if not specified
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -19,6 +20,7 @@ export async function createTestUser(overrides = {}) {
       email,
       password: hashedPassword,
       name,
+      role,
     },
   });
 
