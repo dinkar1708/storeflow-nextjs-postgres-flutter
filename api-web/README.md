@@ -71,6 +71,11 @@ For test login credentials, see `TEST_LOGIN.md`
 ## Structure
 
 - `/app` - Next.js App Router (pages + API routes)
+  - `/admin/dashboard` - Admin home page (full system access)
+  - `/staff/dashboard` - Staff home page (inventory and orders)
+  - `/customer/dashboard` - Customer home page (shopping and orders)
+  - `/dashboard` - Generic dashboard (redirects to role-specific page)
+  - `/403` - Forbidden page (unauthorized access)
 - `/lib` - Utilities and configurations
 - `/prisma` - Database schema and migrations
 - `/__tests__` - API test files

@@ -11,8 +11,19 @@ export default function DashboardPage() {
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
+    } else if (status === 'authenticated' && session?.user) {
+      // Redirect to role-specific dashboard
+      const role = (session.user as any).role;
+
+      if (role === 'ADMIN') {
+        router.push('/admin/dashboard');
+      } else if (role === 'STAFF') {
+        router.push('/staff/dashboard');
+      } else if (role === 'CUSTOMER') {
+        router.push('/customer/dashboard');
+      }
     }
-  }, [status, router]);
+  }, [status, session, router]);
 
   if (status === 'loading') {
     return (

@@ -54,6 +54,16 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // After login, redirect based on user role
+      if (url.startsWith(baseUrl)) {
+        // If already a full URL, use it
+        return url;
+      }
+      // Default redirect to /dashboard for now
+      // Role-based redirect will be handled by middleware
+      return baseUrl + '/dashboard';
+    },
   },
   pages: {
     signIn: '/login',
