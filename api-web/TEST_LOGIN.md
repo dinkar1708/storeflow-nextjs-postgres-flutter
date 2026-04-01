@@ -74,11 +74,11 @@ IMPORTANT: Admin accounts CANNOT be created via public signup. They are created 
 
 ## Login URLs
 
-- Main Login: http://localhost:3000/login
+- Main Login: http://localhost:3001/login
 - After Login Redirect:
-  - Admin: http://localhost:3000/admin/dashboard
-  - Staff: http://localhost:3000/staff/dashboard
-  - Customer: http://localhost:3000/customer/dashboard
+  - Admin: http://localhost:3001/admin/dashboard
+  - Staff: http://localhost:3001/staff/dashboard
+  - Customer: http://localhost:3001/customer/dashboard
 
 ---
 
@@ -101,7 +101,7 @@ This will create:
 
 ### 2. Test Login
 
-Visit: http://localhost:3000/login
+Visit: http://localhost:3001/login
 
 Try logging in with any account above to test role-based redirects.
 
@@ -109,11 +109,38 @@ Try logging in with any account above to test role-based redirects.
 
 ## Public Signup Restrictions
 
-NOTE: Public signup page (http://localhost:3000/register) allows ONLY:
+NOTE: Public signup page (http://localhost:3001/register) allows ONLY:
 - CUSTOMER role (default)
 - STAFF role (if enabled with approval)
 
 Admin accounts CANNOT be created via public signup for security reasons.
+
+---
+
+## Test Products & Categories
+
+After seeding, you'll have demo products to test:
+
+### Categories
+- Electronics
+- Clothing
+
+### Products
+1. Laptop
+   - Price: $999.99
+   - Stock: 10 units
+   - SKU: LAPTOP-001
+   - Category: Electronics
+
+2. T-Shirt
+   - Price: $19.99
+   - Stock: 50 units
+   - SKU: TSHIRT-001
+   - Category: Clothing
+
+### Product Management URLs
+- Admin Product Management: http://localhost:3001/admin/products
+- Customer Product Listing: http://localhost:3001/customer/products
 
 ---
 
@@ -139,24 +166,33 @@ Examples of valid passwords:
    - Verify redirect to /admin/dashboard
    - Check full system access
 
-2. Test Staff Login
+2. Test Admin Product Management
+   - Login as admin@storeflow.com
+   - Navigate to Products from dashboard
+   - Verify you can see existing products (Laptop, T-Shirt)
+   - Try adding a new product with category
+   - Check product appears in the table
+
+3. Test Customer Product Browsing
+   - Login as customer@storeflow.com
+   - Navigate to Products from dashboard
+   - Verify you can see all active products
+   - Check products display with price, stock, category
+
+4. Test Staff Login
    - Login as staff@storeflow.com
    - Verify redirect to /staff/dashboard
    - Check limited access (no admin features)
 
-3. Test Customer Login
-   - Login as customer@storeflow.com
-   - Verify redirect to /customer/dashboard
-   - Check customer-only features
-
-4. Test Public Signup
+5. Test Public Signup
    - Try to register new customer account
    - Verify customer role is assigned by default
    - Verify admin role cannot be selected
 
-5. Test Role-Based Access
+6. Test Role-Based Access
    - Try accessing /admin/dashboard as customer (should get 403)
    - Try accessing /staff/dashboard as customer (should get 403)
+   - Try accessing /admin/products as customer (should get 403)
    - Verify admins can access all dashboards
 
 ---
@@ -176,4 +212,20 @@ If redirect fails:
 
 ---
 
-Last Updated: 2024
+---
+
+## Current Setup Status
+
+You are currently running:
+- Database: Docker PostgreSQL on port 5433
+- Next.js: http://localhost:3001
+- Database has seeded data including:
+  - 3 Admin accounts
+  - 2 Staff accounts
+  - 2 Customer accounts
+  - 2 Categories (Electronics, Clothing)
+  - 2 Products (Laptop, T-Shirt)
+
+---
+
+Last Updated: 2026-04-01
