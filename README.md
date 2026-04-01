@@ -24,25 +24,20 @@ Universal platform for inventory and order management that can be customized for
 
 ## Quick Start
 
+**Recommended:** Use Docker for easiest setup (just 5 minutes!)
+
+👉 **[Setup with Docker](./docs/SETUP_WITH_DOCKER.md)** - No PostgreSQL installation needed, just Docker Desktop + 4 commands
+
+**Alternative:** [Setup without Docker](./docs/SETUP_MANUAL.md) - Manual PostgreSQL installation
+
+**Already set up?**
+
 ```bash
-# Clone and setup
-git clone https://github.com/yourusername/storeflow-nextjs-postgres-flutter.git
-cd storeflow-nextjs-postgres-flutter/api-web
-npm install
-
-# Setup database
-cp .env.example .env
-npx prisma generate
-npx prisma migrate dev
-npm run db:seed
-
-# Run
-npm run dev
+docker-compose up -d  # Start database
+npm run dev           # Start app
 ```
 
-Visit: http://localhost:3000
-
-**Demo Accounts**: See `api-web/TEST_LOGIN.md`
+Visit **http://localhost:3001**
 
 ## Tech Stack
 
@@ -63,8 +58,13 @@ Visit: http://localhost:3000
 
 ## Documentation
 
+**Setup Guides:**
+- [Setup with Docker](./docs/SETUP_WITH_DOCKER.md) (Recommended)
+- [Setup without Docker](./docs/SETUP_MANUAL.md) (Manual)
+
+**Development:**
 - [Testing Guide](./docs/TESTING.md)
-- [Database Setup](./docs/DATABASE_SETUP.md)
+- [Database Schema](./docs/DATABASE_SETUP.md)
 - [Test Credentials](./api-web/TEST_LOGIN.md)
 
 ## Testing
@@ -79,10 +79,12 @@ npm run test:ui       # Interactive UI
 
 ## Deployment
 
-Ready for:
-- **Vercel** (Web app)
-- **Railway** (Database)
-- **Supabase** (Alternative DB)
+Deploy for **FREE** to production:
+- **Vercel** - Web app + PostgreSQL database (Recommended)
+- **Railway** - Full-stack hosting (App + Database)
+- **Render + Supabase** - Free tier (with cold starts)
+
+See **[Production Deployment Guide](./docs/PROD_DEPLOYMENT.md)** for complete step-by-step instructions.
 
 ## License
 
