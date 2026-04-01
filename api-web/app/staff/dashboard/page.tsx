@@ -60,13 +60,32 @@ export default function StaffDashboard() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Welcome Section */}
         <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white rounded-lg shadow px-6 py-8 mb-6">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="bg-white rounded-lg shadow px-6 py-6 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Staff Dashboard
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-4">
               Inventory and order management workspace
             </p>
+
+            {/* Quick Navigation */}
+            <div className="flex flex-wrap gap-3 pt-4 border-t">
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium">
+                Products
+              </button>
+              <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium">
+                Orders
+              </button>
+              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+                Inventory
+              </button>
+              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+                Reports
+              </button>
+              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+                Profile
+              </button>
+            </div>
           </div>
 
           {/* Daily Summary Cards */}
@@ -96,53 +115,6 @@ export default function StaffDashboard() {
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <button className="px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium">
-                Add New Product
-              </button>
-              <button className="px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium">
-                Process Order
-              </button>
-              <button className="px-4 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 font-medium">
-                Update Inventory
-              </button>
-              <button className="px-4 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 font-medium">
-                View All Orders
-              </button>
-              <button className="px-4 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 font-medium">
-                Customer Support
-              </button>
-              <button className="px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium">
-                Stock Alerts
-              </button>
-            </div>
-          </div>
-
-          {/* Staff Modules */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Staff Modules</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">Products & Inventory</h4>
-                <p className="text-sm text-gray-600 mt-1">Add, edit, update stock levels</p>
-              </div>
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">Orders Processing</h4>
-                <p className="text-sm text-gray-600 mt-1">Process, fulfill, and ship orders</p>
-              </div>
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">Customer Management</h4>
-                <p className="text-sm text-gray-600 mt-1">View customer info and support</p>
-              </div>
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">Daily Reports</h4>
-                <p className="text-sm text-gray-600 mt-1">Sales and fulfillment reports</p>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
     </div>

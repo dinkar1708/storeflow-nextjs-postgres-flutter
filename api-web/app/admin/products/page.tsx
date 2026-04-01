@@ -1,0 +1,342 @@
+'use client';
+
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  sku: string;
+  category: {
+    id: string;
+    name: string;
+  };
+  isActive: boolean;
+  createdAt: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
+}
+
+export default function AdminProductsPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    price: '',
+    stock: '',
+    categoryId: '',
+    sku: '',
+  });
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+    } else if (status === 'authenticated' && (session?.user as any)?.role !== 'ADMIN') {
+      router.push('/403');
+    }
+  }, [status, session, router]);
+
+  useEffect(() => {
+    if (status === 'authenticated' && (session?.user as any)?.role === 'ADMIN') {
+      fetchProducts();
+      fetchCategories();
+    }
+  }, [status, session]);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/admin/products');
+      const data = await response.json();
+
+      if (response.ok) {
+        setProducts(data.products);
+      } else {
+        alert('Failed to fetch products');
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      alert('Error fetching products');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/categories');
+      const data = await response.json();
+
+      if (response.ok) {
+        setCategories(data.categories);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/api/admin/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert('Product added successfully');
+        setShowAddForm(false);
+        setFormData({
+          name: '',
+          description: '',
+          price: '',
+          stock: '',
+          categoryId: '',
+          sku: '',
+        });
+        fetchProducts();
+      } else {
+        const data = await response.json();
+        alert(data.error || 'Failed to add product');
+      }
+    } catch (error) {
+      console.error('Error adding product:', error);
+      alert('Error adding product');
+    }
+  };
+
+  if (status === 'loading' || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!session || (session.user as any)?.role !== 'ADMIN') {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <nav className="bg-white shadow-sm border-b-4 border-red-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => router.push('/admin/dashboard')}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                ← Back to Dashboard
+              </button>
+              <h1 className="text-xl font-bold text-gray-900">Product Management</h1>
+            </div>
+            <div className="flex items-center">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                ADMIN
+              </span>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-6 sm:px-0">
+          {/* Add Product Button */}
+          <div className="mb-6">
+            <button
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium"
+            >
+              {showAddForm ? 'Cancel' : '+ Add Product'}
+            </button>
+          </div>
+
+          {/* Add Product Form */}
+          {showAddForm && (
+            <div className="bg-white rounded-lg shadow p-6 mb-6">
+              <h2 className="text-lg font-semibold mb-4">Add New Product</h2>
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Product Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Category *
+                  </label>
+                  <select
+                    required
+                    value={formData.categoryId}
+                    onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Price *
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    required
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Stock Quantity
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.stock}
+                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    SKU (optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.sku}
+                    onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    rows={3}
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium"
+                  >
+                    Add Product
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* Products Table */}
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Product
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Category
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Price
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Stock
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    SKU
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {products.map((product) => (
+                  <tr key={product.id}>
+                    <td className="px-6 py-4">
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                        <div className="text-sm text-gray-500">{product.description}</div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {product.category.name}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      ${Number(product.price).toFixed(2)}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {product.stock}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      {product.sku || '-'}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          product.isActive
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}
+                      >
+                        {product.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {products.length === 0 && (
+              <div className="text-center py-12 text-gray-500">
+                No products found. Add your first product!
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}

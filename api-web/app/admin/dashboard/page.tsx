@@ -60,13 +60,38 @@ export default function AdminDashboard() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Welcome Section */}
         <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white rounded-lg shadow px-6 py-8 mb-6">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="bg-white rounded-lg shadow px-6 py-6 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Admin Dashboard
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-4">
               Full system access and control
             </p>
+
+            {/* Quick Navigation */}
+            <div className="flex flex-wrap gap-3 pt-4 border-t">
+              <button
+                onClick={() => router.push('/admin/users')}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm font-medium"
+              >
+                Users
+              </button>
+              <button
+                onClick={() => router.push('/admin/products')}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
+              >
+                Products
+              </button>
+              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+                Orders
+              </button>
+              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+                Analytics
+              </button>
+              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+                Settings
+              </button>
+            </div>
           </div>
 
           {/* Key Metrics Cards */}
@@ -96,59 +121,6 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <button
-                onClick={() => router.push('/admin/users')}
-                className="px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium"
-              >
-                Manage Users
-              </button>
-              <button className="px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium">
-                Add New Product
-              </button>
-              <button className="px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium">
-                View All Orders
-              </button>
-              <button className="px-4 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 font-medium">
-                System Settings
-              </button>
-              <button className="px-4 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 font-medium">
-                Analytics Reports
-              </button>
-              <button className="px-4 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 font-medium">
-                Audit Logs
-              </button>
-            </div>
-          </div>
-
-          {/* Admin Navigation */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Admin Modules</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div
-                onClick={() => router.push('/admin/users')}
-                className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer"
-              >
-                <h4 className="font-semibold text-gray-900">Users Management</h4>
-                <p className="text-sm text-gray-600 mt-1">View, edit, assign roles, approve accounts</p>
-              </div>
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">Products Management</h4>
-                <p className="text-sm text-gray-600 mt-1">Add, edit, delete products and inventory</p>
-              </div>
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">Orders Management</h4>
-                <p className="text-sm text-gray-600 mt-1">View, process, cancel orders</p>
-              </div>
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">Reports & Analytics</h4>
-                <p className="text-sm text-gray-600 mt-1">Sales reports, user growth, revenue analytics</p>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
     </div>
