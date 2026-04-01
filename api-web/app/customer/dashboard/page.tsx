@@ -60,13 +60,35 @@ export default function CustomerDashboard() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Welcome Section */}
         <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white rounded-lg shadow px-6 py-8 mb-6">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="bg-white rounded-lg shadow px-6 py-6 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Welcome back, {session.user?.name}!
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-4">
               Your personal shopping dashboard
             </p>
+
+            {/* Quick Navigation */}
+            <div className="flex flex-wrap gap-3 pt-4 border-t">
+              <button
+                onClick={() => router.push('/customer/products')}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium"
+              >
+                Browse Products
+              </button>
+              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+                My Orders
+              </button>
+              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+                Wishlist
+              </button>
+              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+                Addresses
+              </button>
+              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+                Profile
+              </button>
+            </div>
           </div>
 
           {/* Quick Stats Cards */}
@@ -99,53 +121,6 @@ export default function CustomerDashboard() {
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <button className="px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium">
-                Browse Products
-              </button>
-              <button className="px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium">
-                Track Order
-              </button>
-              <button className="px-4 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 font-medium">
-                View Wishlist
-              </button>
-              <button className="px-4 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 font-medium">
-                My Addresses
-              </button>
-              <button className="px-4 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 font-medium">
-                Order History
-              </button>
-              <button className="px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium">
-                My Profile
-              </button>
-            </div>
-          </div>
-
-          {/* Customer Modules */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Account</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">Shop Products</h4>
-                <p className="text-sm text-gray-600 mt-1">Browse and search our catalog</p>
-              </div>
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">My Orders</h4>
-                <p className="text-sm text-gray-600 mt-1">Track and view order history</p>
-              </div>
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">Wishlist</h4>
-                <p className="text-sm text-gray-600 mt-1">Save items for later</p>
-              </div>
-              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <h4 className="font-semibold text-gray-900">Profile Settings</h4>
-                <p className="text-sm text-gray-600 mt-1">Update your account details</p>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
     </div>
