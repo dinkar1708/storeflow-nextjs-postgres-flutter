@@ -30,10 +30,14 @@ Universal platform for inventory and order management that can be customized for
 
 **Alternative:** [Setup without Docker](./docs/SETUP_MANUAL.md) - Manual PostgreSQL installation
 
+**Both setups use same credentials:**
+- PostgreSQL: `postgres` / `postgres`
+- App runs on: `http://localhost:3001`
+
 **Already set up?**
 
 ```bash
-docker-compose up -d  # Start database
+docker-compose up -d  # Start database (Docker only)
 npm run dev           # Start app
 ```
 
