@@ -8,17 +8,17 @@ Universal platform for inventory and order management that can be customized for
 
 ## Current Status
 
-**3 Modules Live** | **24 Tests Passing** | **Ready for Production**
+**4 Modules Live** | **32 Tests Passing** | **Ready for Production**
 
 ### Completed Features
 
 1. **Authentication** - Register, Login, Session Management
 2. **User Management** - Admin can manage users, roles, permissions
 3. **Dashboards** - Role-based dashboards (Admin, Staff, Customer)
+4. **Products & Inventory** - Browse products, manage inventory, categories
 
 ### Coming Soon
 
-4. **Products & Inventory** - Stock management, categories, alerts
 5. **Orders** - Order processing, tracking, invoices
 6. **Analytics** - Sales reports, charts, insights
 
@@ -47,7 +47,7 @@ Visit **http://localhost:3001**
 
 **Web**: Next.js 14, TypeScript, PostgreSQL, Prisma, NextAuth, Tailwind CSS
 **Mobile**: Flutter (Coming Soon)
-**Testing**: Vitest (24 tests, 100% passing)
+**Testing**: Vitest (32 tests, 100% passing)
 
 ## Screenshots
 
@@ -79,7 +79,9 @@ npm run test:watch    # Watch mode
 npm run test:ui       # Interactive UI
 ```
 
-**Coverage**: 24/24 tests passing (100%)
+**Coverage**: 32/32 tests passing (100%)
+- Authentication: 24 tests
+- Products & Categories: 8 tests
 
 ## Deployment
 
