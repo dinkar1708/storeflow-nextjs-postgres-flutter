@@ -272,7 +272,10 @@ export default function AdminUsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(user.createdAt).toLocaleDateString()}
+                      <div>{new Date(user.createdAt).toLocaleDateString()}</div>
+                      <div className="text-xs text-gray-400">
+                        {new Date(user.createdAt).toLocaleTimeString()}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                       <button
