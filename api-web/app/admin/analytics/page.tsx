@@ -283,55 +283,167 @@ export default function AnalyticsPage() {
               </div>
             </div>
 
-            {/* Revenue vs Profit Line Chart */}
+            {/* Revenue and Profit Chart */}
             <div className="mb-8">
-              <h3 className="text-md font-medium text-gray-700 mb-4">Revenue vs Profit</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={getChartData()}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue and Profit</h3>
+              <ResponsiveContainer width="100%" height={400}>
+                <LineChart data={getChartData()} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#6b7280"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <YAxis
+                    stroke="#6b7280"
+                    style={{ fontSize: '12px' }}
+                    tickFormatter={(value) => `$${value}`}
+                  />
                   <Tooltip
                     formatter={(value: number) => `$${value.toFixed(2)}`}
-                    labelStyle={{ color: '#000' }}
+                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
+                    labelStyle={{ color: '#111827', fontWeight: 'bold' }}
                   />
-                  <Legend />
+                  <Legend
+                    wrapperStyle={{ paddingTop: '20px' }}
+                    iconType="line"
+                  />
                   <Line
                     type="monotone"
                     dataKey="sales"
                     stroke="#10b981"
-                    strokeWidth={2}
-                    name="Revenue ($)"
+                    strokeWidth={3}
+                    dot={{ fill: '#10b981', r: 4 }}
+                    activeDot={{ r: 6 }}
+                    name="Revenue"
                   />
                   <Line
                     type="monotone"
                     dataKey="profit"
                     stroke="#3b82f6"
-                    strokeWidth={2}
-                    name="Profit ($)"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="cost"
-                    stroke="#f97316"
-                    strokeWidth={2}
-                    name="Cost ($)"
+                    strokeWidth={3}
+                    dot={{ fill: '#3b82f6', r: 4 }}
+                    activeDot={{ r: 6 }}
+                    name="Profit"
                   />
                 </LineChart>
               </ResponsiveContainer>
             </div>
 
+            {/* Cost Chart */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Cost Analysis</h3>
+              <ResponsiveContainer width="100%" height={350}>
+                <LineChart data={getChartData()} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#6b7280"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <YAxis
+                    stroke="#6b7280"
+                    style={{ fontSize: '12px' }}
+                    tickFormatter={(value) => `$${value}`}
+                  />
+                  <Tooltip
+                    formatter={(value: number) => `$${value.toFixed(2)}`}
+                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
+                    labelStyle={{ color: '#111827', fontWeight: 'bold' }}
+                  />
+                  <Legend
+                    wrapperStyle={{ paddingTop: '20px' }}
+                    iconType="line"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="cost"
+                    stroke="#f97316"
+                    strokeWidth={3}
+                    dot={{ fill: '#f97316', r: 4 }}
+                    activeDot={{ r: 6 }}
+                    name="Cost"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Revenue vs Cost vs Profit per Period */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue vs Cost vs Profit</h3>
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={getChartData()} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#6b7280"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <YAxis
+                    stroke="#6b7280"
+                    style={{ fontSize: '12px' }}
+                    tickFormatter={(value) => `$${value}`}
+                  />
+                  <Tooltip
+                    formatter={(value: number) => `$${value.toFixed(2)}`}
+                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
+                    labelStyle={{ color: '#111827', fontWeight: 'bold' }}
+                    cursor={{ fill: 'rgba(59, 130, 246, 0.1)' }}
+                  />
+                  <Legend
+                    wrapperStyle={{ paddingTop: '20px' }}
+                  />
+                  <Bar
+                    dataKey="sales"
+                    fill="#10b981"
+                    name="Revenue"
+                    radius={[6, 6, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="cost"
+                    fill="#f97316"
+                    name="Cost"
+                    radius={[6, 6, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="profit"
+                    fill="#3b82f6"
+                    name="Profit"
+                    radius={[6, 6, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
             {/* Orders Bar Chart */}
             <div>
-              <h3 className="text-md font-medium text-gray-700 mb-4">Order Count</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={getChartData()}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip labelStyle={{ color: '#000' }} />
-                  <Legend />
-                  <Bar dataKey="orders" fill="#3b82f6" name="Orders" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Volume</h3>
+              <ResponsiveContainer width="100%" height={350}>
+                <BarChart data={getChartData()} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#6b7280"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <YAxis
+                    stroke="#6b7280"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
+                    labelStyle={{ color: '#111827', fontWeight: 'bold' }}
+                    cursor={{ fill: 'rgba(59, 130, 246, 0.1)' }}
+                  />
+                  <Legend
+                    wrapperStyle={{ paddingTop: '20px' }}
+                  />
+                  <Bar
+                    dataKey="orders"
+                    fill="#8b5cf6"
+                    name="Orders"
+                    radius={[6, 6, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
