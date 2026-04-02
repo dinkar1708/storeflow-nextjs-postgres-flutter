@@ -70,7 +70,10 @@ export default function StaffDashboard() {
 
             {/* Quick Navigation */}
             <div className="flex flex-wrap gap-3 pt-4 border-t">
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium">
+              <button
+                onClick={() => router.push('/customer/products')}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
+              >
                 Products
               </button>
               <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium">

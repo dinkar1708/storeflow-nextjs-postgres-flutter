@@ -290,11 +290,14 @@ export default function AdminProductsPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Status
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {products.map((product) => (
-                  <tr key={product.id}>
+                  <tr key={product.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div>
                         <div className="text-sm font-medium text-gray-900">{product.name}</div>
@@ -323,6 +326,14 @@ export default function AdminProductsPage() {
                       >
                         {product.isActive ? 'Active' : 'Inactive'}
                       </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => router.push(`/products/${product.id}`)}
+                        className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                      >
+                        View Details
+                      </button>
                     </td>
                   </tr>
                 ))}

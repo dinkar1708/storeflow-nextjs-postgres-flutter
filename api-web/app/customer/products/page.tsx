@@ -128,6 +128,7 @@ export default function CustomerProductsPage() {
                       </div>
 
                       <button
+                        onClick={() => router.push(`/products/${product.id}`)}
                         disabled={product.stock === 0}
                         className={`px-4 py-2 rounded-md font-medium ${
                           product.stock > 0
@@ -135,7 +136,7 @@ export default function CustomerProductsPage() {
                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         }`}
                       >
-                        {product.stock > 0 ? 'View' : 'Out of Stock'}
+                        {product.stock > 0 ? 'View Details' : 'Out of Stock'}
                       </button>
                     </div>
                   </div>
