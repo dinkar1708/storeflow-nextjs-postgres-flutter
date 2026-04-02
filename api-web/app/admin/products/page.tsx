@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { UserRole } from '@/lib/enums';
+import { UserRole, STATUS_FILTER_ALL } from '@/lib/enums';
 
 interface Product {
   id: string;
@@ -32,6 +32,9 @@ export default function AdminProductsPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterStatus, setFilterStatus] = useState(STATUS_FILTER_ALL);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -45,15 +48,21 @@ export default function AdminProductsPage() {
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
-    } else if (status === 'authenticated' && (session?.user as any)?.role !== UserRole.ADMIN) {
-      router.push('/403');
+    } else if (status === 'authenticated') {
+      const userRole = (session?.user as any)?.role;
+      if (userRole !== UserRole.ADMIN && userRole !== UserRole.STAFF) {
+        router.push('/403');
+      }
     }
   }, [status, session, router]);
 
   useEffect(() => {
-    if (status === 'authenticated' && (session?.user as any)?.role === UserRole.ADMIN) {
-      fetchProducts();
-      fetchCategories();
+    if (status === 'authenticated') {
+      const userRole = (session?.user as any)?.role;
+      if (userRole === UserRole.ADMIN || userRole === UserRole.STAFF) {
+        fetchProducts();
+        fetchCategories();
+      }
     }
   }, [status, session]);
 
@@ -130,19 +139,41 @@ export default function AdminProductsPage() {
     );
   }
 
-  if (!session || (session.user as any)?.role !== UserRole.ADMIN) {
+  const userRole = (session?.user as any)?.role;
+
+  if (!session || (userRole !== UserRole.ADMIN && userRole !== UserRole.STAFF)) {
     return null;
   }
+
+  // Filter products based on search and filters
+  const filteredProducts = products.filter((product) => {
+    // Search filter (name or SKU)
+    const matchesSearch =
+      searchQuery === '' ||
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (product.sku && product.sku.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    // Category filter
+    const matchesCategory = filterCategory === '' || product.category.id === filterCategory;
+
+    // Status filter
+    const matchesStatus =
+      filterStatus === STATUS_FILTER_ALL ||
+      (filterStatus === 'active' && product.isActive) ||
+      (filterStatus === 'inactive' && !product.isActive);
+
+    return matchesSearch && matchesCategory && matchesStatus;
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <nav className="bg-white shadow-sm border-b-4 border-red-600">
+      <nav className={`bg-white shadow-sm border-b-4 ${userRole === UserRole.ADMIN ? 'border-red-600' : 'border-blue-600'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => router.push('/admin/dashboard')}
+                onClick={() => router.push(userRole === UserRole.ADMIN ? '/admin/dashboard' : '/staff/dashboard')}
                 className="text-gray-600 hover:text-gray-900"
               >
                 ← Back to Dashboard
@@ -150,8 +181,8 @@ export default function AdminProductsPage() {
               <h1 className="text-xl font-bold text-gray-900">Product Management</h1>
             </div>
             <div className="flex items-center">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                {UserRole.ADMIN}
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${userRole === UserRole.ADMIN ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>
+                {userRole}
               </span>
             </div>
           </div>
@@ -161,14 +192,75 @@ export default function AdminProductsPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          {/* Add Product Button */}
-          <div className="mb-6">
-            <button
-              onClick={() => setShowAddForm(!showAddForm)}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium"
-            >
-              {showAddForm ? 'Cancel' : '+ Add Product'}
-            </button>
+          {/* Add Product Button - Admin Only */}
+          {userRole === UserRole.ADMIN && (
+            <div className="mb-6">
+              <button
+                onClick={() => setShowAddForm(!showAddForm)}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium"
+              >
+                {showAddForm ? 'Cancel' : '+ Add Product'}
+              </button>
+            </div>
+          )}
+
+          {/* Search and Filter Section */}
+          <div className="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 className="text-lg font-semibold mb-4">Search and Filter</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Search Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Search
+                </label>
+                <input
+                  type="text"
+                  placeholder="Search by name or SKU..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                />
+              </div>
+
+              {/* Category Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Category
+                </label>
+                <select
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                >
+                  <option value="">All Categories</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Status Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Status
+                </label>
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                >
+                  <option value="all">All Products</option>
+                  <option value="active">Active Only</option>
+                  <option value="inactive">Inactive Only</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="mt-4 text-sm text-gray-600">
+              Showing {filteredProducts.length} of {products.length} products
+            </div>
           </div>
 
           {/* Add Product Form */}
@@ -315,7 +407,7 @@ export default function AdminProductsPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {products.map((product) => (
+                {filteredProducts.map((product) => (
                   <tr key={product.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div>
@@ -359,9 +451,11 @@ export default function AdminProductsPage() {
               </tbody>
             </table>
 
-            {products.length === 0 && (
+            {filteredProducts.length === 0 && (
               <div className="text-center py-12 text-gray-500">
-                No products found. Add your first product!
+                {products.length === 0
+                  ? 'No products found. Add your first product!'
+                  : 'No products match your search criteria.'}
               </div>
             )}
           </div>
