@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { UserRole } from '@/lib/enums';
 
 interface Product {
   id: string;
@@ -16,23 +17,32 @@ interface Product {
   };
 }
 
+interface Category {
+  id: string;
+  name: string;
+}
+
 export default function CustomerProductsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
 
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
-    } else if (status === 'authenticated' && (session?.user as any)?.role !== 'CUSTOMER') {
+    } else if (status === 'authenticated' && (session?.user as any)?.role !== UserRole.CUSTOMER) {
       router.push('/403');
     }
   }, [status, session, router]);
 
   useEffect(() => {
-    if (status === 'authenticated' && (session?.user as any)?.role === 'CUSTOMER') {
+    if (status === 'authenticated' && (session?.user as any)?.role === UserRole.CUSTOMER) {
       fetchProducts();
+      fetchCategories();
     }
   }, [status, session]);
 
@@ -55,6 +65,19 @@ export default function CustomerProductsPage() {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/categories');
+      const data = await response.json();
+
+      if (response.ok) {
+        setCategories(data.categories);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -63,9 +86,21 @@ export default function CustomerProductsPage() {
     );
   }
 
-  if (!session || (session.user as any)?.role !== 'CUSTOMER') {
+  if (!session || (session.user as any)?.role !== UserRole.CUSTOMER) {
     return null;
   }
+
+  // Filter products based on search and category
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch =
+      searchQuery === '' ||
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory = filterCategory === '' || product.category.id === filterCategory;
+
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -94,13 +129,51 @@ export default function CustomerProductsPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          {products.length === 0 ? (
+          {/* Search and Filter */}
+          <div className="bg-white rounded-lg shadow p-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <input
+                  type="text"
+                  placeholder="Search products by name or category..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+              <div>
+                <select
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                >
+                  <option value="">All Categories</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {(searchQuery || filterCategory) && (
+              <div className="mt-2 text-sm text-gray-600">
+                Showing {filteredProducts.length} of {products.length} products
+              </div>
+            )}
+          </div>
+
+          {filteredProducts.length === 0 ? (
             <div className="bg-white rounded-lg shadow p-12 text-center">
-              <p className="text-gray-500">No products available at the moment.</p>
+              <p className="text-gray-500">
+                {products.length === 0
+                  ? 'No products available at the moment.'
+                  : 'No products match your search.'}
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <div
                   key={product.id}
                   className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden"
