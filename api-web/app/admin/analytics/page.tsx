@@ -20,16 +20,23 @@ import {
 interface SalesData {
   summary: {
     totalSales: number;
+    totalCost: number;
+    totalProfit: number;
+    profitMargin: number;
     totalOrders: number;
     averageOrderValue: number;
     todaySales: number;
+    todayCost: number;
+    todayProfit: number;
     todayOrders: number;
     thisMonthSales: number;
+    thisMonthCost: number;
+    thisMonthProfit: number;
     thisMonthOrders: number;
   };
-  daily: Array<{ date: string; sales: number; orders: number }>;
-  monthly: Array<{ month: string; sales: number; orders: number }>;
-  yearly: Array<{ year: string; sales: number; orders: number }>;
+  daily: Array<{ date: string; sales: number; orders: number; cost: number; profit: number }>;
+  monthly: Array<{ month: string; sales: number; orders: number; cost: number; profit: number }>;
+  yearly: Array<{ year: string; sales: number; orders: number; cost: number; profit: number }>;
 }
 
 export default function AnalyticsPage() {
@@ -98,18 +105,24 @@ export default function AnalyticsPage() {
         return salesData.daily.map(item => ({
           name: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
           sales: item.sales,
+          cost: item.cost,
+          profit: item.profit,
           orders: item.orders,
         }));
       case 'monthly':
         return salesData.monthly.map(item => ({
           name: new Date(item.month + '-01').toLocaleDateString('en-US', { year: 'numeric', month: 'short' }),
           sales: item.sales,
+          cost: item.cost,
+          profit: item.profit,
           orders: item.orders,
         }));
       case 'yearly':
         return salesData.yearly.map(item => ({
           name: item.year,
           sales: item.sales,
+          cost: item.cost,
+          profit: item.profit,
           orders: item.orders,
         }));
     }
@@ -143,37 +156,92 @@ export default function AnalyticsPage() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-sm font-medium text-gray-500">Total Sales</h3>
+              <h3 className="text-sm font-medium text-gray-500">Total Revenue</h3>
               <p className="mt-2 text-3xl font-bold text-green-600">
                 ${salesData.summary.totalSales.toFixed(2)}
               </p>
-              <p className="mt-1 text-xs text-gray-500">All time</p>
+              <p className="mt-1 text-xs text-gray-500">All time sales</p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-sm font-medium text-gray-500">Total Profit</h3>
+              <p className="mt-2 text-3xl font-bold text-blue-600">
+                ${salesData.summary.totalProfit.toFixed(2)}
+              </p>
+              <p className="mt-1 text-xs text-gray-500">
+                {salesData.summary.profitMargin.toFixed(1)}% margin
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-sm font-medium text-gray-500">Total Cost</h3>
+              <p className="mt-2 text-3xl font-bold text-orange-600">
+                ${salesData.summary.totalCost.toFixed(2)}
+              </p>
+              <p className="mt-1 text-xs text-gray-500">Product costs</p>
             </div>
 
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Total Orders</h3>
-              <p className="mt-2 text-3xl font-bold text-blue-600">
+              <p className="mt-2 text-3xl font-bold text-purple-600">
                 {salesData.summary.totalOrders}
               </p>
-              <p className="mt-1 text-xs text-gray-500">Delivered orders</p>
+              <p className="mt-1 text-xs text-gray-500">
+                ${salesData.summary.averageOrderValue.toFixed(2)} avg
+              </p>
+            </div>
+          </div>
+
+          {/* Today and This Month Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Today</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <p className="text-sm text-gray-500">Sales</p>
+                  <p className="text-xl font-bold text-green-600">
+                    ${salesData.summary.todaySales.toFixed(2)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Profit</p>
+                  <p className="text-xl font-bold text-blue-600">
+                    ${salesData.summary.todayProfit.toFixed(2)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Orders</p>
+                  <p className="text-xl font-bold text-purple-600">
+                    {salesData.summary.todayOrders}
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-sm font-medium text-gray-500">Average Order Value</h3>
-              <p className="mt-2 text-3xl font-bold text-purple-600">
-                ${salesData.summary.averageOrderValue.toFixed(2)}
-              </p>
-              <p className="mt-1 text-xs text-gray-500">Per order</p>
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-sm font-medium text-gray-500">Today's Sales</h3>
-              <p className="mt-2 text-3xl font-bold text-orange-600">
-                ${salesData.summary.todaySales.toFixed(2)}
-              </p>
-              <p className="mt-1 text-xs text-gray-500">{salesData.summary.todayOrders} orders</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">This Month</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <p className="text-sm text-gray-500">Sales</p>
+                  <p className="text-xl font-bold text-green-600">
+                    ${salesData.summary.thisMonthSales.toFixed(2)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Profit</p>
+                  <p className="text-xl font-bold text-blue-600">
+                    ${salesData.summary.thisMonthProfit.toFixed(2)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Orders</p>
+                  <p className="text-xl font-bold text-purple-600">
+                    {salesData.summary.thisMonthOrders}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -215,9 +283,9 @@ export default function AnalyticsPage() {
               </div>
             </div>
 
-            {/* Sales Line Chart */}
+            {/* Revenue vs Profit Line Chart */}
             <div className="mb-8">
-              <h3 className="text-md font-medium text-gray-700 mb-4">Sales Revenue</h3>
+              <h3 className="text-md font-medium text-gray-700 mb-4">Revenue vs Profit</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={getChartData()}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -233,7 +301,21 @@ export default function AnalyticsPage() {
                     dataKey="sales"
                     stroke="#10b981"
                     strokeWidth={2}
-                    name="Sales ($)"
+                    name="Revenue ($)"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="profit"
+                    stroke="#3b82f6"
+                    strokeWidth={2}
+                    name="Profit ($)"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="cost"
+                    stroke="#f97316"
+                    strokeWidth={2}
+                    name="Cost ($)"
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -252,25 +334,6 @@ export default function AnalyticsPage() {
                   <Bar dataKey="orders" fill="#3b82f6" name="Orders" />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
-          </div>
-
-          {/* Monthly Performance */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">This Month</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <p className="text-sm text-gray-500">Monthly Revenue</p>
-                <p className="text-2xl font-bold text-green-600">
-                  ${salesData.summary.thisMonthSales.toFixed(2)}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Monthly Orders</p>
-                <p className="text-2xl font-bold text-blue-600">
-                  {salesData.summary.thisMonthOrders}
-                </p>
-              </div>
             </div>
           </div>
         </div>

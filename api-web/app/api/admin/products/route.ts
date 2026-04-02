@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, description, price, stock, categoryId, sku } = body;
+    const { name, description, price, costPrice, stock, categoryId, sku } = body;
 
     // Validate required fields
     if (!name || !price || !categoryId) {
@@ -63,6 +63,7 @@ export async function POST(request: NextRequest) {
         name,
         description: description || '',
         price: parseFloat(price),
+        costPrice: costPrice ? parseFloat(costPrice) : null,
         stock: parseInt(stock) || 0,
         categoryId,
         sku: sku || null,

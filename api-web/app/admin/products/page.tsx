@@ -36,6 +36,7 @@ export default function AdminProductsPage() {
     name: '',
     description: '',
     price: '',
+    costPrice: '',
     stock: '',
     categoryId: '',
     sku: '',
@@ -105,6 +106,7 @@ export default function AdminProductsPage() {
           name: '',
           description: '',
           price: '',
+          costPrice: '',
           stock: '',
           categoryId: '',
           sku: '',
@@ -208,7 +210,7 @@ export default function AdminProductsPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Price *
+                    Selling Price *
                   </label>
                   <input
                     type="number"
@@ -217,7 +219,23 @@ export default function AdminProductsPage() {
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                    placeholder="1000.00"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Cost Price (Optional)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={formData.costPrice}
+                    onChange={(e) => setFormData({ ...formData, costPrice: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                    placeholder="600.00"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">What you paid for this product</p>
                 </div>
 
                 <div>
