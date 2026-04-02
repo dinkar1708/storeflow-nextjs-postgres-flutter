@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { UserRole } from '@/lib/enums';
 
 interface Product {
   id: string;
@@ -43,13 +44,13 @@ export default function AdminProductsPage() {
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
-    } else if (status === 'authenticated' && (session?.user as any)?.role !== 'ADMIN') {
+    } else if (status === 'authenticated' && (session?.user as any)?.role !== UserRole.ADMIN) {
       router.push('/403');
     }
   }, [status, session, router]);
 
   useEffect(() => {
-    if (status === 'authenticated' && (session?.user as any)?.role === 'ADMIN') {
+    if (status === 'authenticated' && (session?.user as any)?.role === UserRole.ADMIN) {
       fetchProducts();
       fetchCategories();
     }
@@ -127,7 +128,7 @@ export default function AdminProductsPage() {
     );
   }
 
-  if (!session || (session.user as any)?.role !== 'ADMIN') {
+  if (!session || (session.user as any)?.role !== UserRole.ADMIN) {
     return null;
   }
 
@@ -148,7 +149,7 @@ export default function AdminProductsPage() {
             </div>
             <div className="flex items-center">
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                ADMIN
+                {UserRole.ADMIN}
               </span>
             </div>
           </div>

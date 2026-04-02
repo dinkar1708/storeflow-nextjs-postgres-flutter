@@ -5,6 +5,7 @@ import {
   loginUser,
   closePrisma,
 } from '../helpers/test-utils.js';
+import { UserRole } from '../../lib/enums.ts';
 
 describe('Login API - Role-Based Tests', () => {
   let adminUser;
@@ -19,21 +20,21 @@ describe('Login API - Role-Based Tests', () => {
       email: `admin${timestamp}@test.com`,
       password: 'AdminTest@123',
       name: 'Test Admin',
-      role: 'ADMIN',
+      role: UserRole.ADMIN,
     });
 
     staffUser = await createTestUser({
       email: `staff${timestamp}@test.com`,
       password: 'StaffTest@123',
       name: 'Test Staff',
-      role: 'STAFF',
+      role: UserRole.STAFF,
     });
 
     customerUser = await createTestUser({
       email: `customer${timestamp}@test.com`,
       password: 'CustomerTest@123',
       name: 'Test Customer',
-      role: 'CUSTOMER',
+      role: UserRole.CUSTOMER,
     });
   });
 
@@ -53,7 +54,7 @@ describe('Login API - Role-Based Tests', () => {
     });
 
     it('should verify ADMIN user has correct role', async () => {
-      expect(adminUser.role).toBe('ADMIN');
+      expect(adminUser.role).toBe(UserRole.ADMIN);
     });
 
     it('should reject ADMIN login with wrong password', async () => {
@@ -72,7 +73,7 @@ describe('Login API - Role-Based Tests', () => {
     });
 
     it('should verify STAFF user has correct role', async () => {
-      expect(staffUser.role).toBe('STAFF');
+      expect(staffUser.role).toBe(UserRole.STAFF);
     });
 
     it('should reject STAFF login with wrong password', async () => {
@@ -90,7 +91,7 @@ describe('Login API - Role-Based Tests', () => {
     });
 
     it('should verify CUSTOMER user has correct role', async () => {
-      expect(customerUser.role).toBe('CUSTOMER');
+      expect(customerUser.role).toBe(UserRole.CUSTOMER);
     });
 
     it('should reject CUSTOMER login with wrong password', async () => {
@@ -102,9 +103,9 @@ describe('Login API - Role-Based Tests', () => {
 
   describe('Role Verification After Login', () => {
     it('should have created all three roles', async () => {
-      expect(adminUser.role).toBe('ADMIN');
-      expect(staffUser.role).toBe('STAFF');
-      expect(customerUser.role).toBe('CUSTOMER');
+      expect(adminUser.role).toBe(UserRole.ADMIN);
+      expect(staffUser.role).toBe(UserRole.STAFF);
+      expect(customerUser.role).toBe(UserRole.CUSTOMER);
     });
 
     it('should have different emails for each role', async () => {

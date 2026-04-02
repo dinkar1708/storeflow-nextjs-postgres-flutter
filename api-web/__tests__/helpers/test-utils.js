@@ -1,6 +1,7 @@
 // Test Utilities for API Testing
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { UserRole } from '../../lib/enums.ts';
 
 const prisma = new PrismaClient();
 const BASE_URL = 'http://localhost:3001';
@@ -11,7 +12,7 @@ export async function createTestUser(overrides = {}) {
   const email = overrides.email || `test${timestamp}@example.com`;
   const password = overrides.password || 'TestPassword@123';
   const name = overrides.name || 'Test User';
-  const role = overrides.role || 'CUSTOMER'; // Default to CUSTOMER if not specified
+  const role = overrides.role || UserRole.CUSTOMER; // Default to CUSTOMER if not specified
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
