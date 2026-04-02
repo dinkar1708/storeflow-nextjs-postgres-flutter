@@ -89,7 +89,10 @@ export default function AdminDashboard() {
               >
                 Orders
               </button>
-              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+              <button
+                onClick={() => router.push('/admin/analytics')}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium"
+              >
                 Analytics
               </button>
               <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">

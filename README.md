@@ -8,19 +8,21 @@ Universal platform for inventory and order management that can be customized for
 
 ## Current Status
 
-**4 Modules Live** | **40 Tests Passing** | **Ready for Production**
+**6 Modules Live** | **40 Tests Passing** | **Ready for Production**
 
 ### Completed Features
 
-1. **Authentication** - Register, Login, Session Management
-2. **User Management** - Admin can manage users, roles, permissions
-3. **Dashboards** - Role-based dashboards (Admin, Staff, Customer)
-4. **Products & Inventory** - Browse products, product details, manage inventory, categories
+1. **Authentication & Authorization** - User registration, login with NextAuth, session management, role-based access control (Admin, Staff, Customer)
 
-### Coming Soon
+2. **User Management** - Admin can create, view, update, and deactivate users. Manage roles and permissions across the system.
 
-5. **Orders** - Order processing, tracking, invoices
-6. **Analytics** - Sales reports, charts, insights
+3. **Role-Based Dashboards** - Separate dashboards for Admin (full system control), Staff (order fulfillment), and Customer (shopping and order tracking)
+
+4. **Products & Inventory Management** - Product catalog with categories, product details page, inventory tracking, stock management, SKU system
+
+5. **Order Management & Shopping Cart** - Shopping cart with quantity controls, order placement with payment method selection, order status workflow (Pending, Confirmed, Processing, Shipped, Delivered, Cancelled), customer order history, admin/staff order management interface
+
+6. **Sales Analytics & Reporting** - Interactive sales charts with daily, monthly, and yearly views using Recharts, revenue analytics dashboard showing total sales and average order value, real-time performance metrics for today and current month, sales data based on delivered orders only
 
 ## Quick Start
 
@@ -225,43 +227,49 @@ MIT
 
 ---
 
-### Module 5: Order Management (TODO)
+### Module 5: Order Management (LIVE)
 
-**What it does**: Handle order creation, processing, and tracking
+**What it does**: Handle order creation, processing, and tracking throughout the complete order lifecycle
 
-**Order Workflow:**
-1. Pending (new order received)
-2. Confirmed (admin/staff verified)
-3. Processing (being prepared)
-4. Packed (ready to ship)
-5. Shipped (in transit)
-6. Delivered (completed)
-7. Cancelled (if needed)
+**Completed Features:**
+- Shopping cart system with add to cart, quantity adjustment, and cart persistence using localStorage
+- Order placement with payment method selection (Cash on Delivery, Card, UPI, Net Banking)
+- Complete order workflow with seven status stages: Pending, Confirmed, Processing, Packed, Shipped, Delivered, Cancelled
+- Customer order history showing all placed orders with status tracking
+- Admin and Staff order management dashboard with ability to update order status
+- Role-based order actions where Staff can process daily orders and Admin has full control
+- Order details including customer information, order items, quantities, and total amount
+- Automatic inventory stock reduction when orders are placed
+- Unique order number generation for tracking
 
-**Requirements:**
-- Customer can place orders
-- Staff can update order status
-- Staff assignment to orders
-- Order tracking for customers
-- Order history with filters (date, status)
-- Cancel/refund capability (admin only)
-- Print invoice/receipt
-- Notification on status change
+**Future Enhancements:**
+- Staff assignment to specific orders
+- Advanced order history filters by date range and status
+- Cancel and refund capability for admins
+- Print invoice and receipt functionality
+- Email or SMS notifications on status changes
 
 ---
 
-### Module 6: Analytics & Reporting (TODO)
+### Module 6: Analytics & Reporting (LIVE)
 
 **What it does**: Provide insights and reports on sales, users, and products
 
-**Requirements:**
-- Sales charts (daily, monthly, yearly)
-- Revenue analytics dashboard
+**Completed Features:**
+- Sales charts with daily, monthly, and yearly views using Recharts library
+- Line charts for revenue trends and bar charts for order counts
+- Revenue analytics dashboard with real-time sales data from delivered orders
+- Summary statistics including total sales, total orders, and average order value
+- Performance metrics for today and current month
+- Interactive chart view modes allowing users to switch between time periods
+- Admin-only access with role-based authentication
+
+**Future Enhancements:**
 - Top selling products report
 - User growth graphs
 - Low stock alerts
-- Export reports (PDF/Excel)
-- Audit logs for all actions
+- Export reports to PDF and Excel formats
+- Audit logs for all system actions
 
 ---
 
