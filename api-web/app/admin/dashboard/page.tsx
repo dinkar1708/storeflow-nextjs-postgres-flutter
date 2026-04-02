@@ -3,6 +3,7 @@
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { UserRole } from '@/lib/enums';
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
@@ -11,7 +12,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
-    } else if (status === 'authenticated' && session?.user?.role !== 'ADMIN') {
+    } else if (status === 'authenticated' && session?.user?.role !== UserRole.ADMIN) {
       // Redirect non-admin users to 403 page
       router.push('/403');
     }
@@ -25,7 +26,7 @@ export default function AdminDashboard() {
     );
   }
 
-  if (!session || session.user?.role !== 'ADMIN') {
+  if (!session || session.user?.role !== UserRole.ADMIN) {
     return null;
   }
 
@@ -43,7 +44,7 @@ export default function AdminDashboard() {
                 Welcome, <strong>{session.user?.name}</strong>
               </span>
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                ADMIN
+                {UserRole.ADMIN}
               </span>
               <button
                 onClick={() => signOut({ callbackUrl: '/login' })}
@@ -82,7 +83,10 @@ export default function AdminDashboard() {
               >
                 Products
               </button>
-              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+              <button
+                onClick={() => router.push('/admin/orders')}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium"
+              >
                 Orders
               </button>
               <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">

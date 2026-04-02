@@ -3,6 +3,7 @@
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { UserRole } from '@/lib/enums';
 
 export default function StaffDashboard() {
   const { data: session, status } = useSession();
@@ -11,7 +12,7 @@ export default function StaffDashboard() {
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
-    } else if (status === 'authenticated' && session?.user?.role !== 'STAFF') {
+    } else if (status === 'authenticated' && session?.user?.role !== UserRole.STAFF) {
       // Redirect non-staff users to 403 page
       router.push('/403');
     }
@@ -25,7 +26,7 @@ export default function StaffDashboard() {
     );
   }
 
-  if (!session || session.user?.role !== 'STAFF') {
+  if (!session || session.user?.role !== UserRole.STAFF) {
     return null;
   }
 
@@ -43,7 +44,7 @@ export default function StaffDashboard() {
                 Welcome, <strong>{session.user?.name}</strong>
               </span>
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                STAFF
+                {UserRole.STAFF}
               </span>
               <button
                 onClick={() => signOut({ callbackUrl: '/login' })}
@@ -71,19 +72,13 @@ export default function StaffDashboard() {
             {/* Quick Navigation */}
             <div className="flex flex-wrap gap-3 pt-4 border-t">
               <button
-                onClick={() => router.push('/customer/products')}
+                onClick={() => router.push('/admin/orders')}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
               >
-                Products
-              </button>
-              <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium">
-                Orders
+                Manage Orders
               </button>
               <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
-                Inventory
-              </button>
-              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
-                Reports
+                My Activity
               </button>
               <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
                 Profile

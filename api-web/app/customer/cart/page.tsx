@@ -2,32 +2,65 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
+import { UserRole, PaymentMethod } from '@/lib/enums';
 
 export default function CartPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { cart, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
+  const [paymentMethod, setPaymentMethod] = useState(PaymentMethod.CASH);
+  const [placing, setPlacing] = useState(false);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
-    } else if (status === 'authenticated' && (session?.user as any)?.role !== 'CUSTOMER') {
+    } else if (status === 'authenticated' && (session?.user as any)?.role !== UserRole.CUSTOMER) {
       router.push('/403');
     }
   }, [status, session, router]);
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (cart.length === 0) {
       alert('Your cart is empty!');
       return;
     }
 
-    // TODO: Implement order placement API
-    alert(`Order placed! Total: $${getCartTotal().toFixed(2)}\n\nOrder management coming soon!`);
-    clearCart();
-    router.push('/customer/dashboard');
+    try {
+      setPlacing(true);
+
+      const orderData = {
+        items: cart.map(item => ({
+          productId: item.id,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        total: getCartTotal(),
+        paymentMethod,
+      };
+
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(`Order placed successfully!\nOrder ID: ${data.order.id}\nTotal: $${getCartTotal().toFixed(2)}\n\nPayment Method: ${paymentMethod.toUpperCase()}`);
+        clearCart();
+        router.push('/customer/orders');
+      } else {
+        alert(data.error || 'Failed to place order');
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Error placing order. Please try again.');
+    } finally {
+      setPlacing(false);
+    }
   };
 
   if (status === 'loading') {
@@ -38,7 +71,7 @@ export default function CartPage() {
     );
   }
 
-  if (!session || (session.user as any)?.role !== 'CUSTOMER') {
+  if (!session || (session.user as any)?.role !== UserRole.CUSTOMER) {
     return null;
   }
 
@@ -62,7 +95,7 @@ export default function CartPage() {
                 <strong>{session.user?.name}</strong>
               </span>
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                CUSTOMER
+                {UserRole.CUSTOMER}
               </span>
             </div>
           </div>
@@ -157,11 +190,35 @@ export default function CartPage() {
                     </div>
                   </div>
 
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Payment Method
+                    </label>
+                    <select
+                      value={paymentMethod}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
+                    >
+                      <option value={PaymentMethod.CASH}>Cash on Delivery</option>
+                      <option value={PaymentMethod.CARD}>Credit/Debit Card</option>
+                      <option value={PaymentMethod.UPI}>UPI Payment</option>
+                      <option value={PaymentMethod.NET_BANKING}>Net Banking</option>
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Payment will be processed on delivery (Demo mode)
+                    </p>
+                  </div>
+
                   <button
                     onClick={handlePlaceOrder}
-                    className="w-full px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium text-lg mb-3"
+                    disabled={placing}
+                    className={`w-full px-6 py-3 rounded-md font-medium text-lg mb-3 ${
+                      placing
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-green-600 hover:bg-green-700'
+                    } text-white`}
                   >
-                    Place Order
+                    {placing ? 'Placing Order...' : 'Place Order'}
                   </button>
 
                   <button

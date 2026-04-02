@@ -3,6 +3,7 @@
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { UserRole } from '@/lib/enums';
 
 export default function CustomerDashboard() {
   const { data: session, status } = useSession();
@@ -11,7 +12,7 @@ export default function CustomerDashboard() {
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
-    } else if (status === 'authenticated' && session?.user?.role !== 'CUSTOMER') {
+    } else if (status === 'authenticated' && session?.user?.role !== UserRole.CUSTOMER) {
       // Redirect non-customer users to 403 page
       router.push('/403');
     }
@@ -25,7 +26,7 @@ export default function CustomerDashboard() {
     );
   }
 
-  if (!session || session.user?.role !== 'CUSTOMER') {
+  if (!session || session.user?.role !== UserRole.CUSTOMER) {
     return null;
   }
 
@@ -43,7 +44,7 @@ export default function CustomerDashboard() {
                 Welcome, <strong>{session.user?.name}</strong>
               </span>
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                CUSTOMER
+                {UserRole.CUSTOMER}
               </span>
               <button
                 onClick={() => signOut({ callbackUrl: '/login' })}
@@ -82,7 +83,10 @@ export default function CustomerDashboard() {
               >
                 My Cart
               </button>
-              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
+              <button
+                onClick={() => router.push('/customer/orders')}
+                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium"
+              >
                 My Orders
               </button>
               <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
