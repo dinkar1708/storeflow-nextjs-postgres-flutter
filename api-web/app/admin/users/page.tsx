@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { UserRole, FILTER_ALL, STATUS_FILTER_ALL } from '@/lib/enums';
 
 interface User {
   id: string;
@@ -18,19 +19,20 @@ export default function AdminUsersPage() {
   const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('ALL');
+  const [filter, setFilter] = useState<string>(FILTER_ALL);
+  const [statusFilter, setStatusFilter] = useState(STATUS_FILTER_ALL);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
-    } else if (status === 'authenticated' && (session?.user as any)?.role !== 'ADMIN') {
+    } else if (status === 'authenticated' && (session?.user as any)?.role !== UserRole.ADMIN) {
       router.push('/403');
     }
   }, [status, session, router]);
 
   useEffect(() => {
-    if (status === 'authenticated' && (session?.user as any)?.role === 'ADMIN') {
+    if (status === 'authenticated' && (session?.user as any)?.role === UserRole.ADMIN) {
       fetchUsers();
     }
   }, [status, session]);
@@ -129,11 +131,15 @@ export default function AdminUsersPage() {
   };
 
   const filteredUsers = users.filter((user) => {
-    const matchesFilter = filter === 'ALL' || user.role === filter;
+    const matchesFilter = filter === FILTER_ALL || user.role === filter;
     const matchesSearch =
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
+    const matchesStatus =
+      statusFilter === STATUS_FILTER_ALL ||
+      (statusFilter === 'active' && user.isActive) ||
+      (statusFilter === 'inactive' && !user.isActive);
+    return matchesFilter && matchesSearch && matchesStatus;
   });
 
   if (status === 'loading' || loading) {
@@ -191,7 +197,7 @@ export default function AdminUsersPage() {
 
               {/* Role Filter */}
               <div className="flex gap-2">
-                {['ALL', 'ADMIN', 'STAFF', 'CUSTOMER'].map((role) => (
+                {[FILTER_ALL, UserRole.ADMIN, UserRole.STAFF, UserRole.CUSTOMER].map((role) => (
                   <button
                     key={role}
                     onClick={() => setFilter(role)}
@@ -204,6 +210,19 @@ export default function AdminUsersPage() {
                     {role}
                   </button>
                 ))}
+              </div>
+
+              {/* Status Filter */}
+              <div>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="px-4 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
+                >
+                  <option value="all">All Status</option>
+                  <option value="active">Active Only</option>
+                  <option value="inactive">Inactive Only</option>
+                </select>
               </div>
             </div>
 

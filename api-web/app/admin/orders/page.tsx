@@ -181,7 +181,11 @@ export default function AdminOrdersPage() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {orders.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50">
+                    <tr
+                      key={order.id}
+                      className="hover:bg-gray-50 cursor-pointer"
+                      onClick={() => router.push(`/orders/${order.id}`)}
+                    >
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
                         {order.id.slice(0, 8)}
                       </td>
@@ -206,7 +210,10 @@ export default function AdminOrdersPage() {
                       <td className="px-6 py-4 text-sm">
                         {order.status === OrderStatus.PENDING && (
                           <button
-                            onClick={() => updateOrderStatus(order.id, OrderStatus.CONFIRMED)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              updateOrderStatus(order.id, OrderStatus.CONFIRMED);
+                            }}
                             className="text-blue-600 hover:text-blue-900 font-medium"
                           >
                             Confirm
@@ -214,7 +221,10 @@ export default function AdminOrdersPage() {
                         )}
                         {order.status === OrderStatus.CONFIRMED && (
                           <button
-                            onClick={() => updateOrderStatus(order.id, OrderStatus.PROCESSING)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              updateOrderStatus(order.id, OrderStatus.PROCESSING);
+                            }}
                             className="text-purple-600 hover:text-purple-900 font-medium"
                           >
                             Process
@@ -222,7 +232,10 @@ export default function AdminOrdersPage() {
                         )}
                         {order.status === OrderStatus.PROCESSING && (
                           <button
-                            onClick={() => updateOrderStatus(order.id, OrderStatus.SHIPPED)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              updateOrderStatus(order.id, OrderStatus.SHIPPED);
+                            }}
                             className="text-orange-600 hover:text-orange-900 font-medium"
                           >
                             Ship
@@ -230,7 +243,10 @@ export default function AdminOrdersPage() {
                         )}
                         {order.status === OrderStatus.SHIPPED && (
                           <button
-                            onClick={() => updateOrderStatus(order.id, OrderStatus.DELIVERED)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              updateOrderStatus(order.id, OrderStatus.DELIVERED);
+                            }}
                             className="text-green-600 hover:text-green-900 font-medium"
                           >
                             Deliver
@@ -238,12 +254,24 @@ export default function AdminOrdersPage() {
                         )}
                         {order.status === OrderStatus.PENDING && (
                           <button
-                            onClick={() => updateOrderStatus(order.id, OrderStatus.CANCELLED)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              updateOrderStatus(order.id, OrderStatus.CANCELLED);
+                            }}
                             className="ml-3 text-red-600 hover:text-red-900 font-medium"
                           >
                             Cancel
                           </button>
                         )}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/orders/${order.id}`);
+                          }}
+                          className="ml-3 text-gray-700 hover:text-gray-900 font-medium"
+                        >
+                          View Details
+                        </button>
                       </td>
                     </tr>
                   ))}

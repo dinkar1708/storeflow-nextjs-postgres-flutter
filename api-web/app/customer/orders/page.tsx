@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { UserRole, OrderStatus } from '@/lib/enums';
+import { UserRole, OrderStatus, STATUS_FILTER_ALL } from '@/lib/enums';
 
 interface OrderItem {
   id: string;
@@ -28,6 +28,8 @@ export default function CustomerOrdersPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>(STATUS_FILTER_ALL);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -87,6 +89,17 @@ export default function CustomerOrdersPage() {
     return null;
   }
 
+  // Filter orders based on search and status
+  const filteredOrders = orders.filter((order) => {
+    const matchesSearch =
+      searchQuery === '' ||
+      order.items.some(item => item.product.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const matchesStatus = statusFilter === STATUS_FILTER_ALL || order.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -117,7 +130,49 @@ export default function CustomerOrdersPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          {orders.length === 0 ? (
+          {/* Search and Filter */}
+          {orders.length > 0 && (
+            <div className="bg-white rounded-lg shadow p-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Search by product name..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                <div>
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
+                  >
+                    <option value={STATUS_FILTER_ALL}>All Status</option>
+                    <option value={OrderStatus.PENDING}>Pending</option>
+                    <option value={OrderStatus.CONFIRMED}>Confirmed</option>
+                    <option value={OrderStatus.PROCESSING}>Processing</option>
+                    <option value={OrderStatus.PACKED}>Packed</option>
+                    <option value={OrderStatus.SHIPPED}>Shipped</option>
+                    <option value={OrderStatus.DELIVERED}>Delivered</option>
+                    <option value={OrderStatus.CANCELLED}>Cancelled</option>
+                  </select>
+                </div>
+              </div>
+              {(searchQuery || statusFilter !== STATUS_FILTER_ALL) && (
+                <div className="mt-2 text-sm text-gray-600">
+                  Showing {filteredOrders.length} of {orders.length} orders
+                </div>
+              )}
+            </div>
+          )}
+
+          {filteredOrders.length === 0 && orders.length > 0 ? (
+            <div className="bg-white rounded-lg shadow p-12 text-center">
+              <p className="text-gray-500">No orders match your search criteria.</p>
+            </div>
+          ) : orders.length === 0 ? (
             <div className="bg-white rounded-lg shadow p-12 text-center">
               <p className="text-gray-500 text-lg mb-4">No orders yet</p>
               <button
@@ -129,8 +184,19 @@ export default function CustomerOrdersPage() {
             </div>
           ) : (
             <div className="space-y-6">
-              {orders.map((order) => (
-                <div key={order.id} className="bg-white rounded-lg shadow">
+              {filteredOrders.map((order) => (
+                <div
+                  key={order.id}
+                  className="bg-white rounded-lg shadow hover:bg-gray-50 hover:shadow-md cursor-pointer transition-shadow"
+                  onClick={() => router.push(`/orders/${order.id}`)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      router.push(`/orders/${order.id}`);
+                    }
+                  }}
+                >
                   {/* Order Header */}
                   <div className="px-6 py-4 border-b bg-gray-50">
                     <div className="flex justify-between items-center">
@@ -153,18 +219,27 @@ export default function CustomerOrdersPage() {
 
                   {/* Order Items */}
                   <div className="px-6 py-4">
-                    <div className="space-y-3">
-                      {order.items.map((item) => (
-                        <div key={item.id} className="flex justify-between">
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm text-gray-600">Items</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          {order.items.length} item(s)
+                        </p>
+                      </div>
+
+                      {order.items[0] ? (
+                        <div className="flex justify-between">
                           <div>
-                            <p className="font-medium text-gray-900">{item.product.name}</p>
-                            <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                            <p className="font-medium text-gray-900">{order.items[0].product.name}</p>
+                            <p className="text-sm text-gray-600">Qty: {order.items[0].quantity}</p>
                           </div>
                           <p className="font-medium text-gray-900">
-                            ${(Number(item.price) * item.quantity).toFixed(2)}
+                            ${(Number(order.items[0].price) * order.items[0].quantity).toFixed(2)}
                           </p>
                         </div>
-                      ))}
+                      ) : (
+                        <p className="text-sm text-gray-600">No items</p>
+                      )}
                     </div>
                   </div>
                 </div>
