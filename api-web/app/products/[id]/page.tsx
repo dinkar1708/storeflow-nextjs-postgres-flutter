@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useCart } from '@/contexts/CartContext';
 
 interface Product {
   id: string;
@@ -30,6 +31,7 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
 
   const userRole = (session?.user as any)?.role;
+  const { addToCart } = useCart();
 
   useEffect(() => {
     fetchProduct();
@@ -56,7 +58,30 @@ export default function ProductDetailPage() {
   };
 
   const handleAddToCart = () => {
-    alert(`Added ${quantity} ${product?.name} to cart (Order feature coming soon)`);
+    if (!product) return;
+
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: Number(product.price),
+      quantity: quantity,
+      stock: product.stock,
+    });
+
+    alert(`Added ${quantity} ${product.name} to cart!`);
+    router.push('/customer/cart');
+  };
+
+  const incrementQuantity = () => {
+    if (product && quantity < product.stock) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
   };
 
   const handleEditProduct = () => {
@@ -201,14 +226,29 @@ export default function ProductDetailPage() {
                     <div className="space-y-4">
                       <div className="flex items-center space-x-4">
                         <label className="text-sm font-medium text-gray-700">Quantity:</label>
-                        <input
-                          type="number"
-                          min="1"
-                          max={product.stock}
-                          value={quantity}
-                          onChange={(e) => setQuantity(Math.min(Number(e.target.value), product.stock))}
-                          className="w-20 px-3 py-2 border rounded-md"
-                        />
+                        <div className="flex items-center border rounded-md">
+                          <button
+                            onClick={decrementQuantity}
+                            className="px-4 py-2 text-gray-700 hover:bg-gray-100 font-bold text-xl"
+                          >
+                            −
+                          </button>
+                          <span className="px-6 py-2 font-medium text-lg">{quantity}</span>
+                          <button
+                            onClick={incrementQuantity}
+                            disabled={quantity >= product.stock}
+                            className={`px-4 py-2 font-bold text-xl ${
+                              quantity >= product.stock
+                                ? 'text-gray-300 cursor-not-allowed'
+                                : 'text-gray-700 hover:bg-gray-100'
+                            }`}
+                          >
+                            +
+                          </button>
+                        </div>
+                        <span className="text-sm text-gray-500">
+                          Max: {product.stock}
+                        </span>
                       </div>
                       <button
                         onClick={handleAddToCart}

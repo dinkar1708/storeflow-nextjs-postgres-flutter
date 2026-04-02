@@ -76,14 +76,17 @@ export default function CustomerDashboard() {
               >
                 Browse Products
               </button>
+              <button
+                onClick={() => router.push('/customer/cart')}
+                className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 text-sm font-medium"
+              >
+                My Cart
+              </button>
               <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
                 My Orders
               </button>
               <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
                 Wishlist
-              </button>
-              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
-                Addresses
               </button>
               <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
                 Profile
