@@ -1,3 +1,7 @@
+**Cleanup:** When you are finished renaming, delete `how_to_use_this_repo/api-web/rename-project.sh` yourself if you do not need it anymore (or remove the whole `how_to_use_this_repo` folder). The script is written so it never edits that file; remove it manually when you are done.
+
+---
+
 # Project Rename Guide
 
 Automated script to rename and rebrand the entire project.
@@ -66,6 +70,8 @@ This script updates **EVERYTHING** in the project:
 ---
 
 ## After Running the Script
+
+**Delete the rename script when you are done:** Remove `how_to_use_this_repo/api-web/rename-project.sh` yourself (or delete the entire `how_to_use_this_repo` folder) if you no longer need it. The rename automation intentionally does **not** modify that file—you clean it up manually after a successful rename.
 
 The script will provide step-by-step instructions. For detailed setup guides, see:
 

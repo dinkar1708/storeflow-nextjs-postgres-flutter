@@ -32,24 +32,33 @@ createdb storeflow
 
 ### 3. Configure Environment
 
+Next.js loads **`.env.development` after `.env`**, so a Docker `DATABASE_URL` inside `.env.development` would override a local URL you only put in `.env`. For local PostgreSQL, use a **gitignored** override file:
+
 ```bash
-# Copy environment file
-cp .env.development .env
+# Replace YOUR_USERNAME with your OS / PostgreSQL role (see below)
+cat > .env.development.local <<'EOF'
+DATABASE_URL="postgresql://YOUR_USERNAME@localhost:5432/storeflow"
+EOF
+
+# Prisma CLI reads .env — keep it in sync
+cp .env.example .env
+# Edit .env: set DATABASE_URL to the same postgresql://…/storeflow value as above.
 ```
 
-**Edit `.env` file** - Update DATABASE_URL with your PostgreSQL user:
+Alternatively, **edit `DATABASE_URL` directly inside `.env.development`** to your local URL (do not commit secrets).
+
+Also set in `.env` (and match `.env.development` / `.env.development.local` for `DATABASE_URL`):
 
 ```env
-# Replace 'postgres:postgres' with your PostgreSQL username
-# Example: If your user is 'arnav', use 'arnav@localhost'
 DATABASE_URL="postgresql://YOUR_USERNAME@localhost:5432/storeflow"
 NEXTAUTH_URL="http://localhost:3001"
 NEXTAUTH_SECRET="dev-secret-change-in-production"
-PORT=3001
 ```
 
-**macOS/Linux:** Your username is usually your system username
-**Windows:** Default is usually `postgres` with the password you set during installation
+**macOS/Linux:** Your username is usually your system username  
+**Windows:** Default is often `postgres` with the password you set during installation
+
+**Dev server port:** Docs assume **http://localhost:3001**. The `npm run dev` script uses port 3001; if you change it, update `NEXTAUTH_URL` accordingly.
 
 ### 4. Setup Database Tables
 
