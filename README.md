@@ -45,6 +45,13 @@ npm run dev           # Start app
 
 Visit **http://localhost:3001**
 
+**Mobile App**
+The mobile application source code is located in the `flutter-app` directory. You can use it to run the mobile version of the platform:
+```bash
+cd flutter-app
+flutter run
+```
+
 ## Tech Stack
 
 **Web**: Next.js 14, TypeScript, PostgreSQL, Prisma, NextAuth, Tailwind CSS
