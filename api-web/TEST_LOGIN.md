@@ -82,6 +82,19 @@ IMPORTANT: Admin accounts CANNOT be created via public signup. They are created 
 
 ---
 
+## Automated mobile login API tests
+
+After seeding and with the API running on **port 3001** (`npm run dev` in `api-web`):
+
+```bash
+cd api-web
+npm run test:api-login
+```
+
+This hits `POST /api/auth/login` (JWT for web, mobile, Swagger, etc.) for every account listed above. Credentials are duplicated in `__tests__/auth/demo-seed-credentials.js` for the test runner, and in the Flutter app under `lib/features/login/demo_accounts.dart` — keep all three in sync when you change passwords.
+
+---
+
 ## Setup Instructions
 
 ### 1. Seed Database

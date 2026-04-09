@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+/**
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     tags:
+ *       - Categories
+ *     summary: List all categories
+ *     description: Returns a list of all product categories. Public endpoint.
+ *     responses:
+ *       200:
+ *         description: A list of categories
+ *       500:
+ *         description: Server error
+ */
 // GET - List all categories (Public)
 export async function GET(request: NextRequest) {
   try {

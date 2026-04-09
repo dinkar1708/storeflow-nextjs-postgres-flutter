@@ -118,6 +118,14 @@ export async function loginUser(email, password) {
   });
 }
 
+/** POST /api/auth/login — JWT (web, mobile, Swagger, etc.) */
+export async function jwtApiLogin(email, password) {
+  return makeRequest('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
+}
+
 // Cleanup on exit
 export async function closePrisma() {
   await prisma.$disconnect();

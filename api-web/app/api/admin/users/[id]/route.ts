@@ -1,18 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 
+/**
+ * @swagger
+ * /api/admin/users/{id}:
+ *   patch:
+ *     tags:
+ *       - Admin
+ *     summary: Update user role or status
+ *     description: Update a user's role or active status. Requires ADMIN role.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               role:
+ *                 type: string
+ *                 enum: [ADMIN, STAFF, CUSTOMER]
+ *               isActive:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       400:
+ *         description: Invalid role requested
+ *       403:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
 // PATCH - Update user role or status (Admin only)
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getApiUser(request);
 
     // Check if user is authenticated and is admin
-    if (!session || (session.user as any).role !== 'ADMIN') {
+    if (!user || user.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'Unauthorized - Admin access required' },
         { status: 403 }
@@ -75,16 +112,42 @@ export async function PATCH(
   }
 }
 
+/**
+ * @swagger
+ * /api/admin/users/{id}:
+ *   delete:
+ *     tags:
+ *       - Admin
+ *     summary: Delete a user
+ *     description: Deletes a user from the system. Requires ADMIN role.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       400:
+ *         description: Cannot delete your own account
+ *       403:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
 // DELETE - Delete user (Admin only)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getApiUser(request);
 
     // Check if user is authenticated and is admin
-    if (!session || (session.user as any).role !== 'ADMIN') {
+    if (!user || user.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'Unauthorized - Admin access required' },
         { status: 403 }
@@ -94,7 +157,7 @@ export async function DELETE(
     const { id } = params;
 
     // Prevent admin from deleting themselves
-    if ((session.user as any).id === id) {
+    if (user.id === id) {
       return NextResponse.json(
         { error: 'Cannot delete your own account' },
         { status: 400 }

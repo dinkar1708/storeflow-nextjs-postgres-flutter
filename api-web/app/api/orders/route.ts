@@ -1,15 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { UserRole, OrderStatus } from '@/lib/enums';
 
+/**
+ * @swagger
+ * /api/orders:
+ *   post:
+ *     tags:
+ *       - Orders
+ *     summary: Create new order
+ *     description: Places a new order. Requires CUSTOMER role.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - items
+ *               - total
+ *             properties:
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     productId:
+ *                       type: string
+ *                     quantity:
+ *                       type: integer
+ *                     price:
+ *                       type: number
+ *               total:
+ *                 type: number
+ *     responses:
+ *       201:
+ *         description: Order placed successfully
+ *       400:
+ *         description: Order must contain at least one item
+ *       403:
+ *         description: Unauthorized
+ */
 // POST - Create new order (Customer only)
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getApiUser(request);
 
-    if (!session || (session.user as any).role !== UserRole.CUSTOMER) {
+    if (!user || user.role !== UserRole.CUSTOMER) {
       return NextResponse.json(
         { error: 'Unauthorized - Customer access required' },
         { status: 403 }
@@ -32,7 +72,7 @@ export async function POST(request: NextRequest) {
     // Create order with order items
     const order = await prisma.order.create({
       data: {
-        userId: (session.user as any).id,
+        userId: user.id,
         orderNumber,
         total: parseFloat(total),
         status: OrderStatus.PENDING,
@@ -81,19 +121,35 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * @swagger
+ * /api/orders:
+ *   get:
+ *     tags:
+ *       - Orders
+ *     summary: Get user's orders or all orders
+ *     description: Customers see their own orders. Admin and Staff see all orders.
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of orders
+ *       403:
+ *         description: Unauthorized
+ */
 // GET - Get customer's orders
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getApiUser(request);
 
-    if (!session) {
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 403 }
       );
     }
 
-    const userRole = (session.user as any).role;
+    const userRole = user.role;
 
     let orders;
 
@@ -101,7 +157,7 @@ export async function GET(request: NextRequest) {
       // Customers see only their own orders
       orders = await prisma.order.findMany({
         where: {
-          userId: (session.user as any).id,
+          userId: user.id,
         },
         include: {
           items: {

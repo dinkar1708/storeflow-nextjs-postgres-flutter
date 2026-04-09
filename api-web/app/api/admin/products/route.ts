@@ -1,14 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 
+/**
+ * @swagger
+ * /api/admin/products:
+ *   get:
+ *     tags:
+ *       - Admin
+ *     summary: List all products (Admin)
+ *     description: Returns a list of all products (including inactive) for admin management. Requires ADMIN role.
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of products
+ *       403:
+ *         description: Unauthorized
+ */
 // GET - List all products (Admin only)
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getApiUser(request);
 
-    if (!session || (session.user as any).role !== 'ADMIN') {
+    if (!user || user.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'Unauthorized - Admin access required' },
         { status: 403 }
@@ -34,12 +49,55 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * @swagger
+ * /api/admin/products:
+ *   post:
+ *     tags:
+ *       - Admin
+ *     summary: Create new product
+ *     description: Creates a new product. Requires ADMIN role.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - price
+ *               - categoryId
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               costPrice:
+ *                 type: number
+ *               stock:
+ *                 type: integer
+ *               categoryId:
+ *                 type: string
+ *               sku:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Product created successfully
+ *       400:
+ *         description: Validation failed or SKU exists
+ *       403:
+ *         description: Unauthorized
+ */
 // POST - Create new product (Admin only)
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getApiUser(request);
 
-    if (!session || (session.user as any).role !== 'ADMIN') {
+    if (!user || user.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'Unauthorized - Admin access required' },
         { status: 403 }

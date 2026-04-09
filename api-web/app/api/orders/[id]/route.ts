@@ -1,18 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { UserRole, OrderStatus } from '@/lib/enums';
 
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   get:
+ *     tags:
+ *       - Orders
+ *     summary: Fetch single order
+ *     description: Returns a specific order. Customers can only view their own.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Order fetched successfully
+ *       403:
+ *         description: Access denied
+ *       404:
+ *         description: Order not found
+ */
 // GET - Fetch single order by ID
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getApiUser(request);
 
-    if (!session) {
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 403 }
@@ -20,8 +43,8 @@ export async function GET(
     }
 
     const { id } = params;
-    const userRole = (session.user as any).role;
-    const userId = (session.user as any).id;
+    const userRole = user.role;
+    const userId = user.id;
 
     const order = await prisma.order.findUnique({
       where: { id },
@@ -74,22 +97,57 @@ export async function GET(
   }
 }
 
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   patch:
+ *     tags:
+ *       - Orders
+ *     summary: Update order status
+ *     description: Updates the status of an existing order. Requires Admin/Staff role.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Order status updated successfully
+ *       400:
+ *         description: Invalid order status
+ *       403:
+ *         description: Unauthorized
+ */
 // PATCH - Update order status (Admin/Staff only)
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getApiUser(request);
 
-    if (!session) {
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 403 }
       );
     }
 
-    const userRole = (session.user as any).role;
+    const userRole = user.role;
 
     if (userRole !== UserRole.ADMIN && userRole !== UserRole.STAFF) {
       return NextResponse.json(

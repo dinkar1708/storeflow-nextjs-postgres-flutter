@@ -1,15 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { UserRole, OrderStatus } from '@/lib/enums';
 
+/**
+ * @swagger
+ * /api/analytics/sales:
+ *   get:
+ *     tags:
+ *       - Analytics
+ *     summary: Get sales analytics
+ *     description: Returns detailed sales analytics including summary, daily, monthly, and yearly data. Requires ADMIN role.
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Analytics data fetched successfully
+ *       403:
+ *         description: Unauthorized
+ */
 // GET - Get sales analytics data (Admin only)
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getApiUser(request);
 
-    if (!session || (session.user as any).role !== UserRole.ADMIN) {
+    if (!user || user.role !== UserRole.ADMIN) {
       return NextResponse.json(
         { error: 'Unauthorized - Admin access required' },
         { status: 403 }
