@@ -80,6 +80,9 @@ flutter run
 - [Database Schema](./docs/DATABASE_SETUP.md)
 - [Test Credentials](./api-web/TEST_LOGIN.md)
 
+**Mobile (Flutter):**
+- [API client generation](./flutter-app/README-API-GENERATION.md) — refresh OpenAPI + `build_runner` after backend API changes; commit generated code
+
 ## Testing
 
 ```bash

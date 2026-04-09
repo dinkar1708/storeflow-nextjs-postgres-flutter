@@ -4,17 +4,27 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: "^3.8.0"
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  chopper: ^8.4.0
+  json_annotation: ^4.9.0
+  shared_preferences: ^2.5.5
+  envied: ^1.3.4
+  logging: ^1.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  build_runner: ^2.4.13
+  chopper_generator: ^8.4.0
+  json_serializable: ^6.9.0
+  swagger_dart_code_generator: ^4.1.1
+  envied_generator: ^1.3.4
 
 flutter:
   uses-material-design: true

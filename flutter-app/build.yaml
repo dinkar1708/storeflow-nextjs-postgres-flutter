@@ -1,0 +1,10 @@
+targets:
+  $default:
+    builders:
+      swagger_dart_code_generator:
+        options:
+          input_folder: "lib/swagger_api/"
+          output_folder: "lib/api_generated/"
+          use_default_null_for_lists: true
+          # `include_paths` matches HTTP path *patterns* in the OpenAPI spec (regex), not the JSON filename.
+          # Omit it to generate all operations; add values like `/api/auth/.*` only if you need a subset.
