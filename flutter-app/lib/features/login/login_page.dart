@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:storeflow/env/env.dart';
 import 'package:storeflow/api/storeflow_client.dart';
 import 'package:storeflow/api_generated/storeflow_api.swagger.dart';
+import 'package:storeflow/core/session_store.dart';
+import 'package:storeflow/env/env.dart';
+import 'package:storeflow/features/dashboard/dashboard_page.dart';
 import 'package:storeflow/features/login/demo_accounts.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,7 +19,9 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
-  int? _selectedDemoIndex;
+
+  /// `-1` = custom email/password; `0..length-1` = [kDemoAccounts] index.
+  int _demoDropdownValue = -1;
 
   @override
   void dispose() {
@@ -57,24 +61,29 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       if (response.isSuccessful && response.body?.token != null) {
-        // Safe cast: token was checked for nullability
-        final token = response.body!.token!;
+        final body = response.body!;
+        final token = body.token!;
+        final user = body.user;
+        final role = user?.role ?? '';
+        final rawName = user?.name?.trim();
+        final displayName = (rawName != null && rawName.isNotEmpty)
+            ? rawName
+            : (user?.email ?? 'User');
 
-        // Save Token Securely
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('auth_token', token);
+        await prefs.setString(SessionStore.tokenKey, token);
+        await prefs.setString(SessionStore.userNameKey, displayName);
+        await prefs.setString(SessionStore.userRoleKey, role);
 
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login successful!'),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
+        Navigator.of(context).pushReplacementNamed(
+          '/dashboard',
+          arguments: DashboardRouteArgs(
+            displayName: displayName,
+            role: role,
           ),
         );
-        
-        // TODO: Navigate to Dashboard 
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -136,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                 Card(
                   margin: EdgeInsets.zero,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 12, 8, 8),
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -148,43 +157,67 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Check one account to fill email & password — same as api-web/TEST_LOGIN.md',
+                          'Pick an account to fill email & password — same as api-web/TEST_LOGIN.md',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[600],
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        ...List<Widget>.generate(kDemoAccounts.length, (i) {
-                          final a = kDemoAccounts[i];
-                          return CheckboxListTile(
-                            value: _selectedDemoIndex == i,
-                            onChanged: (checked) {
-                              if (checked != true) {
-                                setState(() {
-                                  _selectedDemoIndex = null;
-                                  _emailController.clear();
-                                  _passwordController.clear();
-                                });
-                                return;
-                              }
-                              setState(() {
-                                _selectedDemoIndex = i;
-                                _emailController.text = a.email;
-                                _passwordController.text = a.password;
-                              });
-                            },
-                            title: Text('${a.group} · ${a.label}'),
-                            subtitle: Text(
-                              '${a.email} (${a.role})',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                        const SizedBox(height: 12),
+                        InputDecorator(
+                          decoration: InputDecoration(
+                            labelText: 'Demo credentials',
+                            prefixIcon: const Icon(Icons.badge_outlined),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            dense: true,
-                            controlAffinity: ListTileControlAffinity.leading,
-                            contentPadding: EdgeInsets.zero,
-                          );
-                        }),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<int>(
+                              value: _demoDropdownValue,
+                              isExpanded: true,
+                              isDense: true,
+                              padding: EdgeInsets.zero,
+                              hint: const Text('Choose demo account'),
+                              items: [
+                                const DropdownMenuItem<int>(
+                                  value: -1,
+                                  child: Text(
+                                    'Custom — type email & password below',
+                                  ),
+                                ),
+                                ...List<DropdownMenuItem<int>>.generate(
+                                  kDemoAccounts.length,
+                                  (i) {
+                                    final a = kDemoAccounts[i];
+                                    return DropdownMenuItem<int>(
+                                      value: i,
+                                      child: Text(
+                                        '${a.group} · ${a.label} · ${a.email} (${a.role})',
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                              onChanged: (value) {
+                                if (value == null) return;
+                                setState(() {
+                                  _demoDropdownValue = value;
+                                  if (value < 0) {
+                                    _emailController.clear();
+                                    _passwordController.clear();
+                                  } else {
+                                    final a = kDemoAccounts[value];
+                                    _emailController.text = a.email;
+                                    _passwordController.text = a.password;
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
