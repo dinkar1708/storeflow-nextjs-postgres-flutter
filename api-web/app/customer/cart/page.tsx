@@ -10,7 +10,7 @@ export default function CartPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { cart, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
-  const [paymentMethod, setPaymentMethod] = useState(PaymentMethod.CASH);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CASH);
   const [placing, setPlacing] = useState(false);
 
   useEffect(() => {
@@ -196,7 +196,7 @@ export default function CartPage() {
                     </label>
                     <select
                       value={paymentMethod}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
                       className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
                     >
                       <option value={PaymentMethod.CASH}>Cash on Delivery</option>

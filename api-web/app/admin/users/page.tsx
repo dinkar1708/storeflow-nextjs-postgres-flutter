@@ -20,7 +20,7 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>(FILTER_ALL);
-  const [statusFilter, setStatusFilter] = useState(STATUS_FILTER_ALL);
+  const [statusFilter, setStatusFilter] = useState<typeof STATUS_FILTER_ALL | 'active' | 'inactive'>(STATUS_FILTER_ALL);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -216,7 +216,7 @@ export default function AdminUsersPage() {
               <div>
                 <select
                   value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
+                  onChange={(e) => setStatusFilter(e.target.value as typeof STATUS_FILTER_ALL | 'active' | 'inactive')}
                   className="px-4 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
                 >
                   <option value="all">All Status</option>

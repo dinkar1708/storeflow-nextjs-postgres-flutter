@@ -34,7 +34,7 @@ export default function AdminProductsPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
-  const [filterStatus, setFilterStatus] = useState(STATUS_FILTER_ALL);
+  const [filterStatus, setFilterStatus] = useState<typeof STATUS_FILTER_ALL | 'active' | 'inactive'>(STATUS_FILTER_ALL);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -248,7 +248,7 @@ export default function AdminProductsPage() {
                 </label>
                 <select
                   value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
+                  onChange={(e) => setFilterStatus(e.target.value as typeof STATUS_FILTER_ALL | 'active' | 'inactive')}
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
                 >
                   <option value="all">All Products</option>

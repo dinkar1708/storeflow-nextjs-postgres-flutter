@@ -16,6 +16,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+import type { ValueType } from 'recharts/types/component/DefaultTooltipContent';
 
 interface SalesData {
   summary: {
@@ -37,6 +38,17 @@ interface SalesData {
   daily: Array<{ date: string; sales: number; orders: number; cost: number; profit: number }>;
   monthly: Array<{ month: string; sales: number; orders: number; cost: number; profit: number }>;
   yearly: Array<{ year: string; sales: number; orders: number; cost: number; profit: number }>;
+}
+
+function formatTooltipCurrency(value: ValueType | undefined) {
+  const amount =
+    typeof value === 'number'
+      ? value
+      : typeof value === 'string'
+        ? Number(value)
+        : NaN;
+
+  return Number.isFinite(amount) ? `$${amount.toFixed(2)}` : '$0.00';
 }
 
 export default function AnalyticsPage() {
@@ -300,7 +312,7 @@ export default function AnalyticsPage() {
                     tickFormatter={(value) => `$${value}`}
                   />
                   <Tooltip
-                    formatter={(value: number) => `$${value.toFixed(2)}`}
+                    formatter={formatTooltipCurrency}
                     contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
                     labelStyle={{ color: '#111827', fontWeight: 'bold' }}
                   />
@@ -347,7 +359,7 @@ export default function AnalyticsPage() {
                     tickFormatter={(value) => `$${value}`}
                   />
                   <Tooltip
-                    formatter={(value: number) => `$${value.toFixed(2)}`}
+                    formatter={formatTooltipCurrency}
                     contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
                     labelStyle={{ color: '#111827', fontWeight: 'bold' }}
                   />
@@ -385,7 +397,7 @@ export default function AnalyticsPage() {
                     tickFormatter={(value) => `$${value}`}
                   />
                   <Tooltip
-                    formatter={(value: number) => `$${value.toFixed(2)}`}
+                    formatter={formatTooltipCurrency}
                     contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
                     labelStyle={{ color: '#111827', fontWeight: 'bold' }}
                     cursor={{ fill: 'rgba(59, 130, 246, 0.1)' }}
