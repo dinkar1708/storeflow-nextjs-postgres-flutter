@@ -26,7 +26,7 @@ import bcrypt from 'bcryptjs';
  *                 format: email
  *               password:
  *                 type: string
- *                 description: Minimum 8 characters with uppercase, number, and special character
+ *                 description: Minimum 5 characters
  *               name:
  *                 type: string
  *     responses:
@@ -90,11 +90,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate password strength (min 8 chars, 1 uppercase, 1 number, 1 special char)
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!passwordRegex.test(password)) {
+    // Validate password length (min 5 characters)
+    if (password.length < 5) {
       return NextResponse.json(
-        { error: 'Password must be at least 8 characters with uppercase, number, and special character' },
+        { error: 'Password must be at least 5 characters' },
         { status: 400 }
       );
     }
