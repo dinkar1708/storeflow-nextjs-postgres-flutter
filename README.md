@@ -2,6 +2,16 @@
 
 A production-ready, full-stack inventory and order management system built with Next.js 14, PostgreSQL, and Flutter.
 
+## 🚀 Live Production Demo
+
+**Visit:** **[https://storeflow-pink.vercel.app](https://storeflow-pink.vercel.app)**
+
+**Hosted on:** Vercel (Web App) + Supabase (PostgreSQL Database)
+
+**New users:** Register your own account to explore all features!
+
+---
+
 ## What is StoreFlow?
 
 Universal platform for inventory and order management that can be customized for 15+ different industries (Retail, Pharmacy, Restaurant, Warehouse, etc.).
