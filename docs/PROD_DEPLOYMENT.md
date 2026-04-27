@@ -29,14 +29,15 @@ Deploy StoreFlow for **FREE** to production.
 | Platform | Free Tier | Database Size | Best For |
 |----------|-----------|---------------|----------|
 | **Vercel + Vercel Postgres** | Yes | 256 MB | Demos, small projects |
+| **Vercel + Supabase** ⭐ | Yes | 500 MB | Recommended - Larger free tier |
 | **Railway** | $5/month credit | 1 GB | Production apps |
 | **Render + Supabase** | Yes (100%) | 500 MB | Free hosting, no credit card |
 
 ---
 
-## Option 1: Vercel (Recommended)
+## Option 1: Vercel + Supabase (⭐ Recommended)
 
-**What you get:** Web hosting + PostgreSQL database, auto-deploy from GitHub
+**What you get:** Vercel hosting + Supabase PostgreSQL (500MB free), auto-deploy from GitHub
 
 ### Steps
 
@@ -49,15 +50,94 @@ Deploy StoreFlow for **FREE** to production.
    git push -u origin main
    ```
 
+2. **Create Supabase Database**
+   - Go to [supabase.com](https://supabase.com) → Sign up/Login
+   - Click "New Project"
+   - Choose **Region: Asia-Pacific** (closest to your users)
+   - Set database password (save it!)
+   - **Important:** Disable these options:
+     - ❌ Enable Data API (uncheck)
+     - ❌ Enable automatic RLS (uncheck)
+   - Wait 2-3 minutes for database to provision
+
+3. **Get Supabase Connection String**
+   - Click **"Connect"** button (top right)
+   - Select **"Direct"** tab
+   - Choose **"Connection Method: Direct connection"**
+   - Select **"Type: URI"**
+   - Copy the connection string (looks like):
+     ```
+     postgresql://postgres:[YOUR-PASSWORD]@db.xxxxx.supabase.co:5432/postgres
+     ```
+   - Replace `[YOUR-PASSWORD]` with your actual database password
+
+4. **Deploy to Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project" → Select your GitHub repo
+   - **Important:** Set Root Directory: `api-web`
+   - Click "Deploy" (will fail initially - that's okay!)
+
+5. **Set Environment Variables in Vercel**
+   - Go to Project → Settings → Environment Variables
+   - Add these 3 variables:
+
+   | Name | Value | Environment |
+   |------|-------|-------------|
+   | `DATABASE_URL` | `postgresql://postgres:[PASSWORD]@db.xxxxx.supabase.co:5432/postgres` | Production, Preview |
+   | `NEXTAUTH_SECRET` | Generate with: `openssl rand -base64 32` | Production, Preview |
+   | `NEXTAUTH_URL` | `https://your-app-name.vercel.app` | Production, Preview |
+
+   **Note:** Use your actual Vercel URL for `NEXTAUTH_URL`
+
+6. **Redeploy**
+   - Go to Deployments → Click "Redeploy"
+   - Wait for deployment to complete
+
+**Done!** Visit `https://your-app-name.vercel.app`
+
+### Auto-Deploy After Setup
+
+**Once configured, Vercel automatically deploys on every git push:**
+
+```bash
+# Make changes to your code
+git add .
+git commit -m "Your changes"
+git push origin main
+```
+
+Vercel will:
+- ✅ Automatically detect the push
+- ✅ Build and deploy your changes
+- ✅ Update your live site in 2-3 minutes
+
+**No manual action needed!** Just push and wait.
+
+**Test with demo credentials:**
+- Admin: `admin@storeflow.com` / `admin123`
+- Staff: `staff@storeflow.com` / `staff123`
+- Customer: `customer@storeflow.com` / `customer123`
+
+---
+
+## Option 1B: Vercel + Vercel Postgres (Alternative)
+
+**What you get:** Vercel hosting + Vercel PostgreSQL (256MB free)
+
+### Steps
+
+1. **Push to GitHub** (same as Option 1)
+
 2. **Deploy to Vercel**
    - Go to [vercel.com](https://vercel.com)
    - Click "New Project" → Select your repo
    - Root Directory: `api-web`
    - Click "Deploy"
 
-3. **Add PostgreSQL**
+3. **Add Vercel PostgreSQL**
    - Project → Storage → Create Database → Postgres
    - Choose "Hobby" (free)
+   - Vercel automatically sets `DATABASE_URL`
 
 4. **Set Environment Variables**
    - Settings → Environment Variables:
@@ -174,11 +254,16 @@ Deploy StoreFlow for **FREE** to production.
 Required for all platforms:
 
 ```env
-DATABASE_URL="postgresql://..."           # Auto-provided by platform
+DATABASE_URL="postgresql://..."           # Platform-provided or Supabase connection string
 NEXTAUTH_SECRET="<generate-random>"       # Run: openssl rand -base64 32
-NEXTAUTH_URL="https://your-app-url.com"  # Your deployed URL
-NODE_ENV="production"                     # Optional
+NEXTAUTH_URL="https://your-app-url.com"  # Your deployed URL (e.g., https://storeflow.vercel.app)
 ```
+
+**Notes:**
+- `NODE_ENV` is automatically set to `"production"` by Vercel - don't add it manually
+- For Supabase: `DATABASE_URL` format is `postgresql://postgres:[PASSWORD]@db.xxxxx.supabase.co:5432/postgres`
+- For Vercel Postgres: `DATABASE_URL` is automatically set when you add the database
+- Swagger/API docs are automatically disabled in production for security
 
 ---
 
@@ -240,9 +325,10 @@ All platforms provide free SSL automatically.
 
 ## Recommended Setup
 
-**Demos/Portfolio:** Vercel (easiest, free)
-**Production:** Railway ($5/month, better limits)
-**100% Free:** Render + Supabase (cold starts)
+**Best Overall:** Vercel + Supabase ⭐ (500MB database, no cold starts)
+**Smallest Projects:** Vercel + Vercel Postgres (256MB, easiest)
+**Production Apps:** Railway ($5/month credit, better limits)
+**100% Free (with tradeoffs):** Render + Supabase (cold starts after 15min)
 
 ---
 
