@@ -17,6 +17,14 @@ const DOC_TAG_ORDER = [
 ] as const;
 
 export async function GET() {
+  // Disable Swagger in production
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json(
+      { error: 'API documentation is disabled in production' },
+      { status: 404 }
+    );
+  }
+
   const spec = createSwaggerSpec({
     apiFolder: 'app/api',
     definition: {
