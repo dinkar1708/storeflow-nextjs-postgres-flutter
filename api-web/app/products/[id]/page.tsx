@@ -72,6 +72,26 @@ export default function ProductDetailPage() {
     router.push('/customer/cart');
   };
 
+  const handleAddToWishlist = async () => {
+    if (!product) return;
+    try {
+      const res = await fetch('/api/wishlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId: product.id }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message || 'Added to wishlist');
+      } else {
+        alert(data.error || 'Failed to add to wishlist');
+      }
+    } catch (e) {
+      console.error('Error adding to wishlist:', e);
+      alert('Error adding to wishlist');
+    }
+  };
+
   const incrementQuantity = () => {
     if (product && quantity < product.stock) {
       setQuantity(quantity + 1);
@@ -255,6 +275,12 @@ export default function ProductDetailPage() {
                         className="w-full px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium text-lg"
                       >
                         Add to Cart
+                      </button>
+                      <button
+                        onClick={handleAddToWishlist}
+                        className="w-full px-6 py-3 bg-white border border-purple-300 text-purple-700 rounded-md hover:bg-purple-50 font-medium text-lg"
+                      >
+                        ♥ Add to Wishlist
                       </button>
                     </div>
                   )}

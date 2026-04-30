@@ -24,17 +24,18 @@ enum OrderStatus {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String     @id @default(cuid())
+  email     String     @unique
   password  String
   name      String
-  role      Role     @default(CUSTOMER)
+  role      Role       @default(CUSTOMER)
   phone     String?
   address   String?
-  isActive  Boolean  @default(true)
+  isActive  Boolean    @default(true)
   orders    Order[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  wishlist  Wishlist[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@index([email])
   @@map("users")
@@ -53,20 +54,21 @@ model Category {
 }
 
 model Product {
-  id          String      @id @default(cuid())
-  name        String
-  description String?
-  price       Decimal     @db.Decimal(10, 2)
-  costPrice   Decimal?    @db.Decimal(10, 2)
-  stock       Int         @default(0)
-  sku         String?     @unique
-  images      String[]
-  categoryId  String
-  category    Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  isActive    Boolean     @default(true)
-  orderItems  OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id           String      @id @default(cuid())
+  name         String
+  description  String?
+  price        Decimal     @db.Decimal(10, 2)
+  costPrice    Decimal?    @db.Decimal(10, 2)
+  stock        Int         @default(0)
+  sku          String?     @unique
+  images       String[]
+  categoryId   String
+  category     Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  isActive     Boolean     @default(true)
+  orderItems   OrderItem[]
+  wishlistedBy Wishlist[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 
   @@index([categoryId])
   @@index([sku])
@@ -103,6 +105,20 @@ model OrderItem {
   @@index([orderId])
   @@index([productId])
   @@map("order_items")
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+  @@map("wishlists")
 }
 
 model AuditLog {

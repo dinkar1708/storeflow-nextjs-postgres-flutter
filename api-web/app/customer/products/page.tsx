@@ -65,6 +65,25 @@ export default function CustomerProductsPage() {
     }
   };
 
+  const handleAddToWishlist = async (productId: string) => {
+    try {
+      const res = await fetch('/api/wishlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message || 'Added to wishlist');
+      } else {
+        alert(data.error || 'Failed to add to wishlist');
+      }
+    } catch (e) {
+      console.error('Error adding to wishlist:', e);
+      alert('Error adding to wishlist');
+    }
+  };
+
   const fetchCategories = async () => {
     try {
       const response = await fetch('/api/categories');
@@ -200,17 +219,26 @@ export default function CustomerProductsPage() {
                         </p>
                       </div>
 
-                      <button
-                        onClick={() => router.push(`/products/${product.id}`)}
-                        disabled={product.stock === 0}
-                        className={`px-4 py-2 rounded-md font-medium ${
-                          product.stock > 0
-                            ? 'bg-green-600 text-white hover:bg-green-700'
-                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        }`}
-                      >
-                        {product.stock > 0 ? 'View Details' : 'Out of Stock'}
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleAddToWishlist(product.id)}
+                          title="Add to Wishlist"
+                          className="px-3 py-2 rounded-md font-medium bg-white border border-purple-300 text-purple-700 hover:bg-purple-50"
+                        >
+                          ♥
+                        </button>
+                        <button
+                          onClick={() => router.push(`/products/${product.id}`)}
+                          disabled={product.stock === 0}
+                          className={`px-4 py-2 rounded-md font-medium ${
+                            product.stock > 0
+                              ? 'bg-green-600 text-white hover:bg-green-700'
+                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          }`}
+                        >
+                          {product.stock > 0 ? 'View Details' : 'Out of Stock'}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
