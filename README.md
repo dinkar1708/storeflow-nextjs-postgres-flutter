@@ -121,6 +121,15 @@ MIT
 
 ---
 
+## DEMO
+
+<img width="2454" height="1294" alt="Screenshot 2026-05-01 at 17 48 43" src="https://github.com/user-attachments/assets/8192a61d-e961-45a3-8f0f-d6111a6d47b7" />
+<img width="2442" height="1301" alt="Screenshot 2026-05-01 at 17 48 54" src="https://github.com/user-attachments/assets/29ce58d9-8c1e-4f34-9346-004da48b2702" />
+<img width="2457" height="1282" alt="Screenshot 2026-05-01 at 17 49 04" src="https://github.com/user-attachments/assets/a308fe4e-48be-4d4d-af65-307530d4062e" />
+<img width="2484" height="1257" alt="Screenshot 2026-05-01 at 17 49 15" src="https://github.com/user-attachments/assets/dd889927-ee86-4e7c-9a66-f88dc6088375" />
+<img width="2464" height="1302" alt="Screenshot 2026-05-01 at 17 49 28" src="https://github.com/user-attachments/assets/038dee03-d1d7-4f96-a08f-bd4c1a4b7477" />
+<img width="2499" height="1286" alt="Screenshot 2026-05-01 at 17 49 42" src="https://github.com/user-attachments/assets/142bf041-07e6-4c2a-9d7b-4c220c7887cf" />
+
 ## Detailed Feature Specifications
 
 ### Module 1: Authentication (COMPLETED)
