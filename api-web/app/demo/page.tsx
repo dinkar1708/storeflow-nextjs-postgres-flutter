@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { MarketingShell } from '@/components/MarketingShell';
 
 export const metadata = {
   title: 'StoreFlow — Explore the Demo',
@@ -22,11 +23,6 @@ const roles = [
   {
     href: '/demo/customer',
     title: 'Customer',
-    color: 'green',
-    border: 'border-green-600',
-    badge: 'bg-green-100 text-green-800',
-    btn: 'bg-green-600 hover:bg-green-700',
-    accent: 'text-green-700',
     icon: '🛍️',
     summary: 'Browse, buy, save — the shopper experience.',
     bullets: [
@@ -34,35 +30,29 @@ const roles = [
       'Add to cart with stock-aware qty',
       'Save items to a wishlist',
       'Track order status end-to-end',
-      'Edit profile & shipping info',
     ],
+    cardBg: 'bg-gradient-to-br from-emerald-700 via-emerald-800 to-teal-900',
+    shadow: 'shadow-emerald-500/30',
+    chip: 'bg-emerald-300/20 text-emerald-100 border-emerald-300/30',
   },
   {
     href: '/demo/staff',
     title: 'Staff',
-    color: 'blue',
-    border: 'border-blue-600',
-    badge: 'bg-blue-100 text-blue-800',
-    btn: 'bg-blue-600 hover:bg-blue-700',
-    accent: 'text-blue-700',
     icon: '🚚',
     summary: 'Move orders through fulfillment.',
     bullets: [
       'Order queue grouped by status',
-      'Update status: PROCESSING → PACKED → SHIPPED',
+      'Update PROCESSING → PACKED → SHIPPED',
       'Adjust stock as items are picked',
       'View order details & customer info',
-      'Read-only access to all customers',
     ],
+    cardBg: 'bg-gradient-to-br from-sky-700 via-blue-800 to-indigo-900',
+    shadow: 'shadow-sky-500/30',
+    chip: 'bg-sky-300/20 text-sky-100 border-sky-300/30',
   },
   {
     href: '/demo/admin',
     title: 'Admin',
-    color: 'red',
-    border: 'border-red-600',
-    badge: 'bg-red-100 text-red-800',
-    btn: 'bg-red-600 hover:bg-red-700',
-    accent: 'text-red-700',
     icon: '🛠️',
     summary: 'Run the store. Everything, everywhere.',
     bullets: [
@@ -70,134 +60,111 @@ const roles = [
       'CRUD products & categories',
       'Manage users & assign roles',
       'View revenue, top products, AOV',
-      'Full audit log access',
     ],
+    cardBg: 'bg-gradient-to-br from-fuchsia-700 via-purple-800 to-indigo-900',
+    shadow: 'shadow-fuchsia-500/30',
+    chip: 'bg-fuchsia-300/20 text-fuchsia-100 border-fuchsia-300/30',
   },
 ];
 
 export default function DemoLanding() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <MarketingShell>
       {/* Demo banner */}
-      <div className="bg-amber-100 text-amber-900 text-center text-sm py-2 border-b border-amber-200">
-        You’re viewing the demo — sample data only, no login required.
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3">
+        <div className="rounded-full border border-amber-200 bg-amber-50 text-amber-900 text-sm py-2 text-center shadow-sm">
+          Demo mode — sample data only, no API calls, no signup.
+        </div>
       </div>
 
-      {/* Top nav */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-          <Link href="/" className="text-xl font-bold text-gray-900">
-            StoreFlow
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-black rounded-md"
-            >
-              Login
-            </Link>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight">
-          Explore everything StoreFlow can do
+      <section className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-12 text-center">
+        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-600">
+          Self-guided tour
+        </span>
+        <h1 className="mt-3 text-5xl sm:text-6xl font-extrabold tracking-tight text-slate-900">
+          Explore every{' '}
+          <span className="bg-gradient-to-r from-fuchsia-600 via-pink-500 to-sky-500 bg-clip-text text-transparent">
+            corner
+          </span>{' '}
+          of StoreFlow.
         </h1>
-        <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-          Pick a role below to walk through the screens. No signup, no API calls — just a
-          static tour of every module shipped today.
+        <p className="mt-5 text-lg text-slate-600 max-w-2xl mx-auto">
+          Pick a role below to walk through the screens. Every page is a static preview
+          of what the real product looks like in production.
         </p>
         <div className="mt-8 flex justify-center gap-3 flex-wrap">
           <Link
             href="#roles"
-            className="px-6 py-3 bg-gray-900 text-white rounded-md font-medium hover:bg-black"
+            className="px-7 py-3.5 rounded-full font-semibold text-white bg-slate-900 hover:bg-black shadow-xl shadow-slate-900/20 transition-all"
           >
             Start the tour ↓
           </Link>
           <Link
             href="/login"
-            className="px-6 py-3 bg-white border border-gray-300 text-gray-800 rounded-md font-medium hover:bg-gray-50"
+            className="px-7 py-3.5 rounded-full font-semibold text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 shadow-sm transition-all"
           >
-            Try it for real
+            Try the real app
           </Link>
         </div>
       </section>
 
       {/* Module strip */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4 text-center">
+      <section className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pb-16">
+        <h2 className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 mb-6">
           What’s in the box
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
           {modules.map((m) => (
             <div
               key={m.name}
-              className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow"
+              className="rounded-xl border border-slate-200 bg-white/80 backdrop-blur p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
             >
               <div className="text-2xl mb-1">{m.icon}</div>
-              <div className="font-semibold text-gray-900 text-sm">{m.name}</div>
-              <div className="text-xs text-gray-500 mt-1">{m.blurb}</div>
+              <div className="font-semibold text-slate-900 text-sm">{m.name}</div>
+              <div className="text-xs text-slate-500 mt-1">{m.blurb}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Role tiles */}
-      <section id="roles" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-3xl font-bold text-gray-900 text-center mb-2">
-          Pick a role to explore
-        </h2>
-        <p className="text-center text-gray-600 mb-10">
-          Each role sees a different StoreFlow.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section id="roles" className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pb-20">
+        <h2 className="text-3xl font-bold text-slate-900 text-center mb-2">Pick a role to explore</h2>
+        <p className="text-center text-slate-600 mb-10">Each role sees a different StoreFlow.</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {roles.map((r) => (
             <Link
               key={r.title}
               href={r.href}
-              className={`bg-white rounded-lg shadow hover:shadow-xl transition-shadow border-t-4 ${r.border} overflow-hidden`}
+              className={`group relative overflow-hidden rounded-2xl ${r.cardBg} p-6 text-white shadow-xl ${r.shadow} hover:shadow-2xl hover:-translate-y-1 transition-all`}
             >
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="text-4xl">{r.icon}</div>
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${r.badge}`}
-                  >
-                    {r.title.toUpperCase()}
-                  </span>
-                </div>
-                <h3 className={`text-2xl font-bold mb-2 ${r.accent}`}>{r.title}</h3>
-                <p className="text-gray-600 mb-4">{r.summary}</p>
-                <ul className="space-y-2 mb-6">
-                  {r.bullets.map((b) => (
-                    <li key={b} className="text-sm text-gray-700 flex items-start">
-                      <span className={`mr-2 ${r.accent}`}>✓</span>
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div
-                  className={`text-white text-center px-4 py-2 rounded-md text-sm font-medium ${r.btn}`}
-                >
-                  Explore the {r.title} view →
-                </div>
+              <div className="pointer-events-none absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_white,_transparent_60%)]" />
+              <div className="relative flex items-center justify-between">
+                <div className="text-3xl">{r.icon}</div>
+                <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${r.chip}`}>
+                  {r.title.toUpperCase()}
+                </span>
+              </div>
+              <h3 className="relative mt-4 text-3xl font-bold">{r.title}</h3>
+              <p className="relative mt-1 text-white/80">{r.summary}</p>
+              <ul className="relative mt-5 space-y-2">
+                {r.bullets.map((b) => (
+                  <li key={b} className="flex items-start text-sm text-white/85">
+                    <span className="mr-2">✓</span>
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="relative mt-6 inline-flex items-center text-sm font-semibold text-white/95 group-hover:text-white">
+                Open the {r.title} demo
+                <span className="ml-1 transition-transform group-hover:translate-x-1">→</span>
               </div>
             </Link>
           ))}
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-gray-500">
-          StoreFlow demo · Sample data, no backend calls.
-          <Link href="/login" className="ml-2 text-gray-900 underline">
-            Login to use the real app
-          </Link>
-        </div>
-      </footer>
-    </div>
+    </MarketingShell>
   );
 }

@@ -3,7 +3,9 @@
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { DEMO_LOGIN_ACCOUNTS } from '@/lib/demo-login-accounts';
+import { MarketingShell } from '@/components/MarketingShell';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,7 +13,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  /** Empty string = custom; otherwise selected demo account email. */
   const [demoSelectValue, setDemoSelectValue] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,149 +51,154 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-10 px-4">
-      <div className="max-w-md w-full">
-        <div className="flex justify-center mb-6">
-          <div className="rounded-full bg-blue-50 p-4 text-blue-600">
-            <svg
-              className="h-14 w-14"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.015V21m-9-9h.008v.008H9V12z"
-              />
-            </svg>
+    <MarketingShell showAuthLinks={false} navExtras={
+      <Link href="/register" className="hover:text-slate-900">
+        Create an account →
+      </Link>
+    }>
+      <main className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          {/* Left: copy */}
+          <div className="hidden lg:block">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-600">
+              Welcome back
+            </span>
+            <h1 className="mt-3 text-5xl font-extrabold tracking-tight text-slate-900">
+              Sign in to{' '}
+              <span className="bg-gradient-to-r from-fuchsia-600 via-pink-500 to-sky-500 bg-clip-text text-transparent">
+                StoreFlow
+              </span>
+            </h1>
+            <p className="mt-4 text-lg text-slate-600 max-w-md">
+              Manage products, orders, customers and analytics — all from one place.
+            </p>
+            <ul className="mt-6 space-y-3 text-slate-700">
+              {[
+                'Three role-based dashboards (Admin / Staff / Customer)',
+                'Real-time inventory & 7-stage order pipeline',
+                'Web + Flutter mobile, one shared API',
+              ].map((b) => (
+                <li key={b} className="flex items-start">
+                  <span className="mr-2 text-emerald-600">✓</span>
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-8 text-sm text-slate-500">
+              Don’t have an account?{' '}
+              <Link href="/register" className="font-semibold text-fuchsia-600 hover:text-fuchsia-700">
+                Create one →
+              </Link>
+            </p>
           </div>
-        </div>
-        <h1 className="text-3xl font-bold text-center text-gray-900">Welcome to StoreFlow</h1>
-        <p className="mt-2 text-center text-base text-gray-600">
-          Sign in to manage your inventory and orders
-        </p>
 
-        <div className="mt-8 bg-white p-6 rounded-xl shadow-md border border-gray-100">
-          {/* Demo credentials selector - only show in development */}
-          {process.env.NODE_ENV === 'development' && (
-            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 mb-6">
-              <h3 className="text-sm font-semibold text-gray-900">Demo login (seed data)</h3>
-              <p className="mt-1 text-xs text-gray-600">
-                Pick an account to fill email & password — same as{' '}
-                <code className="rounded bg-gray-200 px-1">TEST_LOGIN.md</code> after{' '}
-                <code className="rounded bg-gray-200 px-1">npm run db:seed</code>.
-              </p>
-              <label htmlFor="demo-credentials" className="sr-only">
-                Demo credentials
-              </label>
-              <div className="mt-3 relative">
-                <span className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-500">
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"
+          {/* Right: card */}
+          <div className="w-full max-w-md mx-auto">
+            <div className="rounded-3xl bg-white border border-slate-200 shadow-2xl shadow-slate-900/10 overflow-hidden">
+              <div className="px-7 py-6 bg-gradient-to-r from-slate-900 via-indigo-900 to-fuchsia-900 text-white">
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 backdrop-blur text-xl">
+                    🔐
+                  </span>
+                  <div>
+                    <div className="font-semibold text-lg">Login to your account</div>
+                    <div className="text-xs text-white/70">Use your StoreFlow credentials.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-7">
+                {process.env.NODE_ENV === 'development' && (
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 mb-5">
+                    <h3 className="text-sm font-semibold text-slate-900">Demo login (seed data)</h3>
+                    <p className="mt-1 text-xs text-slate-600">
+                      Pick an account to autofill — same as <code className="rounded bg-slate-200 px-1">TEST_LOGIN.md</code>.
+                    </p>
+                    <select
+                      id="demo-credentials"
+                      value={demoSelectValue}
+                      onChange={(e) => handleDemoSelect(e.target.value)}
+                      className="mt-3 w-full appearance-none rounded-xl border border-slate-300 bg-white py-2.5 px-3 text-sm text-slate-900 shadow-sm focus:border-fuchsia-500 focus:outline-none focus:ring-1 focus:ring-fuchsia-500"
+                    >
+                      <option value="">Custom — type below</option>
+                      {DEMO_LOGIN_ACCOUNTS.map((a) => (
+                        <option key={a.email} value={a.email}>
+                          {a.group} · {a.label} · {a.email} ({a.role})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setEmail(v);
+                        if (demoSelectValue && v !== demoSelectValue) setDemoSelectValue('');
+                      }}
+                      className="w-full px-3.5 py-3 border border-slate-300 rounded-xl text-sm focus:border-fuchsia-500 focus:outline-none focus:ring-2 focus:ring-fuchsia-200"
+                      placeholder="you@example.com"
+                      required
                     />
-                  </svg>
-                </span>
-                <select
-                  id="demo-credentials"
-                  value={demoSelectValue}
-                  onChange={(e) => handleDemoSelect(e.target.value)}
-                  className="w-full appearance-none rounded-xl border border-gray-300 bg-white py-3 pl-11 pr-10 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                >
-                  <option value="">Custom — type email & password below</option>
-                  {DEMO_LOGIN_ACCOUNTS.map((a) => (
-                    <option key={a.email} value={a.email}>
-                      {a.group} · {a.label} · {a.email} ({a.role})
-                    </option>
-                  ))}
-                </select>
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
+                  </div>
+
+                  <div>
+                    <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1">
+                      Password
+                    </label>
+                    <input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        setDemoSelectValue('');
+                      }}
+                      className="w-full px-3.5 py-3 border border-slate-300 rounded-xl text-sm focus:border-fuchsia-500 focus:outline-none focus:ring-2 focus:ring-fuchsia-200"
+                      required
                     />
-                  </svg>
-                </span>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button type="button" className="text-sm text-fuchsia-600 hover:text-fuchsia-700 hover:underline">
+                      Forgot password?
+                    </button>
+                  </div>
+
+                  {error && (
+                    <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2">
+                      {error}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-fuchsia-600 via-pink-500 to-sky-500 hover:brightness-110 shadow-lg shadow-fuchsia-500/30 disabled:opacity-50 transition-all"
+                  >
+                    {loading ? 'Signing in…' : 'Sign in →'}
+                  </button>
+                </form>
+
+                <p className="mt-6 text-sm text-center text-slate-600">
+                  Don’t have an account?{' '}
+                  <Link href="/register" className="font-semibold text-fuchsia-600 hover:text-fuchsia-700">
+                    Register
+                  </Link>
+                </p>
               </div>
             </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  setEmail(v);
-                  if (demoSelectValue && v !== demoSelectValue) {
-                    setDemoSelectValue('');
-                  }
-                }}
-                className="w-full px-3 py-3 border border-gray-300 rounded-xl text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setDemoSelectValue('');
-                }}
-                className="w-full px-3 py-3 border border-gray-300 rounded-xl text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                type="button"
-                className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
-              >
-                Forgot Password?
-              </button>
-            </div>
-
-            {error && <div className="text-red-600 text-sm">{error}</div>}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 rounded-xl text-base font-bold hover:bg-blue-700 disabled:opacity-50 transition-colors"
-            >
-              {loading ? 'Logging in...' : 'Login'}
-            </button>
-          </form>
-
-          <p className="mt-6 text-sm text-center text-gray-600">
-            Don&apos;t have an account?{' '}
-            <a href="/register" className="font-medium text-blue-600 hover:text-blue-800 hover:underline">
-              Register here
-            </a>
-          </p>
+          </div>
         </div>
-      </div>
-    </div>
+      </main>
+    </MarketingShell>
   );
 }
