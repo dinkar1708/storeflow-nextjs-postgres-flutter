@@ -68,17 +68,6 @@ flutter run
 **Mobile**: Flutter (Coming Soon)
 **Testing**: Vitest (40 tests, 100% passing)
 
-## Screenshots
-
-### Welcome Page
-<img width="1476" alt="Welcome Page" src="https://github.com/user-attachments/assets/8b569f1b-a23b-45b4-b511-345d515febd2">
-
-### Login Page
-<img width="1598" alt="Login Page" src="https://github.com/user-attachments/assets/159848de-b791-4cc5-8ef7-09aa078d557b">
-
-### Admin Dashboard
-<img width="1624" alt="Admin Dashboard" src="https://github.com/user-attachments/assets/56766250-8c97-4311-96b0-96999f79fa8e">
-
 ## Documentation
 
 **Setup Guides:**
