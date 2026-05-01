@@ -20,7 +20,7 @@ export default function StaffDashboard() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -31,9 +31,9 @@ export default function StaffDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <nav className="bg-white shadow-sm border-b-4 border-blue-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
@@ -48,7 +48,7 @@ export default function StaffDashboard() {
               </span>
               <button
                 onClick={() => signOut({ callbackUrl: '/login' })}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md"
+                className="px-4 py-2 text-sm font-semibold text-white rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 hover:brightness-110 shadow-md shadow-sky-500/30"
               >
                 Sign Out
               </button>
@@ -61,52 +61,51 @@ export default function StaffDashboard() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Welcome Section */}
         <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white rounded-lg shadow px-6 py-6 mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Staff Dashboard
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Inventory and order management workspace
-            </p>
+          <div className="relative overflow-hidden rounded-2xl px-6 py-7 mb-6 text-white bg-gradient-to-br from-sky-600 via-blue-700 to-indigo-800 shadow-xl shadow-sky-500/30">
+            <div className="pointer-events-none absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_white,_transparent_55%)]" />
+            <div className="relative">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200">Fulfillment</span>
+              <h2 className="mt-1 text-3xl font-bold">Welcome, {session.user?.name} 🚚</h2>
+              <p className="text-white/80 mt-1">Inventory and order management workspace.</p>
 
-            {/* Quick Navigation */}
-            <div className="flex flex-wrap gap-3 pt-4 border-t">
-              <button
-                onClick={() => router.push('/admin/orders')}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
-              >
-                Manage Orders
-              </button>
-              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
-                My Activity
-              </button>
-              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
-                Profile
-              </button>
+              <div className="flex flex-wrap gap-3 mt-5">
+                <button
+                  onClick={() => router.push('/admin/orders')}
+                  className="px-4 py-2 bg-white text-sky-700 rounded-full text-sm font-semibold shadow hover:bg-slate-100"
+                >
+                  Manage Orders →
+                </button>
+                <button className="px-4 py-2 bg-white/15 backdrop-blur border border-white/25 text-white rounded-full text-sm font-medium hover:bg-white/20">
+                  My Activity
+                </button>
+                <button className="px-4 py-2 bg-white/15 backdrop-blur border border-white/25 text-white rounded-full text-sm font-medium hover:bg-white/20">
+                  Profile
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Daily Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Today's Sales</h3>
               <p className="mt-2 text-3xl font-bold text-green-600">$0.00</p>
               <p className="mt-1 text-xs text-gray-500">Last 24 hours</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Pending Orders</h3>
               <p className="mt-2 text-3xl font-bold text-orange-600">0</p>
               <p className="mt-1 text-xs text-gray-500">Needs processing</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">My Assigned Orders</h3>
               <p className="mt-2 text-3xl font-bold text-blue-600">0</p>
               <p className="mt-1 text-xs text-gray-500">Assigned to me</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Low Stock Alerts</h3>
               <p className="mt-2 text-3xl font-bold text-red-600">0</p>
               <p className="mt-1 text-xs text-gray-500">Below 10 items</p>

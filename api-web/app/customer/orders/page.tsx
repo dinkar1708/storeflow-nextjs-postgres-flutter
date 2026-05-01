@@ -79,7 +79,7 @@ export default function CustomerOrdersPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -101,9 +101,9 @@ export default function CustomerOrdersPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <nav className="bg-white shadow-sm border-b-4 border-green-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-green-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center space-x-4">
@@ -132,7 +132,7 @@ export default function CustomerOrdersPage() {
         <div className="px-4 py-6 sm:px-0">
           {/* Search and Filter */}
           {orders.length > 0 && (
-            <div className="bg-white rounded-lg shadow p-4 mb-6">
+            <div className="bg-white rounded-xl shadow p-4 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <input
@@ -169,15 +169,15 @@ export default function CustomerOrdersPage() {
           )}
 
           {filteredOrders.length === 0 && orders.length > 0 ? (
-            <div className="bg-white rounded-lg shadow p-12 text-center">
+            <div className="bg-white rounded-xl shadow p-12 text-center">
               <p className="text-gray-500">No orders match your search criteria.</p>
             </div>
           ) : orders.length === 0 ? (
-            <div className="bg-white rounded-lg shadow p-12 text-center">
+            <div className="bg-white rounded-xl shadow p-12 text-center">
               <p className="text-gray-500 text-lg mb-4">No orders yet</p>
               <button
                 onClick={() => router.push('/customer/products')}
-                className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium"
+                className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-md hover:brightness-110 shadow-md shadow-emerald-500/30 font-medium"
               >
                 Start Shopping
               </button>
@@ -187,7 +187,7 @@ export default function CustomerOrdersPage() {
               {filteredOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="bg-white rounded-lg shadow hover:bg-gray-50 hover:shadow-md cursor-pointer transition-shadow"
+                  className="bg-white rounded-xl shadow hover:bg-gray-50 hover:shadow-md cursor-pointer transition-shadow"
                   onClick={() => router.push(`/orders/${order.id}`)}
                   role="button"
                   tabIndex={0}

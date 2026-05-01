@@ -20,7 +20,7 @@ export default function AdminDashboard() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -31,9 +31,9 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <nav className="bg-white shadow-sm border-b-4 border-red-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-red-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
@@ -48,7 +48,7 @@ export default function AdminDashboard() {
               </span>
               <button
                 onClick={() => signOut({ callbackUrl: '/login' })}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md"
+                className="px-4 py-2 text-sm font-semibold text-white rounded-full bg-gradient-to-r from-fuchsia-500 to-rose-500 hover:brightness-110 shadow-md shadow-fuchsia-500/30"
               >
                 Sign Out
               </button>
@@ -61,67 +61,66 @@ export default function AdminDashboard() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Welcome Section */}
         <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white rounded-lg shadow px-6 py-6 mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Admin Dashboard
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Full system access and control
-            </p>
+          <div className="relative overflow-hidden rounded-2xl px-6 py-7 mb-6 text-white bg-gradient-to-br from-fuchsia-600 via-purple-700 to-indigo-800 shadow-xl shadow-fuchsia-500/30">
+            <div className="pointer-events-none absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_white,_transparent_55%)]" />
+            <div className="relative">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-200">Control center</span>
+              <h2 className="mt-1 text-3xl font-bold">Welcome, {session.user?.name} 🛠️</h2>
+              <p className="text-white/80 mt-1">Full system access — products, orders, users, analytics.</p>
 
-            {/* Quick Navigation */}
-            <div className="flex flex-wrap gap-3 pt-4 border-t">
-              <button
-                onClick={() => router.push('/admin/users')}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm font-medium"
-              >
-                Users
-              </button>
-              <button
-                onClick={() => router.push('/admin/products')}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
-              >
-                Products
-              </button>
-              <button
-                onClick={() => router.push('/admin/orders')}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium"
-              >
-                Orders
-              </button>
-              <button
-                onClick={() => router.push('/admin/analytics')}
-                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium"
-              >
-                Analytics
-              </button>
-              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">
-                Settings
-              </button>
+              <div className="flex flex-wrap gap-3 mt-5">
+                <button
+                  onClick={() => router.push('/admin/analytics')}
+                  className="px-4 py-2 bg-white text-fuchsia-700 rounded-full text-sm font-semibold shadow hover:bg-slate-100"
+                >
+                  📊 Analytics →
+                </button>
+                <button
+                  onClick={() => router.push('/admin/products')}
+                  className="px-4 py-2 bg-white/15 backdrop-blur border border-white/25 text-white rounded-full text-sm font-medium hover:bg-white/20"
+                >
+                  📦 Products
+                </button>
+                <button
+                  onClick={() => router.push('/admin/orders')}
+                  className="px-4 py-2 bg-white/15 backdrop-blur border border-white/25 text-white rounded-full text-sm font-medium hover:bg-white/20"
+                >
+                  📜 Orders
+                </button>
+                <button
+                  onClick={() => router.push('/admin/users')}
+                  className="px-4 py-2 bg-white/15 backdrop-blur border border-white/25 text-white rounded-full text-sm font-medium hover:bg-white/20"
+                >
+                  👥 Users
+                </button>
+                <button className="px-4 py-2 bg-white/15 backdrop-blur border border-white/25 text-white rounded-full text-sm font-medium hover:bg-white/20">
+                  Settings
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Key Metrics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Total Revenue</h3>
               <p className="mt-2 text-3xl font-bold text-green-600">$0.00</p>
               <p className="mt-1 text-xs text-gray-500">This month</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Total Orders</h3>
               <p className="mt-2 text-3xl font-bold text-blue-600">0</p>
               <p className="mt-1 text-xs text-gray-500">All time</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Total Users</h3>
               <p className="mt-2 text-3xl font-bold text-purple-600">7</p>
               <p className="mt-1 text-xs text-gray-500">All roles</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Total Products</h3>
               <p className="mt-2 text-3xl font-bold text-orange-600">2</p>
               <p className="mt-1 text-xs text-gray-500">Active products</p>

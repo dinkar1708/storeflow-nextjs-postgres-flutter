@@ -144,7 +144,7 @@ export default function AdminUsersPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -155,9 +155,9 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <nav className="bg-white shadow-sm border-b-4 border-red-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-red-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center space-x-4">
@@ -182,7 +182,7 @@ export default function AdminUsersPage() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Filters and Search */}
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <div className="bg-white rounded-xl shadow p-6 mb-6">
             <div className="flex flex-col md:flex-row gap-4">
               {/* Search */}
               <div className="flex-1">
@@ -232,7 +232,7 @@ export default function AdminUsersPage() {
           </div>
 
           {/* Users Table */}
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-white rounded-xl shadow overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>

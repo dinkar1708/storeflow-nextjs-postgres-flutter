@@ -43,14 +43,14 @@ const cartSubtotal = cart.reduce((s, i) => s + i.qty * i.price, 0);
 
 export default function CustomerDemo() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Demo banner */}
       <div className="bg-amber-100 text-amber-900 text-center text-sm py-2 border-b border-amber-200">
         Demo · Sample data only — no real account, no real orders.
       </div>
 
       {/* Top nav */}
-      <nav className="bg-white shadow-sm border-b-4 border-green-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-green-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
           <div className="flex items-center gap-4">
             <Link href="/demo" className="text-gray-600 hover:text-gray-900">← Back to Demo</Link>
@@ -65,7 +65,7 @@ export default function CustomerDemo() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
         {/* Welcome */}
-        <section className="bg-white rounded-lg shadow p-6">
+        <section className="bg-white rounded-xl shadow p-6">
           <h2 className="text-2xl font-bold text-gray-900">Welcome back, Alex 👋</h2>
           <p className="text-gray-600 mt-1">Here’s what your dashboard looks like.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
@@ -100,7 +100,7 @@ export default function CustomerDemo() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((p) => (
-              <div key={p.id} className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden">
+              <div key={p.id} className="bg-white rounded-xl shadow hover:shadow-lg transition-shadow overflow-hidden">
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-semibold text-gray-900">{p.name}</h3>
@@ -125,7 +125,7 @@ export default function CustomerDemo() {
 
         {/* Cart + Wishlist */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-xl shadow p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">🛒 Your cart</h2>
             <div className="divide-y">
               {cart.map((i) => (
@@ -145,7 +145,7 @@ export default function CustomerDemo() {
             <button className="mt-4 w-full px-4 py-3 bg-green-600 text-white rounded-md font-medium">Checkout</button>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-xl shadow p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">♥ Your wishlist</h2>
             <div className="space-y-3">
               {wishlist.map((w) => (
@@ -165,7 +165,7 @@ export default function CustomerDemo() {
         </section>
 
         {/* Orders */}
-        <section className="bg-white rounded-lg shadow p-6">
+        <section className="bg-white rounded-xl shadow p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">📜 Recent orders</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
@@ -194,7 +194,7 @@ export default function CustomerDemo() {
         </section>
 
         {/* Cross-link */}
-        <section className="bg-white rounded-lg shadow p-6 text-center">
+        <section className="bg-white rounded-xl shadow p-6 text-center">
           <p className="text-gray-600 mb-3">Want to see what staff & admins see?</p>
           <div className="flex justify-center gap-3 flex-wrap">
             <Link href="/demo/staff" className="px-4 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700">Staff view →</Link>

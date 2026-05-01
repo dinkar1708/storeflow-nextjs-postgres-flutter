@@ -146,7 +146,7 @@ export default function ProfilePage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -157,9 +157,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <nav className="bg-white shadow-sm border-b-4 border-green-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-green-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
@@ -203,18 +203,18 @@ export default function ProfilePage() {
 
           {/* Success/Error Messages */}
           {error && (
-            <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
               {error}
             </div>
           )}
           {success && (
-            <div className="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+            <div className="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl">
               {success}
             </div>
           )}
 
           {/* Profile Information Form */}
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <div className="bg-white rounded-xl shadow p-6 mb-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Profile Information</h2>
             <form onSubmit={handleUpdateProfile} className="space-y-4">
               <div>
@@ -294,7 +294,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Change Password Form */}
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-xl shadow p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Change Password</h2>
             <form onSubmit={handleChangePassword} className="space-y-4">
               <div>
@@ -351,7 +351,7 @@ export default function ProfilePage() {
 
           {/* Account Info */}
           {profile && (
-            <div className="mt-6 bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
+            <div className="mt-6 bg-gray-100 rounded-xl p-4 text-sm text-gray-600">
               <p><strong>Account Created:</strong> {new Date(profile.createdAt).toLocaleDateString()}</p>
               <p className="mt-1"><strong>Account ID:</strong> {profile.id}</p>
             </div>

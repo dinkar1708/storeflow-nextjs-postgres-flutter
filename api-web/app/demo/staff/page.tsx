@@ -38,12 +38,12 @@ const counts = {
 
 export default function StaffDemo() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <div className="bg-amber-100 text-amber-900 text-center text-sm py-2 border-b border-amber-200">
         Demo · Sample data only.
       </div>
 
-      <nav className="bg-white shadow-sm border-b-4 border-blue-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
           <div className="flex items-center gap-4">
             <Link href="/demo" className="text-gray-600 hover:text-gray-900">← Back to Demo</Link>
@@ -58,7 +58,7 @@ export default function StaffDemo() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
         {/* Header */}
-        <section className="bg-white rounded-lg shadow p-6">
+        <section className="bg-white rounded-xl shadow p-6">
           <h2 className="text-2xl font-bold text-gray-900">Fulfillment dashboard</h2>
           <p className="text-gray-600 mt-1">Move orders through the pipeline. Update stock as you pick.</p>
         </section>
@@ -71,7 +71,7 @@ export default function StaffDemo() {
             { label: 'Packed', count: counts.packed, color: 'purple', icon: '📦' },
             { label: 'Shipped today', count: counts.shipped, color: 'indigo', icon: '🚚' },
           ].map((s) => (
-            <div key={s.label} className="bg-white rounded-lg shadow p-5">
+            <div key={s.label} className="bg-white rounded-xl shadow p-5">
               <div className="flex justify-between items-start">
                 <div>
                   <div className="text-sm text-gray-500">{s.label}</div>
@@ -84,7 +84,7 @@ export default function StaffDemo() {
         </section>
 
         {/* Order queue */}
-        <section className="bg-white rounded-lg shadow">
+        <section className="bg-white rounded-xl shadow">
           <div className="p-6 border-b flex justify-between items-center">
             <div>
               <h2 className="text-xl font-bold text-gray-900">Order queue</h2>
@@ -131,12 +131,12 @@ export default function StaffDemo() {
         </section>
 
         {/* Stock alerts */}
-        <section className="bg-white rounded-lg shadow p-6">
+        <section className="bg-white rounded-xl shadow p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-1">⚠️ Low stock alerts</h2>
           <p className="text-sm text-gray-500 mb-4">Items at or below threshold.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {lowStock.map((s) => (
-              <div key={s.sku} className={`rounded-lg p-4 border ${s.stock === 0 ? 'border-red-200 bg-red-50' : 'border-yellow-200 bg-yellow-50'}`}>
+              <div key={s.sku} className={`rounded-xl p-4 border ${s.stock === 0 ? 'border-red-200 bg-red-50' : 'border-yellow-200 bg-yellow-50'}`}>
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="font-semibold text-gray-900">{s.name}</div>
@@ -152,7 +152,7 @@ export default function StaffDemo() {
         </section>
 
         {/* Cross-link */}
-        <section className="bg-white rounded-lg shadow p-6 text-center">
+        <section className="bg-white rounded-xl shadow p-6 text-center">
           <p className="text-gray-600 mb-3">Compare with the other roles:</p>
           <div className="flex justify-center gap-3 flex-wrap">
             <Link href="/demo/customer" className="px-4 py-2 bg-green-600 text-white rounded-md font-medium hover:bg-green-700">Customer view →</Link>

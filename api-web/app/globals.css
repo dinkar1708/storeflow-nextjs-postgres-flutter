@@ -54,6 +54,32 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground antialiased;
+    /* Soft gradient base shared across every page */
+    background:
+      radial-gradient(60rem 40rem at -10% -10%, rgba(232, 121, 249, 0.18), transparent 60%),
+      radial-gradient(60rem 40rem at 110% 20%, rgba(125, 211, 252, 0.22), transparent 60%),
+      radial-gradient(60rem 40rem at 30% 110%, rgba(110, 231, 183, 0.18), transparent 60%),
+      linear-gradient(to bottom, #ffffff, #f0f9ff 40%, #f5f3ff 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
+
+  /* Subtle dot pattern overlay on every page */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: radial-gradient(#0f172a 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.04;
+  }
+}
+
+/* Lift app content above the decorative ::before */
+body > * {
+  position: relative;
+  z-index: 1;
 }

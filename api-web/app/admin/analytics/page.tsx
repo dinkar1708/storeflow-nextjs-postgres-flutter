@@ -93,7 +93,7 @@ export default function AnalyticsPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading analytics...</div>
       </div>
     );
@@ -105,7 +105,7 @@ export default function AnalyticsPage() {
 
   if (!salesData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">No data available</div>
       </div>
     );
@@ -141,9 +141,9 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <nav className="bg-white shadow-sm border-b-4 border-red-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-red-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center space-x-4">
@@ -169,7 +169,7 @@ export default function AnalyticsPage() {
         <div className="px-4 py-6 sm:px-0">
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Total Revenue</h3>
               <p className="mt-2 text-3xl font-bold text-green-600">
                 ${salesData.summary.totalSales.toFixed(2)}
@@ -177,7 +177,7 @@ export default function AnalyticsPage() {
               <p className="mt-1 text-xs text-gray-500">All time sales</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Total Profit</h3>
               <p className="mt-2 text-3xl font-bold text-blue-600">
                 ${salesData.summary.totalProfit.toFixed(2)}
@@ -187,7 +187,7 @@ export default function AnalyticsPage() {
               </p>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Total Cost</h3>
               <p className="mt-2 text-3xl font-bold text-orange-600">
                 ${salesData.summary.totalCost.toFixed(2)}
@@ -195,7 +195,7 @@ export default function AnalyticsPage() {
               <p className="mt-1 text-xs text-gray-500">Product costs</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-sm font-medium text-gray-500">Total Orders</h3>
               <p className="mt-2 text-3xl font-bold text-purple-600">
                 {salesData.summary.totalOrders}
@@ -208,7 +208,7 @@ export default function AnalyticsPage() {
 
           {/* Today and This Month Stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Today</h3>
               <div className="grid grid-cols-3 gap-4">
                 <div>
@@ -232,7 +232,7 @@ export default function AnalyticsPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-xl shadow p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">This Month</h3>
               <div className="grid grid-cols-3 gap-4">
                 <div>
@@ -258,7 +258,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Chart Section */}
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <div className="bg-white rounded-xl shadow p-6 mb-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-semibold text-gray-900">Sales Overview</h2>
               <div className="flex gap-2">

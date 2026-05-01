@@ -95,7 +95,7 @@ export default function OrderDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -103,8 +103,8 @@ export default function OrderDetailsPage() {
 
   if (errorMsg) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-lg shadow p-6 max-w-md w-full">
+      <div className="min-h-screen flex items-center justify-center p-6">
+        <div className="bg-white rounded-xl shadow p-6 max-w-md w-full">
           <div className="text-red-600 font-medium mb-2">Error</div>
           <div className="text-gray-700">{errorMsg}</div>
           <button
@@ -121,8 +121,8 @@ export default function OrderDetailsPage() {
   if (!order) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm border-b-4 border-blue-600">
+    <div className="min-h-screen">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <button onClick={() => router.push(getBackUrl())} className="text-gray-600 hover:text-gray-900">
@@ -134,7 +134,7 @@ export default function OrderDetailsPage() {
       </nav>
 
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow p-6">
           <div className="flex flex-wrap gap-6 justify-between items-start">
             <div>
               <div className="text-sm text-gray-500">Order ID</div>

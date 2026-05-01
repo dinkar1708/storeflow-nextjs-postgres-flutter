@@ -133,7 +133,7 @@ export default function AdminProductsPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -166,7 +166,7 @@ export default function AdminProductsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
       <nav className={`bg-white shadow-sm border-b-4 ${userRole === UserRole.ADMIN ? 'border-red-600' : 'border-blue-600'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -197,7 +197,7 @@ export default function AdminProductsPage() {
             <div className="mb-6">
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium"
+                className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-rose-500 text-white rounded-md hover:brightness-110 shadow-md shadow-fuchsia-500/30 font-medium"
               >
                 {showAddForm ? 'Cancel' : '+ Add Product'}
               </button>
@@ -205,7 +205,7 @@ export default function AdminProductsPage() {
           )}
 
           {/* Search and Filter Section */}
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <div className="bg-white rounded-xl shadow p-6 mb-6">
             <h2 className="text-lg font-semibold mb-4">Search and Filter</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Search Input */}
@@ -265,7 +265,7 @@ export default function AdminProductsPage() {
 
           {/* Add Product Form */}
           {showAddForm && (
-            <div className="bg-white rounded-lg shadow p-6 mb-6">
+            <div className="bg-white rounded-xl shadow p-6 mb-6">
               <h2 className="text-lg font-semibold mb-4">Add New Product</h2>
               <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -369,7 +369,7 @@ export default function AdminProductsPage() {
                 <div className="md:col-span-2">
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium"
+                    className="px-6 py-2 bg-gradient-to-r from-fuchsia-500 to-rose-500 text-white rounded-md hover:brightness-110 shadow-md shadow-fuchsia-500/30 font-medium"
                   >
                     Add Product
                   </button>
@@ -379,7 +379,7 @@ export default function AdminProductsPage() {
           )}
 
           {/* Products Table */}
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-white rounded-xl shadow overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>

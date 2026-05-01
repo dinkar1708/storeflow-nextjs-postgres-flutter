@@ -65,7 +65,7 @@ export default function CartPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -76,9 +76,9 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <nav className="bg-white shadow-sm border-b-4 border-green-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-green-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center space-x-4">
@@ -106,11 +106,11 @@ export default function CartPage() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {cart.length === 0 ? (
-            <div className="bg-white rounded-lg shadow p-12 text-center">
+            <div className="bg-white rounded-xl shadow p-12 text-center">
               <p className="text-gray-500 text-lg mb-4">Your cart is empty</p>
               <button
                 onClick={() => router.push('/customer/products')}
-                className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium"
+                className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-md hover:brightness-110 shadow-md shadow-emerald-500/30 font-medium"
               >
                 Start Shopping
               </button>
@@ -120,7 +120,7 @@ export default function CartPage() {
               {/* Cart Items */}
               <div className="lg:col-span-2 space-y-4">
                 {cart.map((item) => (
-                  <div key={item.id} className="bg-white rounded-lg shadow p-6">
+                  <div key={item.id} className="bg-white rounded-xl shadow p-6">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
@@ -172,7 +172,7 @@ export default function CartPage() {
 
               {/* Order Summary */}
               <div className="lg:col-span-1">
-                <div className="bg-white rounded-lg shadow p-6 sticky top-6">
+                <div className="bg-white rounded-xl shadow p-6 sticky top-6">
                   <h2 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
 
                   <div className="space-y-3 mb-6">

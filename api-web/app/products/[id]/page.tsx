@@ -114,7 +114,7 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading product...</div>
       </div>
     );
@@ -122,7 +122,7 @@ export default function ProductDetailPage() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Product not found</div>
       </div>
     );
@@ -151,7 +151,7 @@ export default function ProductDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
       <nav className={`bg-white shadow-sm border-b-4 ${getHeaderColor()}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -191,10 +191,10 @@ export default function ProductDetailPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-white rounded-xl shadow overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
               {/* Product Image */}
-              <div className="bg-gray-100 rounded-lg flex items-center justify-center h-96">
+              <div className="bg-gray-100 rounded-xl flex items-center justify-center h-96">
                 <div className="text-gray-400 text-6xl">📦</div>
               </div>
 
@@ -272,7 +272,7 @@ export default function ProductDetailPage() {
                       </div>
                       <button
                         onClick={handleAddToCart}
-                        className="w-full px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium text-lg"
+                        className="w-full px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-md hover:brightness-110 shadow-md shadow-emerald-500/30 font-medium text-lg"
                       >
                         Add to Cart
                       </button>
@@ -297,7 +297,7 @@ export default function ProductDetailPage() {
                     <div className="space-y-3">
                       <button
                         onClick={handleEditProduct}
-                        className="w-full px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium"
+                        className="w-full px-6 py-3 bg-gradient-to-r from-fuchsia-500 to-rose-500 text-white rounded-md hover:brightness-110 shadow-md shadow-fuchsia-500/30 font-medium"
                       >
                         Edit Product
                       </button>
@@ -312,11 +312,11 @@ export default function ProductDetailPage() {
                     <div className="space-y-3">
                       <button
                         onClick={handleUpdateStock}
-                        className="w-full px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+                        className="w-full px-6 py-3 bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-md hover:brightness-110 shadow-md shadow-sky-500/30 font-medium"
                       >
                         Update Stock
                       </button>
-                      <button className="w-full px-6 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 font-medium">
+                      <button className="w-full px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-md hover:brightness-110 shadow-md shadow-orange-500/30 font-medium">
                         Process Orders
                       </button>
                     </div>
@@ -326,7 +326,7 @@ export default function ProductDetailPage() {
                   {!session && product.isActive && (
                     <button
                       onClick={() => router.push('/login')}
-                      className="w-full px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium text-lg"
+                      className="w-full px-6 py-3 bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-md hover:brightness-110 shadow-md shadow-sky-500/30 font-medium text-lg"
                     >
                       Login to Purchase
                     </button>

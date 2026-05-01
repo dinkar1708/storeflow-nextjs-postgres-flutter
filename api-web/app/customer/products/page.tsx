@@ -99,7 +99,7 @@ export default function CustomerProductsPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -122,9 +122,9 @@ export default function CustomerProductsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <nav className="bg-white shadow-sm border-b-4 border-green-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-green-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center space-x-4">
@@ -149,7 +149,7 @@ export default function CustomerProductsPage() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Search and Filter */}
-          <div className="bg-white rounded-lg shadow p-4 mb-6">
+          <div className="bg-white rounded-xl shadow p-4 mb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <input
@@ -183,7 +183,7 @@ export default function CustomerProductsPage() {
           </div>
 
           {filteredProducts.length === 0 ? (
-            <div className="bg-white rounded-lg shadow p-12 text-center">
+            <div className="bg-white rounded-xl shadow p-12 text-center">
               <p className="text-gray-500">
                 {products.length === 0
                   ? 'No products available at the moment.'
@@ -195,7 +195,7 @@ export default function CustomerProductsPage() {
               {filteredProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden"
+                  className="bg-white rounded-xl shadow hover:shadow-lg transition-shadow overflow-hidden"
                 >
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-2">

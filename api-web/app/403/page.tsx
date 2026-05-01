@@ -23,8 +23,8 @@ export default function ForbiddenPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center">
         <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
           <svg
             className="h-10 w-10 text-red-600"
@@ -47,7 +47,7 @@ export default function ForbiddenPage() {
         </p>
 
         {session?.user && (
-          <div className="bg-gray-100 rounded-lg p-4 mb-6">
+          <div className="bg-gray-100 rounded-xl p-4 mb-6">
             <p className="text-sm text-gray-700">
               Your current role: <strong>{(session.user as any).role}</strong>
             </p>

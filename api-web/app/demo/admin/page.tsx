@@ -68,12 +68,12 @@ const roleBadge: Record<string, string> = {
 
 export default function AdminDemo() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <div className="bg-amber-100 text-amber-900 text-center text-sm py-2 border-b border-amber-200">
         Demo · Sample data only.
       </div>
 
-      <nav className="bg-white shadow-sm border-b-4 border-red-600">
+      <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-red-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
           <div className="flex items-center gap-4">
             <Link href="/demo" className="text-gray-600 hover:text-gray-900">← Back to Demo</Link>
@@ -95,7 +95,7 @@ export default function AdminDemo() {
             { label: 'Avg order value', value: '$92.93', sub: '+4%', color: 'text-purple-600' },
             { label: 'Active users', value: '1,284', sub: '+22 new', color: 'text-orange-600' },
           ].map((k) => (
-            <div key={k.label} className="bg-white rounded-lg shadow p-5">
+            <div key={k.label} className="bg-white rounded-xl shadow p-5">
               <div className="text-sm text-gray-500">{k.label}</div>
               <div className={`text-3xl font-bold mt-1 ${k.color}`}>{k.value}</div>
               <div className="text-xs text-gray-400 mt-1">{k.sub}</div>
@@ -105,7 +105,7 @@ export default function AdminDemo() {
 
         {/* Charts */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
+          <div className="bg-white rounded-xl shadow p-6 lg:col-span-2">
             <h2 className="text-lg font-bold text-gray-900 mb-4">Revenue · last 7 days</h2>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -119,7 +119,7 @@ export default function AdminDemo() {
               </ResponsiveContainer>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-xl shadow p-6">
             <h2 className="text-lg font-bold text-gray-900 mb-4">Orders by status</h2>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -137,7 +137,7 @@ export default function AdminDemo() {
           </div>
         </section>
 
-        <section className="bg-white rounded-lg shadow p-6">
+        <section className="bg-white rounded-xl shadow p-6">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Top products by units sold</h2>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -153,7 +153,7 @@ export default function AdminDemo() {
         </section>
 
         {/* Products table */}
-        <section className="bg-white rounded-lg shadow">
+        <section className="bg-white rounded-xl shadow">
           <div className="p-6 border-b flex justify-between items-center">
             <div>
               <h2 className="text-xl font-bold text-gray-900">Products</h2>
@@ -199,7 +199,7 @@ export default function AdminDemo() {
         </section>
 
         {/* Users table */}
-        <section className="bg-white rounded-lg shadow">
+        <section className="bg-white rounded-xl shadow">
           <div className="p-6 border-b">
             <h2 className="text-xl font-bold text-gray-900">Users</h2>
             <p className="text-sm text-gray-500">Manage roles and access.</p>
@@ -233,7 +233,7 @@ export default function AdminDemo() {
         </section>
 
         {/* Cross-link */}
-        <section className="bg-white rounded-lg shadow p-6 text-center">
+        <section className="bg-white rounded-xl shadow p-6 text-center">
           <p className="text-gray-600 mb-3">See it from the other side:</p>
           <div className="flex justify-center gap-3 flex-wrap">
             <Link href="/demo/customer" className="px-4 py-2 bg-green-600 text-white rounded-md font-medium hover:bg-green-700">Customer view →</Link>

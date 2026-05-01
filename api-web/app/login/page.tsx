@@ -1,10 +1,10 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { DEMO_LOGIN_ACCOUNTS } from '@/lib/demo-login-accounts';
+import type { DemoLoginAccount } from '@/lib/demo-login-accounts';
 import { MarketingShell } from '@/components/MarketingShell';
 
 export default function LoginPage() {
@@ -14,6 +14,19 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [demoSelectValue, setDemoSelectValue] = useState('');
+  const [demoAccounts, setDemoAccounts] = useState<DemoLoginAccount[]>([]);
+
+  // Dev-only: dynamically load seed credentials so they never enter the
+  // production bundle. The `process.env.NODE_ENV` check is statically
+  // evaluated by Next.js, so the import() call is dead-code-eliminated
+  // in production builds.
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      import('@/lib/demo-login-accounts')
+        .then((mod) => setDemoAccounts(mod.DEMO_LOGIN_ACCOUNTS))
+        .catch(() => {});
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +56,7 @@ export default function LoginPage() {
       setPassword('');
       return;
     }
-    const account = DEMO_LOGIN_ACCOUNTS.find((a) => a.email === value);
+    const account = demoAccounts.find((a) => a.email === value);
     if (account) {
       setEmail(account.email);
       setPassword(account.password);
@@ -108,7 +121,7 @@ export default function LoginPage() {
               </div>
 
               <div className="p-7">
-                {process.env.NODE_ENV === 'development' && (
+                {process.env.NODE_ENV === 'development' && demoAccounts.length > 0 && (
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 mb-5">
                     <h3 className="text-sm font-semibold text-slate-900">Demo login (seed data)</h3>
                     <p className="mt-1 text-xs text-slate-600">
@@ -121,7 +134,7 @@ export default function LoginPage() {
                       className="mt-3 w-full appearance-none rounded-xl border border-slate-300 bg-white py-2.5 px-3 text-sm text-slate-900 shadow-sm focus:border-fuchsia-500 focus:outline-none focus:ring-1 focus:ring-fuchsia-500"
                     >
                       <option value="">Custom — type below</option>
-                      {DEMO_LOGIN_ACCOUNTS.map((a) => (
+                      {demoAccounts.map((a) => (
                         <option key={a.email} value={a.email}>
                           {a.group} · {a.label} · {a.email} ({a.role})
                         </option>
@@ -174,7 +187,7 @@ export default function LoginPage() {
                   </div>
 
                   {error && (
-                    <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2">
+                    <div className="rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2">
                       {error}
                     </div>
                   )}

@@ -23,7 +23,7 @@ export default function Home() {
       <nav className="relative z-10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center h-16">
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-fuchsia-500 to-sky-500 font-bold text-white shadow-md">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500 to-sky-500 font-bold text-white shadow-md">
               S
             </span>
             <span className="text-xl font-bold tracking-tight">StoreFlow</span>
