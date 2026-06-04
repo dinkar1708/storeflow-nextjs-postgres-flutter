@@ -60,13 +60,21 @@ NEXTAUTH_SECRET="dev-secret-change-in-production"
 
 **Dev server port:** Docs assume **http://localhost:3001**. The `npm run dev` script uses port 3001; if you change it, update `NEXTAUTH_URL` accordingly.
 
+**Environment files created:**
+- `.env` - Base configuration (Prisma reads this)
+- `.env.development.local` - Local overrides (Next.js reads this, gitignored)
+
+Both should have the same `DATABASE_URL` for local development.
+
 ### 4. Setup Database Tables
 
 ```bash
 npx prisma generate
-npx prisma migrate deploy
+npx prisma migrate dev --name init
 npm run db:seed
 ```
+
+**Note:** Use `migrate dev` for first-time setup. It creates and applies migrations. For production deployments, use `migrate deploy` instead.
 
 ### 5. Run the App
 
@@ -80,12 +88,38 @@ Visit: **http://localhost:3001**
 - Email: `admin@storeflow.com`
 - Password: `Admin@123`
 
+### 6. Verify Setup
+
+To confirm everything is working:
+
+```bash
+# Check PostgreSQL connection
+psql -U YOUR_USERNAME -d storeflow -c "SELECT current_database();"
+
+# View created tables
+psql -U YOUR_USERNAME -d storeflow -c "\dt"
+
+# Check seeded data
+psql -U YOUR_USERNAME -d storeflow -c "SELECT email, role FROM \"User\";"
+```
+
+If all commands succeed, your setup is complete! ✅
+
 ---
 
 ## Common Issues
 
 **Database connection failed:**
-- Check PostgreSQL is running
+- Check PostgreSQL is running:
+  ```bash
+  # Check if PostgreSQL is running
+  pg_isready
+
+  # Start PostgreSQL (macOS/Linux with Homebrew)
+  brew services start postgresql@14
+  # or
+  pg_ctl -D /opt/homebrew/var/postgresql@14 start
+  ```
 - Verify DATABASE_URL has correct username/password
 - Make sure database `storeflow` exists
 
@@ -102,7 +136,7 @@ npx prisma studio
 
 # Reset database
 dropdb storeflow && createdb storeflow
-npx prisma migrate deploy
+npx prisma migrate dev --name init
 npm run db:seed
 ```
 
