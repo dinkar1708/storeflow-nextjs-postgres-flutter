@@ -1,4 +1,4 @@
-# StoreFlow - API & Web Application
+# StoreFlow - API & Web Application.
 
 Next.js 14 full-stack application (API + Web UI)
 
