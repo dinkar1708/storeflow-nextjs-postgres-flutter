@@ -137,10 +137,25 @@ export async function PATCH(request: NextRequest) {
         );
       }
 
-      // Validate new password
-      if (newPassword.length < 5) {
+      // Validate new password strength (min 8 characters with complexity)
+      if (newPassword.length < 8) {
         return NextResponse.json(
-          { error: 'New password must be at least 5 characters' },
+          { error: 'New password must be at least 8 characters' },
+          { status: 400 }
+        );
+      }
+
+      // Check password complexity requirements
+      const hasUpperCase = /[A-Z]/.test(newPassword);
+      const hasLowerCase = /[a-z]/.test(newPassword);
+      const hasNumber = /[0-9]/.test(newPassword);
+      const hasSpecialChar = /[@$!%*?&#]/.test(newPassword);
+
+      if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+        return NextResponse.json(
+          {
+            error: 'New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&#)'
+          },
           { status: 400 }
         );
       }

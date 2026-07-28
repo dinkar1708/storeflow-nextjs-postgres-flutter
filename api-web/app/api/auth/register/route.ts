@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { rateLimit, RateLimitPresets } from '@/lib/rate-limit';
 
 /**
  * @swagger
@@ -55,6 +56,12 @@ import bcrypt from 'bcryptjs';
  */
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting
+  const rateLimitResponse = await rateLimit(request, RateLimitPresets.AUTH);
+  if (rateLimitResponse) {
+    return rateLimitResponse;
+  }
+
   try {
     const body = await request.json();
     const { email, password, name } = body;
@@ -90,10 +97,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate password length (min 5 characters)
-    if (password.length < 5) {
+    // Validate password strength (min 8 characters with complexity)
+    if (password.length < 8) {
       return NextResponse.json(
-        { error: 'Password must be at least 5 characters' },
+        { error: 'Password must be at least 8 characters' },
+        { status: 400 }
+      );
+    }
+
+    // Check password complexity requirements
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[@$!%*?&#]/.test(password);
+
+    if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+      return NextResponse.json(
+        {
+          error: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&#)'
+        },
         { status: 400 }
       );
     }

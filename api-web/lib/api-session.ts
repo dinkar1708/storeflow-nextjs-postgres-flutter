@@ -3,6 +3,14 @@ import { jwtVerify } from 'jose';
 import type { NextRequest } from 'next/server';
 import { authOptions } from './auth';
 
+// Validate JWT secret - fail fast in production if not set
+if (!process.env.NEXTAUTH_SECRET) {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('NEXTAUTH_SECRET environment variable is required in production');
+  }
+  console.warn('⚠️  WARNING: NEXTAUTH_SECRET not set, using development fallback');
+}
+
 /** Same secret as JWT login (POST /api/auth/login). */
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'fallback-secret-for-dev';
 const secretKey = new TextEncoder().encode(JWT_SECRET);

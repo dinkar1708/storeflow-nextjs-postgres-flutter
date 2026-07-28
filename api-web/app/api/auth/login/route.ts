@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { handleJwtLogin } from '@/lib/jwt-login';
+import { rateLimit, RateLimitPresets } from '@/lib/rate-limit';
 
 /**
  * @swagger
@@ -8,7 +9,7 @@ import { handleJwtLogin } from '@/lib/jwt-login';
  *     tags:
  *       - Authentication
  *     summary: Login (JWT)
- *     description: Email + password → JWT in `token` for any client. Use in Authorize (BearerAuth). Same users/passwords as NextAuth web login.
+ *     description: Email + password → JWT in `token` for any client. Use in Authorize (BearerAuth). Same users/passwords as NextAuth web login. Rate limited to 5 attempts per 15 minutes.
  *     requestBody:
  *       required: true
  *       content:
@@ -49,7 +50,15 @@ import { handleJwtLogin } from '@/lib/jwt-login';
  *         description: Invalid credentials
  *       400:
  *         description: Missing parameters
+ *       429:
+ *         description: Too many login attempts
  */
 export async function POST(request: NextRequest) {
+  // Apply rate limiting
+  const rateLimitResponse = await rateLimit(request, RateLimitPresets.AUTH);
+  if (rateLimitResponse) {
+    return rateLimitResponse;
+  }
+
   return handleJwtLogin(request);
 }

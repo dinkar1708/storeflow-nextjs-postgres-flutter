@@ -18,7 +18,14 @@ Universal platform for inventory and order management that can be customized for
 
 ## Current Status
 
-**6 Modules Live** | **40 Tests Passing** | **Ready for Production**
+**6 Modules Live** | **63 Tests Passing** | **Security Hardened** | **Production Ready**
+
+### Recent Updates
+- ✅ Enhanced security with rate limiting (prevents brute force attacks)
+- ✅ Strong password requirements (8+ characters with complexity)
+- ✅ Transaction-based order processing (prevents inventory overselling)
+- ✅ Updated dependencies (fixed security vulnerabilities)
+- ✅ Comprehensive security documentation added
 
 ### Completed Features
 
@@ -79,8 +86,9 @@ flutter run
 ## Tech Stack
 
 **Web**: Next.js 14, TypeScript, PostgreSQL, Prisma, NextAuth, Tailwind CSS
-**Mobile**: Flutter (Coming Soon)
-**Testing**: Vitest (40 tests, 100% passing)
+**Mobile**: Flutter
+**Testing**: Vitest (63 tests, 100% passing)
+**Security**: Rate limiting, bcrypt hashing, JWT authentication, transaction safety
 
 ## Documentation
 
@@ -112,18 +120,27 @@ flutter run
 - [Testing Guide](./docs/development/TESTING.md) - Run tests
 - [Flutter API Generation](./flutter-app/README-API-GENERATION.md) - Mobile app setup
 
+**Security:**
+- [Security Guide](./docs/security/SECURITY.md) - Security features & configuration
+
 ## Testing
 
+**Status**: ✅ **63/63 tests passing (100%)**
+
 ```bash
+cd api-web
 npm test              # Run all tests
 npm run test:watch    # Watch mode
 npm run test:ui       # Interactive UI
 ```
 
-**Coverage**: 40/40 tests passing (100%)
-- Authentication: 24 tests
-- Products & Categories: 8 tests
-- Product Details: 8 tests
+**Test Coverage**:
+- ✅ Authentication & Security: 30 tests
+- ✅ Products & Categories: 16 tests
+- ✅ Wishlist: 15 tests
+- ✅ Integration: 2 tests
+
+See [Testing Guide](./docs/development/TESTING.md) for details.
 
 ## Deployment
 

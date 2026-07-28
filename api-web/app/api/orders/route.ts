@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { UserRole, OrderStatus } from '@/lib/enums';
+import { rateLimit, RateLimitPresets } from '@/lib/rate-limit';
 
 /**
  * @swagger
@@ -46,6 +47,12 @@ import { UserRole, OrderStatus } from '@/lib/enums';
  */
 // POST - Create new order (Customer only)
 export async function POST(request: NextRequest) {
+  // Apply rate limiting for order creation
+  const rateLimitResponse = await rateLimit(request, RateLimitPresets.WRITE);
+  if (rateLimitResponse) {
+    return rateLimitResponse;
+  }
+
   try {
     const user = await getApiUser(request);
 
@@ -69,41 +76,62 @@ export async function POST(request: NextRequest) {
     // Generate unique order number
     const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
-    // Create order with order items
-    const order = await prisma.order.create({
-      data: {
-        userId: user.id,
-        orderNumber,
-        total: parseFloat(total),
-        status: OrderStatus.PENDING,
-        items: {
-          create: items.map((item: any) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            price: parseFloat(item.price),
-          })),
-        },
-      },
-      include: {
-        items: {
-          include: {
-            product: true,
+    // Use transaction to ensure atomicity and prevent race conditions
+    const order = await prisma.$transaction(async (tx) => {
+      // First, check stock availability for all items
+      for (const item of items) {
+        const product = await tx.product.findUnique({
+          where: { id: item.productId },
+          select: { stock: true, name: true },
+        });
+
+        if (!product) {
+          throw new Error(`Product with ID ${item.productId} not found`);
+        }
+
+        if (product.stock < item.quantity) {
+          throw new Error(`Insufficient stock for ${product.name}. Available: ${product.stock}, Requested: ${item.quantity}`);
+        }
+      }
+
+      // Create order with order items
+      const newOrder = await tx.order.create({
+        data: {
+          userId: user.id,
+          orderNumber,
+          total: parseFloat(total),
+          status: OrderStatus.PENDING,
+          items: {
+            create: items.map((item: any) => ({
+              productId: item.productId,
+              quantity: item.quantity,
+              price: parseFloat(item.price),
+            })),
           },
         },
-      },
-    });
-
-    // Update product stock
-    for (const item of items) {
-      await prisma.product.update({
-        where: { id: item.productId },
-        data: {
-          stock: {
-            decrement: item.quantity,
+        include: {
+          items: {
+            include: {
+              product: true,
+            },
           },
         },
       });
-    }
+
+      // Update product stock atomically
+      for (const item of items) {
+        await tx.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: {
+              decrement: item.quantity,
+            },
+          },
+        });
+      }
+
+      return newOrder;
+    });
 
     return NextResponse.json(
       {

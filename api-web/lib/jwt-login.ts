@@ -3,6 +3,14 @@ import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { SignJWT } from 'jose';
 
+// Validate JWT secret - fail fast in production if not set
+if (!process.env.NEXTAUTH_SECRET) {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('NEXTAUTH_SECRET environment variable is required in production');
+  }
+  console.warn('⚠️  WARNING: NEXTAUTH_SECRET not set, using development fallback');
+}
+
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'fallback-secret-for-dev';
 const secretKey = new TextEncoder().encode(JWT_SECRET);
 
