@@ -97,7 +97,7 @@ export async function GET(
     }
 
     return NextResponse.json({ order }, { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(error);
   }
 }
@@ -198,7 +198,7 @@ export async function PATCH(
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(error);
   }
 }

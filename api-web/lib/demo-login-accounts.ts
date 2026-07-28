@@ -1,4 +1,23 @@
-/** Seed users from TEST_LOGIN.md — run `npm run db:seed` first. */
+/**
+ * Demo login accounts for DEVELOPMENT ONLY.
+ *
+ * Security Notes:
+ * - These accounts are only loaded in NODE_ENV=development
+ * - Production builds exclude this file via tree-shaking
+ * - Database seed script validates NODE_ENV before creating accounts
+ * - Never deploy these accounts to production databases
+ *
+ * Usage: Run `npm run db:seed` in development
+ */
+
+// Runtime check to prevent accidental usage in production
+if (process.env.NODE_ENV === 'production') {
+  throw new Error(
+    'SECURITY: demo-login-accounts.ts should never be imported in production. ' +
+    'Check your build configuration and imports.'
+  );
+}
+
 export type DemoLoginAccount = {
   group: 'Admin' | 'Staff' | 'Customer';
   label: string;

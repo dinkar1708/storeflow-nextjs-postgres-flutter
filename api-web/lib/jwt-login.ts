@@ -5,6 +5,7 @@ import { SignJWT } from 'jose';
 import { createErrorResponse, ErrorCodes } from '@/lib/error-handler';
 import { validateRequest } from '@/lib/validate-request';
 import { loginSchema } from '@/lib/validations';
+import { logAuthEvent, AuditAction, getIpAddress } from '@/lib/audit-log';
 
 // Validate JWT secret - fail fast in production if not set
 if (!process.env.NEXTAUTH_SECRET) {
@@ -29,7 +30,12 @@ export async function handleJwtLogin(request: NextRequest): Promise<NextResponse
       where: { email },
     });
 
+    const ipAddress = getIpAddress(request);
+
     if (!user || !user.isActive) {
+      // Log failed login attempt
+      await logAuthEvent(AuditAction.LOGIN_FAILED, null, email, ipAddress);
+
       return NextResponse.json(
         { error: 'Invalid credentials or inactive account' },
         { status: 401 }
@@ -39,11 +45,17 @@ export async function handleJwtLogin(request: NextRequest): Promise<NextResponse
     const isValid = await bcrypt.compare(password, user.password);
 
     if (!isValid) {
+      // Log failed login attempt
+      await logAuthEvent(AuditAction.LOGIN_FAILED, user.id, email, ipAddress);
+
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
       );
     }
+
+    // Log successful login
+    await logAuthEvent(AuditAction.LOGIN_SUCCESS, user.id, email, ipAddress);
 
     const token = await new SignJWT({
       id: user.id,
@@ -52,7 +64,7 @@ export async function handleJwtLogin(request: NextRequest): Promise<NextResponse
     })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
-      .setExpirationTime('30d')
+      .setExpirationTime('7d') // Reduced from 30d to 7d for better security
       .sign(secretKey);
 
     return NextResponse.json(
@@ -68,7 +80,7 @@ export async function handleJwtLogin(request: NextRequest): Promise<NextResponse
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     return createErrorResponse(
       ErrorCodes.INTERNAL_ERROR,
       'Login failed. Please try again later.',

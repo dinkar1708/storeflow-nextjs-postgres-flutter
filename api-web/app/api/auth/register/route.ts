@@ -5,6 +5,7 @@ import { rateLimit, RateLimitPresets } from '@/lib/rate-limit';
 import { handlePrismaError, createErrorResponse, ErrorCodes } from '@/lib/error-handler';
 import { validateRequest } from '@/lib/validate-request';
 import { registerSchema } from '@/lib/validations';
+import { logAuthEvent, AuditAction, getIpAddress } from '@/lib/audit-log';
 
 /**
  * @swagger
@@ -98,6 +99,10 @@ export async function POST(request: NextRequest) {
         role: 'CUSTOMER',
       },
     });
+
+    // Log registration
+    const ipAddress = getIpAddress(request);
+    await logAuthEvent(AuditAction.REGISTER, user.id, email, ipAddress);
 
     // Return user object without password
     return NextResponse.json(

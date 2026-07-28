@@ -94,10 +94,52 @@ function addCorsHeaders(response: NextResponse, origin: string | null): NextResp
 }
 
 /**
+ * CSRF Protection: Verify Origin/Referer for state-changing operations
+ * For JWT-based APIs, checking Origin header is the primary CSRF defense
+ */
+function checkCSRF(request: NextRequest): boolean {
+  const method = request.method;
+
+  // Only check state-changing methods
+  if (!['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+    return true;
+  }
+
+  // In development, be more lenient
+  if (process.env.NODE_ENV === 'development') {
+    return true;
+  }
+
+  const origin = request.headers.get('origin');
+  const referer = request.headers.get('referer');
+
+  // Check Origin header first (most reliable)
+  if (origin) {
+    return isOriginAllowed(origin);
+  }
+
+  // Fallback to Referer header
+  if (referer) {
+    try {
+      const refererUrl = new URL(referer);
+      const refererOrigin = `${refererUrl.protocol}//${refererUrl.host}`;
+      return isOriginAllowed(refererOrigin);
+    } catch {
+      return false;
+    }
+  }
+
+  // No Origin or Referer header - reject in production
+  return false;
+}
+
+/**
  * Optional HTTP Basic Auth for `/api-docs` and `/api/swagger` when both
  * `SWAGGER_DOCS_USERNAME` and `SWAGGER_DOCS_PASSWORD` are set.
  *
  * CORS configuration for API routes with configurable allowed origins.
+ *
+ * CSRF protection via Origin/Referer header verification for state-changing operations.
  *
  * Development-only request logging for `/api/*` (does not read bodies).
  */
@@ -114,6 +156,25 @@ export function middleware(request: NextRequest) {
   // Check Swagger authentication
   if (swaggerDocsAuthRequired(pathname) && !checkSwaggerBasicAuth(request)) {
     return unauthorizedSwaggerResponse();
+  }
+
+  // CSRF Protection for API routes
+  if (pathname.startsWith('/api') && !checkCSRF(request)) {
+    return new NextResponse(
+      JSON.stringify({
+        success: false,
+        error: {
+          code: 'CSRF_VALIDATION_FAILED',
+          message: 'Invalid origin for this request',
+        },
+      }),
+      {
+        status: 403,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
   }
 
   // Development logging

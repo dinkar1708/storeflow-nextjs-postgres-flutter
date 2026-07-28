@@ -4,7 +4,14 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding database...');
+  // SECURITY: Prevent seeding demo accounts in production
+  if (process.env.NODE_ENV === 'production') {
+    console.error('ERROR: Cannot seed demo accounts in production environment');
+    console.error('Demo accounts with hardcoded passwords are for development only');
+    process.exit(1);
+  }
+
+  console.log('Seeding database (DEVELOPMENT MODE)...');
 
   // Create demo users with hashed passwords
   console.log('Creating admin accounts...');

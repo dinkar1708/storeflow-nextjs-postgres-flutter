@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { createErrorResponse, ErrorCodes, handlePrismaError } from '@/lib/error-handler';
+import { logUserAction, AuditAction, getIpAddress } from '@/lib/audit-log';
 
 /**
  * @swagger
@@ -74,7 +75,7 @@ export async function PATCH(
     }
 
     // Build update data
-    const updateData: any = {};
+    const updateData: { role?: string; isActive?: boolean } = {};
     if (role !== undefined) updateData.role = role;
     if (isActive !== undefined) updateData.isActive = isActive;
 
@@ -93,6 +94,11 @@ export async function PATCH(
       },
     });
 
+    // Log user update
+    const ipAddress = getIpAddress(request);
+    const action = role !== undefined ? AuditAction.USER_ROLE_CHANGED : AuditAction.USER_UPDATED;
+    await logUserAction(action, user.id, id, updateData, ipAddress);
+
     return NextResponse.json(
       {
         message: 'User updated successfully',
@@ -100,7 +106,7 @@ export async function PATCH(
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handlePrismaError(error);
   }
 }
@@ -162,15 +168,20 @@ export async function DELETE(
     }
 
     // Delete user
-    await prisma.user.delete({
+    const deletedUser = await prisma.user.delete({
       where: { id },
+      select: { email: true, name: true, role: true },
     });
+
+    // Log user deletion
+    const ipAddress = getIpAddress(request);
+    await logUserAction(AuditAction.USER_DELETED, user.id, id, { email: deletedUser.email, name: deletedUser.name }, ipAddress);
 
     return NextResponse.json(
       { message: 'User deleted successfully' },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handlePrismaError(error);
   }
 }
