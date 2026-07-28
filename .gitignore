@@ -1,6 +1,15 @@
 # Claude AI folder
 .claude/
 
+# Outputs folder (analysis reports, temporary files)
+outputs/
+
+# Environment files
+api-web/.env
+api-web/.env.local
+api-web/.env.production
+api-web/.env.development
+
 # OS files
 .DS_Store
 Thumbs.db

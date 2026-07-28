@@ -38,25 +38,39 @@ Universal platform for inventory and order management that can be customized for
 
 **Recommended:** Use Docker for easiest setup (just 5 minutes!)
 
-👉 **[Setup with Docker](./docs/SETUP_WITH_DOCKER.md)** - No PostgreSQL installation needed, just Docker Desktop + 4 commands
-
-**Alternative:** [Setup without Docker](./docs/SETUP_MANUAL.md) - Manual PostgreSQL installation
-
-**Both setups use same credentials:**
-- PostgreSQL: `postgres` / `postgres`
-- App runs on: `http://localhost:3001`
-
-**Already set up?**
-
 ```bash
-docker-compose up -d  # Start database (Docker only)
-npm run dev           # Start app
+cd api-web
+
+# 1. Copy environment file
+cp .env.example .env
+
+# 2. Start PostgreSQL with Docker
+docker-compose up -d
+
+# 3. Install dependencies
+npm install
+
+# 4. Setup database
+npx prisma generate
+npx prisma migrate dev
+
+# 5. Seed demo data
+npm run db:seed
+
+# 6. Start dev server
+npm run dev
 ```
 
 Visit **http://localhost:3001**
 
+**Demo Credentials:**
+- Admin: `admin@storeflow.com` / `Admin@123`
+- Staff: `staff@storeflow.com` / `Staff@123`
+- Customer: `customer@storeflow.com` / `Customer@123`
+
+See [Test Credentials](./api-web/TEST_LOGIN.md) for all 7 demo accounts.
+
 **Mobile App**
-The mobile application source code is located in the `flutter-app` directory. You can use it to run the mobile version of the platform:
 ```bash
 cd flutter-app
 flutter run
@@ -70,17 +84,33 @@ flutter run
 
 ## Documentation
 
-**Setup Guides:**
-- [Setup with Docker](./docs/SETUP_WITH_DOCKER.md) (Recommended)
-- [Setup without Docker](./docs/SETUP_MANUAL.md) (Manual)
+### 📚 Complete Documentation
+
+**[📖 Documentation Hub](./docs/README.md)** - Start here for navigation
+
+**Getting Started:**
+- [Setup with Docker](./docs/getting-started/SETUP_WITH_DOCKER.md) - Docker setup (Recommended)
+- [Setup Manual](./docs/getting-started/SETUP_MANUAL.md) - Manual PostgreSQL install
+- [Test Credentials](./api-web/TEST_LOGIN.md) - Demo account logins
+
+**Feature Guides:**
+- [Authentication & Authorization](./docs/features/01-authentication.md) - Login, RBAC, JWT
+- [User Management](./docs/features/02-user-management.md) - Admin user control
+- [Products & Inventory](./docs/features/03-products.md) - Catalog & stock management
+- [Categories](./docs/features/04-categories.md) - Product organization
+- [Orders & Shopping Cart](./docs/features/05-orders.md) - Complete order workflow
+- [Sales Analytics](./docs/features/06-analytics.md) - Charts & reporting
+- [Wishlist](./docs/features/07-wishlist.md) - Save products for later
+- [Audit Logging](./docs/features/08-audit-logging.md) - Activity tracking
+
+**Core Documentation:**
+- [System Architecture](./docs/core/architecture/ARCHITECTURE.md) - System design & tech stack
+- [Database Schema](./docs/core/architecture/DATABASE_SCHEMA.md) - Complete data models
+- [Production Deployment](./docs/core/deployment/PROD_DEPLOYMENT.md) - Deploy to production
 
 **Development:**
-- [Testing Guide](./docs/TESTING.md)
-- [Database Schema](./docs/DATABASE_SETUP.md)
-- [Test Credentials](./api-web/TEST_LOGIN.md)
-
-**Mobile (Flutter):**
-- [API client generation](./flutter-app/README-API-GENERATION.md) — refresh OpenAPI + `build_runner` after backend API changes; commit generated code
+- [Testing Guide](./docs/development/TESTING.md) - Run tests
+- [Flutter API Generation](./flutter-app/README-API-GENERATION.md) - Mobile app setup
 
 ## Testing
 
@@ -98,11 +128,11 @@ npm run test:ui       # Interactive UI
 ## Deployment
 
 Deploy for **FREE** to production:
-- **Vercel** - Web app + PostgreSQL database (Recommended)
+- **Vercel** - Web app + Supabase PostgreSQL (Recommended)
 - **Railway** - Full-stack hosting (App + Database)
 - **Render + Supabase** - Free tier (with cold starts)
 
-See **[Production Deployment Guide](./docs/PROD_DEPLOYMENT.md)** for complete step-by-step instructions.
+**Live Demo:** [https://storeflow-pink.vercel.app](https://storeflow-pink.vercel.app)
 
 ## License
 
