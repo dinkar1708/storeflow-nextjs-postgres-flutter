@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { SignJWT } from 'jose';
+import { createErrorResponse, ErrorCodes } from '@/lib/error-handler';
+import { validateRequest } from '@/lib/validate-request';
+import { loginSchema } from '@/lib/validations';
 
 // Validate JWT secret - fail fast in production if not set
 if (!process.env.NEXTAUTH_SECRET) {
@@ -16,15 +19,11 @@ const secretKey = new TextEncoder().encode(JWT_SECRET);
 
 export async function handleJwtLogin(request: NextRequest): Promise<NextResponse> {
   try {
-    const body = await request.json();
-    const { email, password } = body;
+    // Validate request body with Zod
+    const validation = await validateRequest(request, loginSchema);
+    if (validation.error) return validation.error;
 
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
-      );
-    }
+    const { email, password } = validation.data;
 
     const user = await prisma.user.findUnique({
       where: { email },
@@ -70,10 +69,11 @@ export async function handleJwtLogin(request: NextRequest): Promise<NextResponse
       { status: 200 }
     );
   } catch (error: any) {
-    console.error('JWT login error:', error);
-    return NextResponse.json(
-      { error: 'Login failed', details: error.message },
-      { status: 500 }
+    return createErrorResponse(
+      ErrorCodes.INTERNAL_ERROR,
+      'Login failed. Please try again later.',
+      error,
+      500
     );
   }
 }

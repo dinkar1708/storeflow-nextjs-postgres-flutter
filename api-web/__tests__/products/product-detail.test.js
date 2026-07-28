@@ -111,7 +111,12 @@ describe('Product Detail API', () => {
 
       expect(response.status).toBe(404);
       expect(response.data).toHaveProperty('error');
-      expect(response.data.error).toBe('Product not found');
+      // With standardized error handling, error is now an object
+      if (typeof response.data.error === 'string') {
+        expect(response.data.error).toBe('Product not found');
+      } else {
+        expect(response.data.error.message).toBe('Product not found');
+      }
     });
 
     it('should handle invalid product ID format gracefully', async () => {

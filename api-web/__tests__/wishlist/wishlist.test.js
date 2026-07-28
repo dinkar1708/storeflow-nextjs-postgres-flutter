@@ -199,22 +199,22 @@ describe('Wishlist API', () => {
       expect(res.data).toHaveProperty('error');
     });
 
-    it('returns 400 when product does not exist', async () => {
+    it('returns 404 when product does not exist', async () => {
       const res = await makeRequest('/api/wishlist', {
         method: 'POST',
         headers: authHeaders(customerToken),
         body: JSON.stringify({ productId: 'does-not-exist-id' }),
       });
-      expect(res.status).toBe(400);
+      expect(res.status).toBe(404); // Changed to 404 for NOT_FOUND
     });
 
-    it('rejects an inactive product (400)', async () => {
+    it('rejects an inactive product (404)', async () => {
       const res = await makeRequest('/api/wishlist', {
         method: 'POST',
         headers: authHeaders(customerToken),
         body: JSON.stringify({ productId: inactiveProduct.id }),
       });
-      expect(res.status).toBe(400);
+      expect(res.status).toBe(404); // Changed to 404 for NOT_FOUND
     });
   });
 

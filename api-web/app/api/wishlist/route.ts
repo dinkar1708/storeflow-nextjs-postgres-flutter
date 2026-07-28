@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { UserRole } from '@/lib/enums';
+import { createErrorResponse, ErrorCodes, handleApiError } from '@/lib/error-handler';
 
 /**
  * @swagger
@@ -24,9 +25,11 @@ export async function GET(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== UserRole.CUSTOMER) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Customer access required' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Customer access required',
+        undefined,
+        403
       );
     }
 
@@ -42,11 +45,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ items }, { status: 200 });
   } catch (error) {
-    console.error('Error fetching wishlist:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch wishlist' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
@@ -86,9 +85,11 @@ export async function POST(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== UserRole.CUSTOMER) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Customer access required' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Customer access required',
+        undefined,
+        403
       );
     }
 
@@ -96,9 +97,11 @@ export async function POST(request: NextRequest) {
     const { productId } = body as { productId?: string };
 
     if (!productId || typeof productId !== 'string') {
-      return NextResponse.json(
-        { error: 'productId is required' },
-        { status: 400 }
+      return createErrorResponse(
+        ErrorCodes.VALIDATION_ERROR,
+        'productId is required',
+        undefined,
+        400
       );
     }
 
@@ -107,9 +110,11 @@ export async function POST(request: NextRequest) {
     });
 
     if (!product || !product.isActive) {
-      return NextResponse.json(
-        { error: 'Product not found' },
-        { status: 400 }
+      return createErrorResponse(
+        ErrorCodes.NOT_FOUND,
+        'Product not found or inactive',
+        undefined,
+        404
       );
     }
 
@@ -140,10 +145,6 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error adding to wishlist:', error);
-    return NextResponse.json(
-      { error: 'Failed to add to wishlist' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

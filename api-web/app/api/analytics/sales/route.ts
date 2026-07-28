@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { UserRole, OrderStatus } from '@/lib/enums';
+import { createErrorResponse, ErrorCodes, handleApiError } from '@/lib/error-handler';
 
 /**
  * @swagger
@@ -25,9 +26,11 @@ export async function GET(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== UserRole.ADMIN) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Admin access required',
+        undefined,
+        403
       );
     }
 
@@ -166,10 +169,6 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
   } catch (error: any) {
-    console.error('Error fetching analytics:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch analytics data' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

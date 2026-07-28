@@ -3,6 +3,9 @@ import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { UserRole, OrderStatus } from '@/lib/enums';
 import { rateLimit, RateLimitPresets } from '@/lib/rate-limit';
+import { validateRequest } from '@/lib/validate-request';
+import { createOrderSchema } from '@/lib/validations';
+import { handleApiError } from '@/lib/error-handler';
 
 /**
  * @swagger
@@ -57,21 +60,28 @@ export async function POST(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== UserRole.CUSTOMER) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Customer access required' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Customer access required',
+        undefined,
+        403
       );
     }
 
     const body = await request.json();
-    const { items, total } = body;
+    const { items, total: requestTotal } = body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
-      return NextResponse.json(
-        { error: 'Order must contain at least one item' },
-        { status: 400 }
+      return createErrorResponse(
+        ErrorCodes.VALIDATION_ERROR,
+        'Order must contain at least one item',
+        undefined,
+        400
       );
     }
+
+    // Calculate total from items (or use provided total for backwards compatibility)
+    const total = requestTotal ||items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
 
     // Generate unique order number
     const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
@@ -141,11 +151,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error: any) {
-    console.error('Error creating order:', error);
-    return NextResponse.json(
-      { error: 'Failed to create order' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
@@ -171,9 +177,11 @@ export async function GET(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.UNAUTHORIZED,
+        'Authentication required',
+        undefined,
+        401
       );
     }
 
@@ -220,18 +228,16 @@ export async function GET(request: NextRequest) {
         },
       });
     } else {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Invalid user role',
+        undefined,
+        403
       );
     }
 
     return NextResponse.json({ orders }, { status: 200 });
   } catch (error) {
-    console.error('Error fetching orders:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch orders' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

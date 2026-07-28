@@ -3,6 +3,9 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { createErrorResponse, ErrorCodes, handleApiError } from '@/lib/error-handler';
+import { validateRequest } from '@/lib/validate-request';
+import { updateProfileSchema } from '@/lib/validations';
 
 /**
  * @swagger
@@ -25,7 +28,12 @@ export async function GET() {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return createErrorResponse(
+        ErrorCodes.UNAUTHORIZED,
+        'Authentication required',
+        undefined,
+        401
+      );
     }
 
     const user = await prisma.user.findUnique({
@@ -42,16 +50,17 @@ export async function GET() {
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return createErrorResponse(
+        ErrorCodes.NOT_FOUND,
+        'User not found',
+        undefined,
+        404
+      );
     }
 
     return NextResponse.json({ user });
   } catch (error) {
-    console.error('Get profile error:', error);
-    return NextResponse.json(
-      { error: 'Failed to get profile' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
@@ -97,11 +106,19 @@ export async function PATCH(request: NextRequest) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return createErrorResponse(
+        ErrorCodes.UNAUTHORIZED,
+        'Authentication required',
+        undefined,
+        401
+      );
     }
 
-    const body = await request.json();
-    const { name, phone, address, currentPassword, newPassword } = body;
+    // Validate request body with Zod
+    const validation = await validateRequest(request, updateProfileSchema);
+    if (validation.error) return validation.error;
+
+    const { name, email, currentPassword, newPassword } = validation.data;
 
     // Get current user
     const user = await prisma.user.findUnique({
@@ -109,54 +126,30 @@ export async function PATCH(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return createErrorResponse(
+        ErrorCodes.NOT_FOUND,
+        'User not found',
+        undefined,
+        404
+      );
     }
 
     // Prepare update data
     const updateData: any = {};
 
     if (name) updateData.name = name;
-    if (phone !== undefined) updateData.phone = phone || null;
-    if (address !== undefined) updateData.address = address || null;
+    if (email) updateData.email = email;
 
-    // Handle password change
-    if (newPassword) {
-      if (!currentPassword) {
-        return NextResponse.json(
-          { error: 'Current password is required to change password' },
-          { status: 400 }
-        );
-      }
-
+    // Handle password change (validation already handled by Zod schema)
+    if (newPassword && currentPassword) {
       // Verify current password
       const isValidPassword = await bcrypt.compare(currentPassword, user.password);
       if (!isValidPassword) {
-        return NextResponse.json(
-          { error: 'Current password is incorrect' },
-          { status: 400 }
-        );
-      }
-
-      // Validate new password strength (min 8 characters with complexity)
-      if (newPassword.length < 8) {
-        return NextResponse.json(
-          { error: 'New password must be at least 8 characters' },
-          { status: 400 }
-        );
-      }
-
-      // Check password complexity requirements
-      const hasUpperCase = /[A-Z]/.test(newPassword);
-      const hasLowerCase = /[a-z]/.test(newPassword);
-      const hasNumber = /[0-9]/.test(newPassword);
-      const hasSpecialChar = /[@$!%*?&#]/.test(newPassword);
-
-      if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
-        return NextResponse.json(
-          {
-            error: 'New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&#)'
-          },
-          { status: 400 }
+        return createErrorResponse(
+          ErrorCodes.INVALID_CREDENTIALS,
+          'Current password is incorrect',
+          undefined,
+          400
         );
       }
 
@@ -184,10 +177,6 @@ export async function PATCH(request: NextRequest) {
       user: updatedUser,
     });
   } catch (error) {
-    console.error('Update profile error:', error);
-    return NextResponse.json(
-      { error: 'Failed to update profile' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

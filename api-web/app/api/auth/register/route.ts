@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { rateLimit, RateLimitPresets } from '@/lib/rate-limit';
+import { handlePrismaError, createErrorResponse, ErrorCodes } from '@/lib/error-handler';
+import { validateRequest } from '@/lib/validate-request';
+import { registerSchema } from '@/lib/validations';
 
 /**
  * @swagger
@@ -63,62 +66,11 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json();
-    const { email, password, name } = body;
+    // Validate request body with Zod
+    const validation = await validateRequest(request, registerSchema);
+    if (validation.error) return validation.error;
 
-    // Validate required fields
-    if (!email) {
-      return NextResponse.json(
-        { error: 'Email is required' },
-        { status: 400 }
-      );
-    }
-
-    if (!password) {
-      return NextResponse.json(
-        { error: 'Password is required' },
-        { status: 400 }
-      );
-    }
-
-    if (!name) {
-      return NextResponse.json(
-        { error: 'Name is required' },
-        { status: 400 }
-      );
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
-    }
-
-    // Validate password strength (min 8 characters with complexity)
-    if (password.length < 8) {
-      return NextResponse.json(
-        { error: 'Password must be at least 8 characters' },
-        { status: 400 }
-      );
-    }
-
-    // Check password complexity requirements
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSpecialChar = /[@$!%*?&#]/.test(password);
-
-    if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
-      return NextResponse.json(
-        {
-          error: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&#)'
-        },
-        { status: 400 }
-      );
-    }
+    const { email, password, name } = validation.data;
 
     // Check if user exists
     const exists = await prisma.user.findUnique({
@@ -126,9 +78,11 @@ export async function POST(request: NextRequest) {
     });
 
     if (exists) {
-      return NextResponse.json(
-        { error: 'Email already registered' },
-        { status: 400 }
+      return createErrorResponse(
+        ErrorCodes.DUPLICATE_ENTRY,
+        'Email already registered',
+        undefined,
+        409
       );
     }
 
@@ -159,10 +113,17 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Registration error:', error);
-    return NextResponse.json(
-      { error: 'Registration failed', details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
+    // Handle Prisma-specific errors (e.g., duplicate email)
+    if (typeof error === 'object' && error !== null && 'code' in error) {
+      return handlePrismaError(error);
+    }
+
+    // Handle all other errors
+    return createErrorResponse(
+      ErrorCodes.INTERNAL_ERROR,
+      'Registration failed. Please try again later.',
+      error,
+      500
     );
   }
 }

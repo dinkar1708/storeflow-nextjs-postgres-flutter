@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { UserRole, OrderStatus } from '@/lib/enums';
+import { createErrorResponse, ErrorCodes, handleApiError } from '@/lib/error-handler';
+import { validateRequest } from '@/lib/validate-request';
+import { updateOrderStatusSchema } from '@/lib/validations';
 
 /**
  * @swagger
@@ -36,9 +39,11 @@ export async function GET(
     const user = await getApiUser(request);
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.UNAUTHORIZED,
+        'Authentication required',
+        undefined,
+        401
       );
     }
 
@@ -73,27 +78,27 @@ export async function GET(
     });
 
     if (!order) {
-      return NextResponse.json(
-        { error: 'Order not found' },
-        { status: 404 }
+      return createErrorResponse(
+        ErrorCodes.NOT_FOUND,
+        'Order not found',
+        undefined,
+        404
       );
     }
 
     // Customers can only view their own orders
     if (userRole === UserRole.CUSTOMER && order.user.id !== userId) {
-      return NextResponse.json(
-        { error: 'Access denied' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Access denied to this order',
+        undefined,
+        403
       );
     }
 
     return NextResponse.json({ order }, { status: 200 });
   } catch (error: any) {
-    console.error('Error fetching order:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch order' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
@@ -141,33 +146,32 @@ export async function PATCH(
     const user = await getApiUser(request);
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.UNAUTHORIZED,
+        'Authentication required',
+        undefined,
+        401
       );
     }
 
     const userRole = user.role;
 
     if (userRole !== UserRole.ADMIN && userRole !== UserRole.STAFF) {
-      return NextResponse.json(
-        { error: 'Admin or Staff access required' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Admin or Staff access required',
+        undefined,
+        403
       );
     }
 
     const { id } = params;
-    const body = await request.json();
-    const { status } = body;
 
-    const validStatuses = Object.values(OrderStatus);
+    // Validate request body with Zod
+    const validation = await validateRequest(request, updateOrderStatusSchema);
+    if (validation.error) return validation.error;
 
-    if (!validStatuses.includes(status)) {
-      return NextResponse.json(
-        { error: 'Invalid order status' },
-        { status: 400 }
-      );
-    }
+    const { status } = validation.data;
 
     const order = await prisma.order.update({
       where: { id },
@@ -195,10 +199,6 @@ export async function PATCH(
       { status: 200 }
     );
   } catch (error: any) {
-    console.error('Error updating order:', error);
-    return NextResponse.json(
-      { error: 'Failed to update order' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

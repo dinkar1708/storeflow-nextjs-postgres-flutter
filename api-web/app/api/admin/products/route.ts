@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
+import { createErrorResponse, ErrorCodes, handleApiError, handlePrismaError } from '@/lib/error-handler';
 
 /**
  * @swagger
@@ -24,9 +25,11 @@ export async function GET(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Admin access required',
+        undefined,
+        403
       );
     }
 
@@ -41,11 +44,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ products }, { status: 200 });
   } catch (error) {
-    console.error('Error fetching products:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch products' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
@@ -98,9 +97,11 @@ export async function POST(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Admin access required',
+        undefined,
+        403
       );
     }
 
@@ -109,9 +110,11 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!name || !price || !categoryId) {
-      return NextResponse.json(
-        { error: 'Name, price, and category are required' },
-        { status: 400 }
+      return createErrorResponse(
+        ErrorCodes.VALIDATION_ERROR,
+        'Name, price, and category are required',
+        undefined,
+        400
       );
     }
 
@@ -140,18 +143,6 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error: any) {
-    console.error('Error creating product:', error);
-
-    if (error.code === 'P2002') {
-      return NextResponse.json(
-        { error: 'SKU already exists' },
-        { status: 400 }
-      );
-    }
-
-    return NextResponse.json(
-      { error: 'Failed to create product' },
-      { status: 500 }
-    );
+    return handlePrismaError(error);
   }
 }

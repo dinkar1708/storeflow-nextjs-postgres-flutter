@@ -63,9 +63,14 @@ describe('Registration API', () => {
         name: 'User Two',
       });
 
-      expect(secondResponse.status).toBe(400);
+      expect(secondResponse.status).toBe(409); // Changed to 409 for DUPLICATE_ENTRY
       expect(secondResponse.data).toHaveProperty('error');
-      expect(secondResponse.data.error).toMatch(/already exists|already registered/i);
+      // With standardized error handling, error is now an object with code and message
+      if (typeof secondResponse.data.error === 'string') {
+        expect(secondResponse.data.error).toMatch(/already exists|already registered/i);
+      } else {
+        expect(secondResponse.data.error.message).toMatch(/already exists|already registered/i);
+      }
     });
 
     it('should reject registration with missing password', async () => {
