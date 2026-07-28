@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { UserRole } from '@/lib/enums';
+import { createErrorResponse, ErrorCodes, handleApiError } from '@/lib/error-handler';
 
 /**
  * @swagger
@@ -35,9 +36,11 @@ export async function DELETE(
     const user = await getApiUser(request);
 
     if (!user || user.role !== UserRole.CUSTOMER) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Customer access required' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Customer access required',
+        undefined,
+        403
       );
     }
 
@@ -50,9 +53,11 @@ export async function DELETE(
     });
 
     if (!existing) {
-      return NextResponse.json(
-        { error: 'Wishlist entry not found' },
-        { status: 404 }
+      return createErrorResponse(
+        ErrorCodes.NOT_FOUND,
+        'Wishlist entry not found',
+        undefined,
+        404
       );
     }
 
@@ -65,10 +70,6 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-    console.error('Error removing from wishlist:', error);
-    return NextResponse.json(
-      { error: 'Failed to remove from wishlist' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

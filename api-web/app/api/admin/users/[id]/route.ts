@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
+import { createErrorResponse, ErrorCodes, handlePrismaError } from '@/lib/error-handler';
 
 /**
  * @swagger
@@ -50,9 +51,11 @@ export async function PATCH(
 
     // Check if user is authenticated and is admin
     if (!user || user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Admin access required',
+        undefined,
+        403
       );
     }
 
@@ -62,9 +65,11 @@ export async function PATCH(
 
     // Validate role if provided
     if (role && !['ADMIN', 'STAFF', 'CUSTOMER'].includes(role)) {
-      return NextResponse.json(
-        { error: 'Invalid role. Must be ADMIN, STAFF, or CUSTOMER' },
-        { status: 400 }
+      return createErrorResponse(
+        ErrorCodes.VALIDATION_ERROR,
+        'Invalid role. Must be ADMIN, STAFF, or CUSTOMER',
+        undefined,
+        400
       );
     }
 
@@ -96,19 +101,7 @@ export async function PATCH(
       { status: 200 }
     );
   } catch (error: any) {
-    console.error('Error updating user:', error);
-
-    if (error.code === 'P2025') {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(
-      { error: 'Failed to update user' },
-      { status: 500 }
-    );
+    return handlePrismaError(error);
   }
 }
 
@@ -148,9 +141,11 @@ export async function DELETE(
 
     // Check if user is authenticated and is admin
     if (!user || user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 403 }
+      return createErrorResponse(
+        ErrorCodes.FORBIDDEN,
+        'Admin access required',
+        undefined,
+        403
       );
     }
 
@@ -158,9 +153,11 @@ export async function DELETE(
 
     // Prevent admin from deleting themselves
     if (user.id === id) {
-      return NextResponse.json(
-        { error: 'Cannot delete your own account' },
-        { status: 400 }
+      return createErrorResponse(
+        ErrorCodes.VALIDATION_ERROR,
+        'Cannot delete your own account',
+        undefined,
+        400
       );
     }
 
@@ -174,18 +171,6 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error: any) {
-    console.error('Error deleting user:', error);
-
-    if (error.code === 'P2025') {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(
-      { error: 'Failed to delete user' },
-      { status: 500 }
-    );
+    return handlePrismaError(error);
   }
 }
