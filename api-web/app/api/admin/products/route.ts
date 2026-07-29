@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { createErrorResponse, ErrorCodes, handleApiError, handlePrismaError } from '@/lib/error-handler';
+import { validateRequestBody } from '@/lib/validate-request';
+import { createProductSchema } from '@/lib/validations';
 
 /**
  * @swagger
@@ -106,28 +108,22 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, description, price, costPrice, stock, categoryId, sku } = body;
+    // Validate request body with Zod
+    const validation = await validateRequestBody(request, createProductSchema);
+    if (validation.error) return validation.error;
 
-    // Validate required fields
-    if (!name || !price || !categoryId) {
-      return createErrorResponse(
-        ErrorCodes.VALIDATION_ERROR,
-        'Name, price, and category are required',
-        undefined,
-        400
-      );
-    }
+    const { name, description, price, costPrice, stock, categoryId, sku } = validation.data;
 
-    // Create product
+    // Create product (all numeric fields validated and parsed by Zod)
     const product = await prisma.product.create({
       data: {
         name,
         description: description || '',
-        price: parseFloat(price),
-        costPrice: costPrice ? parseFloat(costPrice) : null,
-        stock: parseInt(stock) || 0,
+        price,
+        costPrice: costPrice ?? null,
+        stock: stock ?? 0,
         categoryId,
-        sku: sku || null,
+        sku: sku ?? null,
         images: [],
       },
       include: {

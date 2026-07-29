@@ -103,11 +103,43 @@ export const updateUserSchema = z.object({
 
 export const createProductSchema = z.object({
   name: z.string().min(1, 'Product name is required').max(200, 'Product name must be less than 200 characters'),
-  description: z.string().min(1, 'Description is required'),
-  price: z.number().positive('Price must be greater than 0'),
-  stock: z.number().int('Stock must be a whole number').min(0, 'Stock cannot be negative'),
-  categoryId: z.string().uuid('Invalid category ID'),
-  imageUrl: z.string().url('Invalid image URL').optional(),
+  description: z.string().optional(),
+  price: z.union([
+    z.number().positive('Price must be greater than 0'),
+    z.string().transform((val, ctx) => {
+      const num = parseFloat(val);
+      if (isNaN(num) || num <= 0) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Price must be a valid positive number' });
+        return z.NEVER;
+      }
+      return num;
+    })
+  ]),
+  costPrice: z.union([
+    z.number().positive().nullable(),
+    z.string().transform((val, ctx) => {
+      if (!val || val === '') return null;
+      const num = parseFloat(val);
+      if (isNaN(num) || num <= 0) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Cost price must be a valid positive number' });
+        return z.NEVER;
+      }
+      return num;
+    })
+  ]).optional().nullable(),
+  stock: z.union([
+    z.number().int().min(0, 'Stock cannot be negative'),
+    z.string().transform((val, ctx) => {
+      const num = parseInt(val, 10);
+      if (isNaN(num) || num < 0) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Stock must be a valid non-negative integer' });
+        return z.NEVER;
+      }
+      return num;
+    })
+  ]).optional(),
+  categoryId: z.string().min(1, 'Category is required'),
+  sku: z.string().optional().nullable(),
   isActive: z.boolean().optional().default(true),
 });
 

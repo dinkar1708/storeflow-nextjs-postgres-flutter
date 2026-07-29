@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
 import { createErrorResponse, ErrorCodes, handlePrismaError } from '@/lib/error-handler';
 import { logUserAction, AuditAction, getIpAddress } from '@/lib/audit-log';
+import { requireAdmin, isErrorResponse } from '@/lib/auth-middleware';
 
 /**
  * @swagger
@@ -48,17 +48,10 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await getApiUser(request);
-
-    // Check if user is authenticated and is admin
-    if (!user || user.role !== 'ADMIN') {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Admin access required',
-        undefined,
-        403
-      );
-    }
+    // Require admin authentication
+    const authResult = await requireAdmin(request);
+    if (isErrorResponse(authResult)) return authResult;
+    const user = authResult;
 
     const { id } = params;
     const body = await request.json();
@@ -143,17 +136,10 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await getApiUser(request);
-
-    // Check if user is authenticated and is admin
-    if (!user || user.role !== 'ADMIN') {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Admin access required',
-        undefined,
-        403
-      );
-    }
+    // Require admin authentication
+    const authResult = await requireAdmin(request);
+    if (isErrorResponse(authResult)) return authResult;
+    const user = authResult;
 
     const { id } = params;
 
