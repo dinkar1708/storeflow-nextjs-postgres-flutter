@@ -72,6 +72,8 @@ model Product {
 
   @@index([categoryId])
   @@index([sku])
+  @@index([isActive])
+  @@index([categoryId, isActive])
   @@map("products")
 }
 
@@ -90,6 +92,9 @@ model Order {
 
   @@index([userId])
   @@index([orderNumber])
+  @@index([status])
+  @@index([createdAt])
+  @@index([userId, status])
   @@map("orders")
 }
 
