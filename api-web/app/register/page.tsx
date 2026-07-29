@@ -75,11 +75,14 @@ export default function RegisterPage() {
   };
 
   return (
-    <MarketingShell showAuthLinks={false} navExtras={
-      <Link href="/login" className="hover:text-slate-900">
-        Already have an account? Sign in →
-      </Link>
-    }>
+    <MarketingShell
+      showAuthLinks={false}
+      navExtras={
+        <Link href="/login" className="hover:text-slate-900">
+          Already have an account? Sign in →
+        </Link>
+      }
+    >
       <main className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           {/* Left: copy */}
@@ -157,7 +160,10 @@ export default function RegisterPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-slate-700 mb-1"
+                    >
                       Email
                     </label>
                     <input
@@ -174,7 +180,10 @@ export default function RegisterPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-slate-700 mb-1"
+                    >
                       Password
                     </label>
                     <input
@@ -191,7 +200,10 @@ export default function RegisterPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 mb-1">
+                    <label
+                      htmlFor="confirmPassword"
+                      className="block text-sm font-medium text-slate-700 mb-1"
+                    >
                       Confirm password
                     </label>
                     <input
@@ -218,7 +230,10 @@ export default function RegisterPage() {
 
                 <p className="mt-6 text-sm text-center text-slate-600">
                   Already have an account?{' '}
-                  <Link href="/login" className="font-semibold text-fuchsia-600 hover:text-fuchsia-700">
+                  <Link
+                    href="/login"
+                    className="font-semibold text-fuchsia-600 hover:text-fuchsia-700"
+                  >
                     Sign in
                   </Link>
                 </p>

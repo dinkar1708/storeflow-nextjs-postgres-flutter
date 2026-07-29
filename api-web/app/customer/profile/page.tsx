@@ -171,9 +171,7 @@ export default function ProfilePage() {
               </button>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-700">
-                {session.user?.name}
-              </span>
+              <span className="text-gray-700">{session.user?.name}</span>
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                 {UserRole.CUSTOMER}
               </span>
@@ -265,7 +263,9 @@ export default function ProfilePage() {
                   placeholder="10 digit phone number"
                 />
                 {phone && phone.length > 0 && phone.length < 10 && (
-                  <p className="mt-1 text-xs text-red-600">Phone number must be exactly 10 digits</p>
+                  <p className="mt-1 text-xs text-red-600">
+                    Phone number must be exactly 10 digits
+                  </p>
                 )}
               </div>
 
@@ -298,7 +298,10 @@ export default function ProfilePage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Change Password</h2>
             <form onSubmit={handleChangePassword} className="space-y-4">
               <div>
-                <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="currentPassword"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Current Password
                 </label>
                 <input
@@ -312,7 +315,10 @@ export default function ProfilePage() {
               </div>
 
               <div>
-                <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="newPassword"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   New Password
                 </label>
                 <input
@@ -326,7 +332,10 @@ export default function ProfilePage() {
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Confirm New Password
                 </label>
                 <input
@@ -352,8 +361,12 @@ export default function ProfilePage() {
           {/* Account Info */}
           {profile && (
             <div className="mt-6 bg-gray-100 rounded-xl p-4 text-sm text-gray-600">
-              <p><strong>Account Created:</strong> {new Date(profile.createdAt).toLocaleDateString()}</p>
-              <p className="mt-1"><strong>Account ID:</strong> {profile.id}</p>
+              <p>
+                <strong>Account Created:</strong> {new Date(profile.createdAt).toLocaleDateString()}
+              </p>
+              <p className="mt-1">
+                <strong>Account ID:</strong> {profile.id}
+              </p>
             </div>
           )}
         </div>

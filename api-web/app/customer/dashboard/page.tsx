@@ -64,7 +64,9 @@ export default function CustomerDashboard() {
           <div className="relative overflow-hidden rounded-2xl px-6 py-7 mb-6 text-white bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700 shadow-xl shadow-emerald-500/30">
             <div className="pointer-events-none absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_white,_transparent_55%)]" />
             <div className="relative">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100">Shopping</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100">
+                Shopping
+              </span>
               <h2 className="mt-1 text-3xl font-bold">Welcome back, {session.user?.name} 🛍️</h2>
               <p className="text-white/80 mt-1">Your personal shopping dashboard.</p>
 
@@ -132,7 +134,6 @@ export default function CustomerDashboard() {
               <p className="text-sm mt-2">Your current orders will appear here</p>
             </div>
           </div>
-
         </div>
       </main>
     </div>

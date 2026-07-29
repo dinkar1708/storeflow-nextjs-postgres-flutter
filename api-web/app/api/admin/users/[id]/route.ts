@@ -43,10 +43,7 @@ import { requireAdmin, isErrorResponse } from '@/lib/auth-middleware';
  *         description: User not found
  */
 // PATCH - Update user role or status (Admin only)
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Require admin authentication
     const authResult = await requireAdmin(request);
@@ -131,10 +128,7 @@ export async function PATCH(
  *         description: User not found
  */
 // DELETE - Delete user (Admin only)
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Require admin authentication
     const authResult = await requireAdmin(request);
@@ -161,12 +155,15 @@ export async function DELETE(
 
     // Log user deletion
     const ipAddress = getIpAddress(request);
-    await logUserAction(AuditAction.USER_DELETED, user.id, id, { email: deletedUser.email, name: deletedUser.name }, ipAddress);
-
-    return NextResponse.json(
-      { message: 'User deleted successfully' },
-      { status: 200 }
+    await logUserAction(
+      AuditAction.USER_DELETED,
+      user.id,
+      id,
+      { email: deletedUser.email, name: deletedUser.name },
+      ipAddress
     );
+
+    return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
   } catch (error: unknown) {
     return handlePrismaError(error);
   }

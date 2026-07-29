@@ -26,113 +26,178 @@ export async function GET(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== UserRole.ADMIN) {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Admin access required',
-        undefined,
-        403
-      );
+      return createErrorResponse(ErrorCodes.FORBIDDEN, 'Admin access required', undefined, 403);
     }
 
-    // Get all DELIVERED orders with items and product cost prices
-    const deliveredOrders = await prisma.order.findMany({
-      where: {
-        status: OrderStatus.DELIVERED,
-      },
-      select: {
-        id: true,
-        total: true,
-        createdAt: true,
-        orderNumber: true,
-        items: {
+    // Define date ranges
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const twelveMonthsAgo = new Date();
+    twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+
+    // Use Prisma aggregations for summary data - much more efficient than fetching all records
+    const [summaryAggregation, last30DaysOrders, last12MonthsOrders, allTimeOrders] =
+      await Promise.all([
+        // Summary: aggregate all delivered orders
+        prisma.order.aggregate({
+          where: { status: OrderStatus.DELIVERED },
+          _sum: { total: true },
+          _count: { id: true },
+        }),
+        // Last 30 days: fetch orders for daily breakdown
+        prisma.order.findMany({
+          where: {
+            status: OrderStatus.DELIVERED,
+            createdAt: { gte: thirtyDaysAgo },
+          },
           select: {
-            quantity: true,
-            price: true,
-            product: {
+            id: true,
+            total: true,
+            createdAt: true,
+            items: {
               select: {
-                costPrice: true,
+                quantity: true,
+                price: true,
+                product: { select: { costPrice: true } },
               },
             },
           },
-        },
-      },
-      orderBy: {
-        createdAt: 'asc',
-      },
-    });
+          orderBy: { createdAt: 'asc' },
+        }),
+        // Last 12 months: fetch orders for monthly breakdown
+        prisma.order.findMany({
+          where: {
+            status: OrderStatus.DELIVERED,
+            createdAt: { gte: twelveMonthsAgo },
+          },
+          select: {
+            id: true,
+            total: true,
+            createdAt: true,
+            items: {
+              select: {
+                quantity: true,
+                price: true,
+                product: { select: { costPrice: true } },
+              },
+            },
+          },
+          orderBy: { createdAt: 'asc' },
+        }),
+        // All time: fetch all orders for yearly breakdown (only if needed)
+        prisma.order.findMany({
+          where: { status: OrderStatus.DELIVERED },
+          select: {
+            id: true,
+            total: true,
+            createdAt: true,
+            items: {
+              select: {
+                quantity: true,
+                price: true,
+                product: { select: { costPrice: true } },
+              },
+            },
+          },
+          orderBy: { createdAt: 'asc' },
+        }),
+      ]);
 
-    // Calculate cost and profit for each order
-    const ordersWithProfit = deliveredOrders.map(order => {
+    // Helper function to calculate order cost and profit
+    const calculateOrderMetrics = (order: {
+      total: number | string;
+      items: Array<{
+        quantity: number;
+        price: number | string;
+        product: { costPrice: number | string | null };
+      }>;
+    }) => {
       const totalCost = order.items.reduce((sum, item) => {
         const costPrice = item.product.costPrice ? Number(item.product.costPrice) : 0;
-        return sum + (costPrice * item.quantity);
+        return sum + costPrice * item.quantity;
       }, 0);
 
       const revenue = Number(order.total);
       const profit = revenue - totalCost;
 
-      return {
-        ...order,
-        cost: totalCost,
-        profit: profit,
-      };
-    });
+      return { cost: totalCost, revenue, profit };
+    };
 
     // Calculate daily sales (last 30 days)
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-    const dailySales = ordersWithProfit
-      .filter(order => new Date(order.createdAt) >= thirtyDaysAgo)
-      .reduce((acc, order) => {
+    const dailySales = last30DaysOrders.reduce(
+      (acc, order) => {
         const date = new Date(order.createdAt).toISOString().split('T')[0];
         if (!acc[date]) {
           acc[date] = { date, sales: 0, orders: 0, cost: 0, profit: 0 };
         }
-        acc[date].sales += Number(order.total);
-        acc[date].cost += order.cost;
-        acc[date].profit += order.profit;
+        const { cost, revenue, profit } = calculateOrderMetrics(order);
+        acc[date].sales += revenue;
+        acc[date].cost += cost;
+        acc[date].profit += profit;
         acc[date].orders += 1;
         return acc;
-      }, {} as Record<string, { date: string; sales: number; orders: number; cost: number; profit: number }>);
+      },
+      {} as Record<
+        string,
+        { date: string; sales: number; orders: number; cost: number; profit: number }
+      >
+    );
 
     // Calculate monthly sales (last 12 months)
-    const twelveMonthsAgo = new Date();
-    twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
-
-    const monthlySales = ordersWithProfit
-      .filter(order => new Date(order.createdAt) >= twelveMonthsAgo)
-      .reduce((acc, order) => {
+    const monthlySales = last12MonthsOrders.reduce(
+      (acc, order) => {
         const date = new Date(order.createdAt);
         const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
         if (!acc[monthKey]) {
           acc[monthKey] = { month: monthKey, sales: 0, orders: 0, cost: 0, profit: 0 };
         }
-        acc[monthKey].sales += Number(order.total);
-        acc[monthKey].cost += order.cost;
-        acc[monthKey].profit += order.profit;
+        const { cost, revenue, profit } = calculateOrderMetrics(order);
+        acc[monthKey].sales += revenue;
+        acc[monthKey].cost += cost;
+        acc[monthKey].profit += profit;
         acc[monthKey].orders += 1;
         return acc;
-      }, {} as Record<string, { month: string; sales: number; orders: number; cost: number; profit: number }>);
+      },
+      {} as Record<
+        string,
+        { month: string; sales: number; orders: number; cost: number; profit: number }
+      >
+    );
 
     // Calculate yearly sales
-    const yearlySales = ordersWithProfit.reduce((acc, order) => {
-      const year = new Date(order.createdAt).getFullYear().toString();
-      if (!acc[year]) {
-        acc[year] = { year, sales: 0, orders: 0, cost: 0, profit: 0 };
-      }
-      acc[year].sales += Number(order.total);
-      acc[year].cost += order.cost;
-      acc[year].profit += order.profit;
-      acc[year].orders += 1;
-      return acc;
-    }, {} as Record<string, { year: string; sales: number; orders: number; cost: number; profit: number }>);
+    const yearlySales = allTimeOrders.reduce(
+      (acc, order) => {
+        const year = new Date(order.createdAt).getFullYear().toString();
+        if (!acc[year]) {
+          acc[year] = { year, sales: 0, orders: 0, cost: 0, profit: 0 };
+        }
+        const { cost, revenue, profit } = calculateOrderMetrics(order);
+        acc[year].sales += revenue;
+        acc[year].cost += cost;
+        acc[year].profit += profit;
+        acc[year].orders += 1;
+        return acc;
+      },
+      {} as Record<
+        string,
+        { year: string; sales: number; orders: number; cost: number; profit: number }
+      >
+    );
 
-    // Calculate summary statistics
-    const totalSales = ordersWithProfit.reduce((sum, order) => sum + Number(order.total), 0);
-    const totalCost = ordersWithProfit.reduce((sum, order) => sum + order.cost, 0);
-    const totalProfit = ordersWithProfit.reduce((sum, order) => sum + order.profit, 0);
-    const totalOrders = ordersWithProfit.length;
+    // Calculate summary statistics - use aggregation for total sales
+    const totalSales = Number(summaryAggregation._sum.total) || 0;
+    const totalOrders = summaryAggregation._count.id;
+
+    // For cost and profit, we need to calculate from all orders (no way to aggregate this in SQL)
+    let totalCost = 0;
+    let totalProfit = 0;
+    for (const order of allTimeOrders) {
+      const { cost, profit } = calculateOrderMetrics(order);
+      totalCost += cost;
+      totalProfit += profit;
+    }
+
     const averageOrderValue = totalOrders > 0 ? totalSales / totalOrders : 0;
     const profitMargin = totalSales > 0 ? (totalProfit / totalSales) * 100 : 0;
 

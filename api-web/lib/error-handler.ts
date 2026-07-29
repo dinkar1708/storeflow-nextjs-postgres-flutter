@@ -28,7 +28,7 @@ export const ErrorCodes = {
   RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
 } as const;
 
-export type ErrorCode = typeof ErrorCodes[keyof typeof ErrorCodes];
+export type ErrorCode = (typeof ErrorCodes)[keyof typeof ErrorCodes];
 
 interface ErrorResponse {
   success: false;
@@ -124,12 +124,7 @@ export function handlePrismaError(error: unknown): NextResponse<ErrorResponse> {
   }
 
   // Generic database error
-  return createErrorResponse(
-    ErrorCodes.DATABASE_ERROR,
-    'A database error occurred',
-    error,
-    500
-  );
+  return createErrorResponse(ErrorCodes.DATABASE_ERROR, 'A database error occurred', error, 500);
 }
 
 /**
@@ -146,12 +141,7 @@ export function handleApiError(error: unknown): NextResponse<ErrorResponse> {
   if (error instanceof Error) {
     // Check error message for common patterns
     if (error.message.includes('Insufficient stock')) {
-      return createErrorResponse(
-        ErrorCodes.INSUFFICIENT_STOCK,
-        error.message,
-        error,
-        409
-      );
+      return createErrorResponse(ErrorCodes.INSUFFICIENT_STOCK, error.message, error, 409);
     }
 
     if (error.message.includes('not found')) {

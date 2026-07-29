@@ -29,9 +29,15 @@ export default function Home() {
             <span className="text-xl font-bold tracking-tight">StoreFlow</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-slate-600">
-            <Link href="/demo" className="hover:text-slate-900 hidden sm:inline">Demo</Link>
-            <Link href="#features" className="hover:text-slate-900 hidden sm:inline">Features</Link>
-            <Link href="#stack" className="hover:text-slate-900 hidden sm:inline">Stack</Link>
+            <Link href="/demo" className="hover:text-slate-900 hidden sm:inline">
+              Demo
+            </Link>
+            <Link href="#features" className="hover:text-slate-900 hidden sm:inline">
+              Features
+            </Link>
+            <Link href="#stack" className="hover:text-slate-900 hidden sm:inline">
+              Stack
+            </Link>
           </div>
         </div>
       </nav>
@@ -42,10 +48,14 @@ export default function Home() {
           <div className="relative px-6 sm:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="pointer-events-none absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_white,_transparent_50%)]" />
             <div className="relative flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 backdrop-blur text-xl">🔐</span>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 backdrop-blur text-xl">
+                🔐
+              </span>
               <div>
                 <div className="font-semibold text-lg">Already have an account?</div>
-                <div className="text-sm text-white/70">Sign in to manage your store, orders, and team.</div>
+                <div className="text-sm text-white/70">
+                  Sign in to manage your store, orders, and team.
+                </div>
               </div>
             </div>
             <div className="relative flex items-center gap-3">
@@ -85,8 +95,8 @@ export default function Home() {
 
             <p className="mt-6 text-lg text-slate-600 max-w-xl">
               From the moment a customer adds to cart to the moment a courier picks it up —
-              StoreFlow handles inventory, fulfillment, analytics, and the mobile app, all
-              from one codebase.
+              StoreFlow handles inventory, fulfillment, analytics, and the mobile app, all from one
+              codebase.
             </p>
 
             <div className="mt-8 flex gap-3 flex-wrap">
@@ -95,7 +105,9 @@ export default function Home() {
                 className="group px-7 py-3.5 rounded-full font-semibold text-white bg-slate-900 hover:bg-black shadow-xl shadow-slate-900/20 transition-all"
               >
                 Take the tour
-                <span className="ml-1 inline-block transition-transform group-hover:translate-x-1">→</span>
+                <span className="ml-1 inline-block transition-transform group-hover:translate-x-1">
+                  →
+                </span>
               </Link>
               <Link
                 href="#features"
@@ -142,8 +154,12 @@ export default function Home() {
                     { l: 'AOV', v: '$92', c: 'from-fuchsia-500 to-pink-500' },
                   ].map((k) => (
                     <div key={k.l} className="rounded-xl border border-slate-200 p-3">
-                      <div className="text-[10px] uppercase tracking-wider text-slate-500">{k.l}</div>
-                      <div className={`text-xl font-bold bg-gradient-to-r ${k.c} bg-clip-text text-transparent`}>
+                      <div className="text-[10px] uppercase tracking-wider text-slate-500">
+                        {k.l}
+                      </div>
+                      <div
+                        className={`text-xl font-bold bg-gradient-to-r ${k.c} bg-clip-text text-transparent`}
+                      >
                         {k.v}
                       </div>
                     </div>
@@ -151,7 +167,9 @@ export default function Home() {
                 </div>
                 {/* Sparkline */}
                 <div className="rounded-xl border border-slate-200 p-3">
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-2">Revenue · 7d</div>
+                  <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-2">
+                    Revenue · 7d
+                  </div>
                   <svg viewBox="0 0 220 70" className="w-full h-16">
                     <defs>
                       <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
@@ -180,7 +198,9 @@ export default function Home() {
                   ].map((o) => (
                     <div key={o.id} className="flex justify-between items-center px-3 py-2 text-sm">
                       <span className="font-mono text-slate-700">{o.id}</span>
-                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${o.c}`}>{o.s}</span>
+                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${o.c}`}>
+                        {o.s}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -193,8 +213,12 @@ export default function Home() {
       {/* Features */}
       <section id="features" className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pb-20">
         <div className="text-center mb-12">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-600">Features</span>
-          <h2 className="mt-2 text-4xl font-bold text-slate-900">Built for retail. Made to scale.</h2>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-600">
+            Features
+          </span>
+          <h2 className="mt-2 text-4xl font-bold text-slate-900">
+            Built for retail. Made to scale.
+          </h2>
           <p className="mt-2 text-slate-600 max-w-xl mx-auto">
             Six pillars that turn StoreFlow from a project into a platform.
           </p>
@@ -202,12 +226,48 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {[
-            { i: '⚡', t: 'Real-time stock', d: 'Inventory updates as orders flow through PROCESSING → SHIPPED.', c: 'from-amber-100 to-orange-50', a: 'text-amber-700' },
-            { i: '🔐', t: 'Three-tier RBAC', d: 'Admin / Staff / Customer — each gets a tailored dashboard.', c: 'from-rose-100 to-pink-50', a: 'text-rose-700' },
-            { i: '📱', t: 'Web + Flutter', d: 'Same Postgres, same API, native mobile + responsive web.', c: 'from-sky-100 to-blue-50', a: 'text-sky-700' },
-            { i: '📊', t: 'Live analytics', d: 'Revenue, AOV, top products, charts powered by recharts.', c: 'from-violet-100 to-fuchsia-50', a: 'text-violet-700' },
-            { i: '🛒', t: 'Cart + Wishlist', d: 'Persistent cart, save-for-later, one-click reorder.', c: 'from-emerald-100 to-teal-50', a: 'text-emerald-700' },
-            { i: '📚', t: 'Swagger inside', d: 'Every route documented, ready for partners and integrators.', c: 'from-indigo-100 to-blue-50', a: 'text-indigo-700' },
+            {
+              i: '⚡',
+              t: 'Real-time stock',
+              d: 'Inventory updates as orders flow through PROCESSING → SHIPPED.',
+              c: 'from-amber-100 to-orange-50',
+              a: 'text-amber-700',
+            },
+            {
+              i: '🔐',
+              t: 'Three-tier RBAC',
+              d: 'Admin / Staff / Customer — each gets a tailored dashboard.',
+              c: 'from-rose-100 to-pink-50',
+              a: 'text-rose-700',
+            },
+            {
+              i: '📱',
+              t: 'Web + Flutter',
+              d: 'Same Postgres, same API, native mobile + responsive web.',
+              c: 'from-sky-100 to-blue-50',
+              a: 'text-sky-700',
+            },
+            {
+              i: '📊',
+              t: 'Live analytics',
+              d: 'Revenue, AOV, top products, charts powered by recharts.',
+              c: 'from-violet-100 to-fuchsia-50',
+              a: 'text-violet-700',
+            },
+            {
+              i: '🛒',
+              t: 'Cart + Wishlist',
+              d: 'Persistent cart, save-for-later, one-click reorder.',
+              c: 'from-emerald-100 to-teal-50',
+              a: 'text-emerald-700',
+            },
+            {
+              i: '📚',
+              t: 'Swagger inside',
+              d: 'Every route documented, ready for partners and integrators.',
+              c: 'from-indigo-100 to-blue-50',
+              a: 'text-indigo-700',
+            },
           ].map((f) => (
             <div
               key={f.t}
@@ -244,7 +304,17 @@ export default function Home() {
               </Link>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
-              {['Next.js 14', 'Postgres 14', 'Prisma 5', 'Flutter', 'Tailwind', 'NextAuth + JWT', 'Recharts', 'Vitest', 'Docker'].map((s) => (
+              {[
+                'Next.js 14',
+                'Postgres 14',
+                'Prisma 5',
+                'Flutter',
+                'Tailwind',
+                'NextAuth + JWT',
+                'Recharts',
+                'Vitest',
+                'Docker',
+              ].map((s) => (
                 <div
                   key={s}
                   className="rounded-xl border border-white/15 bg-white/5 backdrop-blur px-3 py-2 text-center text-white/90"
@@ -284,8 +354,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col sm:flex-row justify-between items-center gap-3 text-sm text-slate-600">
           <div>© {new Date().getFullYear()} StoreFlow</div>
           <div className="flex gap-6">
-            <Link href="/demo" className="hover:text-slate-900">Demo</Link>
-            <Link href="/login" className="hover:text-slate-900">Login</Link>
+            <Link href="/demo" className="hover:text-slate-900">
+              Demo
+            </Link>
+            <Link href="/login" className="hover:text-slate-900">
+              Login
+            </Link>
           </div>
         </div>
       </footer>

@@ -3,6 +3,7 @@
 Follow these steps to run StoreFlow locally using Docker.
 
 **What runs where:**
+
 - 🐳 **Docker**: PostgreSQL database only (port 5433)
 - 💻 **Local**: Next.js application (port 3001)
 
@@ -11,14 +12,17 @@ Follow these steps to run StoreFlow locally using Docker.
 ## Step 1: Start Docker Desktop
 
 **macOS:**
+
 - Open Docker Desktop application from Applications folder
 - Wait for Docker icon to show "running" status in menu bar (green/whale icon)
 
 **Windows:**
+
 - Open Docker Desktop from Start menu
 - Wait for Docker to fully start
 
 **Linux:**
+
 - Docker runs automatically as a service
 - Verify: `sudo systemctl status docker`
 
@@ -34,6 +38,7 @@ docker-compose up -d
 ```
 
 **Verify database is running:**
+
 ```bash
 docker ps
 ```
@@ -84,14 +89,17 @@ This runs the Next.js app locally (not in Docker).
 ## Login with Demo Accounts
 
 **Admin:**
+
 - Email: `admin@storeflow.com`
 - Password: `Admin@123`
 
 **Staff:**
+
 - Email: `staff@storeflow.com`
 - Password: `Staff@123`
 
 **Customer:**
+
 - Email: `customer@storeflow.com`
 - Password: `Customer@123`
 
@@ -102,6 +110,7 @@ See `TEST_LOGIN.md` for all demo accounts.
 ## Useful Commands
 
 **Database:**
+
 ```bash
 # View database in GUI
 npx prisma studio
@@ -121,6 +130,7 @@ npm run db:seed
 ```
 
 **Development:**
+
 ```bash
 # Start dev server
 npm run dev
@@ -151,19 +161,23 @@ docker-compose down
 ## Troubleshooting
 
 ### Docker not running
+
 - Start Docker Desktop application
 - Wait for it to fully start before running commands
 
 ### Port 5432 already in use
+
 - Another PostgreSQL is running
 - Stop it: `brew services stop postgresql` (macOS)
 - Or change port in `docker-compose.yml`
 
 ### Database connection failed
+
 - Ensure Docker container is running: `docker ps`
 - Restart: `docker-compose restart`
 
 ### Tables don't exist
+
 - Run migrations: `npx prisma migrate dev`
 - Seed data: `npm run db:seed`
 
@@ -175,6 +189,7 @@ docker-compose down
 ✅ Ready to develop!
 
 **See also:**
+
 - [Setup with Docker](../docs/SETUP_WITH_DOCKER.md) - Full setup guide
 - [Testing Guide](../docs/TESTING.md) - Run tests
 - [Production Deployment](../docs/PROD_DEPLOYMENT.md) - Deploy to production

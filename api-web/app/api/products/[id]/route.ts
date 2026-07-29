@@ -56,10 +56,7 @@ import { createErrorResponse, ErrorCodes, handleApiError } from '@/lib/error-han
  *         description: Failed to fetch product
  */
 // GET - Get single product by ID (Public)
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
 
@@ -73,12 +70,7 @@ export async function GET(
     });
 
     if (!product) {
-      return createErrorResponse(
-        ErrorCodes.NOT_FOUND,
-        'Product not found',
-        undefined,
-        404
-      );
+      return createErrorResponse(ErrorCodes.NOT_FOUND, 'Product not found', undefined, 404);
     }
 
     return NextResponse.json({ product }, { status: 200 });

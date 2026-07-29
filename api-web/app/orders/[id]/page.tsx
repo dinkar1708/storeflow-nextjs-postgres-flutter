@@ -125,7 +125,10 @@ export default function OrderDetailsPage() {
       <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <button onClick={() => router.push(getBackUrl())} className="text-gray-600 hover:text-gray-900">
+            <button
+              onClick={() => router.push(getBackUrl())}
+              className="text-gray-600 hover:text-gray-900"
+            >
               ← Back
             </button>
             <h1 className="text-xl font-bold text-gray-900">Order Details</h1>
@@ -141,7 +144,9 @@ export default function OrderDetailsPage() {
               <div className="text-gray-900 font-medium">{order.id}</div>
 
               <div className="mt-3 text-sm text-gray-500">Status</div>
-              <div className={`mt-1 inline-flex px-3 py-1 rounded-full text-sm font-semibold ${statusClass}`}>
+              <div
+                className={`mt-1 inline-flex px-3 py-1 rounded-full text-sm font-semibold ${statusClass}`}
+              >
                 {order.status}
               </div>
 
@@ -187,4 +192,3 @@ export default function OrderDetailsPage() {
     </div>
   );
 }
-

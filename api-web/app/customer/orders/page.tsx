@@ -93,7 +93,9 @@ export default function CustomerOrdersPage() {
   const filteredOrders = orders.filter((order) => {
     const matchesSearch =
       searchQuery === '' ||
-      order.items.some(item => item.product.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      order.items.some((item) =>
+        item.product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
     const matchesStatus = statusFilter === STATUS_FILTER_ALL || order.status === statusFilter;
 
@@ -207,7 +209,9 @@ export default function CustomerOrdersPage() {
                         </p>
                       </div>
                       <div className="text-right">
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}
+                        >
                           {order.status}
                         </span>
                         <p className="text-lg font-bold text-gray-900 mt-1">
@@ -230,7 +234,9 @@ export default function CustomerOrdersPage() {
                       {order.items[0] ? (
                         <div className="flex justify-between">
                           <div>
-                            <p className="font-medium text-gray-900">{order.items[0].product.name}</p>
+                            <p className="font-medium text-gray-900">
+                              {order.items[0].product.name}
+                            </p>
                             <p className="text-sm text-gray-600">Qty: {order.items[0].quantity}</p>
                           </div>
                           <p className="font-medium text-gray-900">

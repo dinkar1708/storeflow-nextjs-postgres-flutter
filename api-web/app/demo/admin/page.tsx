@@ -46,18 +46,49 @@ const ordersByStatus = [
 const pieColors = ['#9CA3AF', '#FBBF24', '#A78BFA', '#6366F1', '#10B981'];
 
 const productRows = [
-  { sku: 'WH-220', name: 'Wireless Headphones', cat: 'Electronics', price: 149.99, stock: 24, active: true },
+  {
+    sku: 'WH-220',
+    name: 'Wireless Headphones',
+    cat: 'Electronics',
+    price: 149.99,
+    stock: 24,
+    active: true,
+  },
   { sku: 'TS-001', name: 'Cotton Tee', cat: 'Apparel', price: 19.99, stock: 120, active: true },
-  { sku: 'SB-001', name: 'Stainless Bottle', cat: 'Home', price: 24.50, stock: 0, active: true },
-  { sku: 'YM-220', name: 'Yoga Mat', cat: 'Fitness', price: 39.00, stock: 17, active: true },
-  { sku: 'LL-014', name: 'LED Desk Lamp', cat: 'Home', price: 45.00, stock: 8, active: false },
+  { sku: 'SB-001', name: 'Stainless Bottle', cat: 'Home', price: 24.5, stock: 0, active: true },
+  { sku: 'YM-220', name: 'Yoga Mat', cat: 'Fitness', price: 39.0, stock: 17, active: true },
+  { sku: 'LL-014', name: 'LED Desk Lamp', cat: 'Home', price: 45.0, stock: 8, active: false },
 ];
 
 const userRows = [
-  { name: 'Alex Chen', email: 'alex@example.com', role: 'CUSTOMER', orders: 14, joined: '2025-08-12' },
-  { name: 'Priya Patel', email: 'priya@example.com', role: 'CUSTOMER', orders: 6, joined: '2025-11-03' },
-  { name: 'Marco Diaz', email: 'marco@example.com', role: 'STAFF', orders: 0, joined: '2025-02-19' },
-  { name: 'Sara Johansson', email: 'sara@example.com', role: 'ADMIN', orders: 0, joined: '2024-09-04' },
+  {
+    name: 'Alex Chen',
+    email: 'alex@example.com',
+    role: 'CUSTOMER',
+    orders: 14,
+    joined: '2025-08-12',
+  },
+  {
+    name: 'Priya Patel',
+    email: 'priya@example.com',
+    role: 'CUSTOMER',
+    orders: 6,
+    joined: '2025-11-03',
+  },
+  {
+    name: 'Marco Diaz',
+    email: 'marco@example.com',
+    role: 'STAFF',
+    orders: 0,
+    joined: '2025-02-19',
+  },
+  {
+    name: 'Sara Johansson',
+    email: 'sara@example.com',
+    role: 'ADMIN',
+    orders: 0,
+    joined: '2024-09-04',
+  },
 ];
 
 const roleBadge: Record<string, string> = {
@@ -76,12 +107,21 @@ export default function AdminDemo() {
       <nav className="bg-white/70 backdrop-blur shadow-sm border-b-4 border-red-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
           <div className="flex items-center gap-4">
-            <Link href="/demo" className="text-gray-600 hover:text-gray-900">← Back to Demo</Link>
+            <Link href="/demo" className="text-gray-600 hover:text-gray-900">
+              ← Back to Demo
+            </Link>
             <h1 className="text-xl font-bold text-gray-900">Admin view</h1>
           </div>
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">ADMIN</span>
-            <Link href="/login" className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md">Login</Link>
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+              ADMIN
+            </span>
+            <Link
+              href="/login"
+              className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md"
+            >
+              Login
+            </Link>
           </div>
         </div>
       </nav>
@@ -90,7 +130,12 @@ export default function AdminDemo() {
         {/* KPI cards */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { label: 'Revenue (7d)', value: '$15,520', sub: '+18% vs prev', color: 'text-green-600' },
+            {
+              label: 'Revenue (7d)',
+              value: '$15,520',
+              sub: '+18% vs prev',
+              color: 'text-green-600',
+            },
             { label: 'Orders (7d)', value: '167', sub: '+9%', color: 'text-blue-600' },
             { label: 'Avg order value', value: '$92.93', sub: '+4%', color: 'text-purple-600' },
             { label: 'Active users', value: '1,284', sub: '+22 new', color: 'text-orange-600' },
@@ -114,7 +159,13 @@ export default function AdminDemo() {
                   <XAxis dataKey="d" stroke="#6B7280" />
                   <YAxis stroke="#6B7280" />
                   <Tooltip />
-                  <Line type="monotone" dataKey="revenue" stroke="#DC2626" strokeWidth={3} dot={{ r: 5 }} />
+                  <Line
+                    type="monotone"
+                    dataKey="revenue"
+                    stroke="#DC2626"
+                    strokeWidth={3}
+                    dot={{ r: 5 }}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -124,7 +175,14 @@ export default function AdminDemo() {
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={ordersByStatus} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70}>
+                  <Pie
+                    data={ordersByStatus}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={70}
+                  >
                     {ordersByStatus.map((_, i) => (
                       <Cell key={i} fill={pieColors[i]} />
                     ))}
@@ -159,7 +217,9 @@ export default function AdminDemo() {
               <h2 className="text-xl font-bold text-gray-900">Products</h2>
               <p className="text-sm text-gray-500">CRUD with categories, stock, pricing.</p>
             </div>
-            <button className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium">+ New product</button>
+            <button className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium">
+              + New product
+            </button>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
@@ -181,9 +241,15 @@ export default function AdminDemo() {
                     <td className="px-4 py-3 font-medium">{p.name}</td>
                     <td className="px-4 py-3 text-gray-600">{p.cat}</td>
                     <td className="px-4 py-3 font-semibold">${p.price.toFixed(2)}</td>
-                    <td className={`px-4 py-3 font-semibold ${p.stock === 0 ? 'text-red-600' : 'text-gray-900'}`}>{p.stock}</td>
+                    <td
+                      className={`px-4 py-3 font-semibold ${p.stock === 0 ? 'text-red-600' : 'text-gray-900'}`}
+                    >
+                      {p.stock}
+                    </td>
                     <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded-full text-xs ${p.active ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-xs ${p.active ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}
+                      >
                         {p.active ? 'Active' : 'Inactive'}
                       </span>
                     </td>
@@ -221,7 +287,11 @@ export default function AdminDemo() {
                     <td className="px-4 py-3 font-medium">{u.name}</td>
                     <td className="px-4 py-3 text-gray-600">{u.email}</td>
                     <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${roleBadge[u.role]}`}>{u.role}</span>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-xs font-medium ${roleBadge[u.role]}`}
+                      >
+                        {u.role}
+                      </span>
                     </td>
                     <td className="px-4 py-3">{u.orders}</td>
                     <td className="px-4 py-3 text-gray-500">{u.joined}</td>
@@ -236,8 +306,18 @@ export default function AdminDemo() {
         <section className="bg-white rounded-xl shadow p-6 text-center">
           <p className="text-gray-600 mb-3">See it from the other side:</p>
           <div className="flex justify-center gap-3 flex-wrap">
-            <Link href="/demo/customer" className="px-4 py-2 bg-green-600 text-white rounded-md font-medium hover:bg-green-700">Customer view →</Link>
-            <Link href="/demo/staff" className="px-4 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700">Staff view →</Link>
+            <Link
+              href="/demo/customer"
+              className="px-4 py-2 bg-green-600 text-white rounded-md font-medium hover:bg-green-700"
+            >
+              Customer view →
+            </Link>
+            <Link
+              href="/demo/staff"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700"
+            >
+              Staff view →
+            </Link>
           </div>
         </section>
       </main>

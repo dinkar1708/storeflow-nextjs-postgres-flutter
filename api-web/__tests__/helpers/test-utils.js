@@ -62,10 +62,7 @@ export async function cleanupAllTestUsers() {
     // Delete users with test email pattern
     await prisma.user.deleteMany({
       where: {
-        OR: [
-          { email: { contains: 'test' } },
-          { email: { contains: 'example.com' } },
-        ],
+        OR: [{ email: { contains: 'test' } }, { email: { contains: 'example.com' } }],
       },
     });
   } catch (error) {

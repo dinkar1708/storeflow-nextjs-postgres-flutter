@@ -48,10 +48,7 @@ export async function handleJwtLogin(request: NextRequest): Promise<NextResponse
       // Log failed login attempt
       await logAuthEvent(AuditAction.LOGIN_FAILED, user.id, email, ipAddress);
 
-      return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
     // Log successful login

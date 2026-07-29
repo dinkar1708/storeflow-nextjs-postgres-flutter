@@ -64,9 +64,13 @@ export default function AdminDashboard() {
           <div className="relative overflow-hidden rounded-2xl px-6 py-7 mb-6 text-white bg-gradient-to-br from-fuchsia-600 via-purple-700 to-indigo-800 shadow-xl shadow-fuchsia-500/30">
             <div className="pointer-events-none absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_white,_transparent_55%)]" />
             <div className="relative">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-200">Control center</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-200">
+                Control center
+              </span>
               <h2 className="mt-1 text-3xl font-bold">Welcome, {session.user?.name} 🛠️</h2>
-              <p className="text-white/80 mt-1">Full system access — products, orders, users, analytics.</p>
+              <p className="text-white/80 mt-1">
+                Full system access — products, orders, users, analytics.
+              </p>
 
               <div className="flex flex-wrap gap-3 mt-5">
                 <button
@@ -126,7 +130,6 @@ export default function AdminDashboard() {
               <p className="mt-1 text-xs text-gray-500">Active products</p>
             </div>
           </div>
-
         </div>
       </main>
     </div>

@@ -62,7 +62,7 @@ describe('Products API', () => {
 
       expect(response.status).toBe(200);
       // All returned products should be active
-      response.data.products.forEach(product => {
+      response.data.products.forEach((product) => {
         expect(product.isActive).toBe(true);
       });
     });

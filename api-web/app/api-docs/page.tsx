@@ -20,12 +20,7 @@ export default function ApiDocsPage() {
 
   return (
     <div className="min-h-screen">
-      <SwaggerUI
-        url="/api/swagger"
-        docExpansion="list"
-        filter={true}
-        persistAuthorization={true}
-      />
+      <SwaggerUI url="/api/swagger" docExpansion="list" filter={true} persistAuthorization={true} />
     </div>
   );
 }

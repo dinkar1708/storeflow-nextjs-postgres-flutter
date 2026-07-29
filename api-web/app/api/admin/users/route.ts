@@ -54,12 +54,7 @@ export async function GET(request: NextRequest) {
 
     // Check if user is authenticated and is admin
     if (!user || user.role !== 'ADMIN') {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Admin access required',
-        undefined,
-        403
-      );
+      return createErrorResponse(ErrorCodes.FORBIDDEN, 'Admin access required', undefined, 403);
     }
 
     // Get all users

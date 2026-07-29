@@ -31,19 +31,13 @@ export default function CustomerWishlistPage() {
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
-    } else if (
-      status === 'authenticated' &&
-      (session?.user as any)?.role !== UserRole.CUSTOMER
-    ) {
+    } else if (status === 'authenticated' && (session?.user as any)?.role !== UserRole.CUSTOMER) {
       router.push('/403');
     }
   }, [status, session, router]);
 
   useEffect(() => {
-    if (
-      status === 'authenticated' &&
-      (session?.user as any)?.role === UserRole.CUSTOMER
-    ) {
+    if (status === 'authenticated' && (session?.user as any)?.role === UserRole.CUSTOMER) {
       fetchWishlist();
     }
   }, [status, session]);

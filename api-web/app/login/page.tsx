@@ -64,11 +64,14 @@ export default function LoginPage() {
   };
 
   return (
-    <MarketingShell showAuthLinks={false} navExtras={
-      <Link href="/register" className="hover:text-slate-900">
-        Create an account →
-      </Link>
-    }>
+    <MarketingShell
+      showAuthLinks={false}
+      navExtras={
+        <Link href="/register" className="hover:text-slate-900">
+          Create an account →
+        </Link>
+      }
+    >
       <main className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           {/* Left: copy */}
@@ -99,7 +102,10 @@ export default function LoginPage() {
             </ul>
             <p className="mt-8 text-sm text-slate-500">
               Don’t have an account?{' '}
-              <Link href="/register" className="font-semibold text-fuchsia-600 hover:text-fuchsia-700">
+              <Link
+                href="/register"
+                className="font-semibold text-fuchsia-600 hover:text-fuchsia-700"
+              >
                 Create one →
               </Link>
             </p>
@@ -125,7 +131,8 @@ export default function LoginPage() {
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 mb-5">
                     <h3 className="text-sm font-semibold text-slate-900">Demo login (seed data)</h3>
                     <p className="mt-1 text-xs text-slate-600">
-                      Pick an account to autofill — same as <code className="rounded bg-slate-200 px-1">TEST_LOGIN.md</code>.
+                      Pick an account to autofill — same as{' '}
+                      <code className="rounded bg-slate-200 px-1">TEST_LOGIN.md</code>.
                     </p>
                     <select
                       id="demo-credentials"
@@ -145,7 +152,10 @@ export default function LoginPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-slate-700 mb-1"
+                    >
                       Email
                     </label>
                     <input
@@ -164,7 +174,10 @@ export default function LoginPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-slate-700 mb-1"
+                    >
                       Password
                     </label>
                     <input
@@ -181,7 +194,10 @@ export default function LoginPage() {
                   </div>
 
                   <div className="flex justify-end">
-                    <button type="button" className="text-sm text-fuchsia-600 hover:text-fuchsia-700 hover:underline">
+                    <button
+                      type="button"
+                      className="text-sm text-fuchsia-600 hover:text-fuchsia-700 hover:underline"
+                    >
                       Forgot password?
                     </button>
                   </div>
@@ -203,7 +219,10 @@ export default function LoginPage() {
 
                 <p className="mt-6 text-sm text-center text-slate-600">
                   Don’t have an account?{' '}
-                  <Link href="/register" className="font-semibold text-fuchsia-600 hover:text-fuchsia-700">
+                  <Link
+                    href="/register"
+                    className="font-semibold text-fuchsia-600 hover:text-fuchsia-700"
+                  >
                     Register
                   </Link>
                 </p>

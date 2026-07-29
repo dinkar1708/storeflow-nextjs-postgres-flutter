@@ -11,10 +11,15 @@ import { z } from 'zod';
 
 const envSchema = z.object({
   // Database
-  DATABASE_URL: z.string().url('DATABASE_URL must be a valid URL').min(1, 'DATABASE_URL is required'),
+  DATABASE_URL: z
+    .string()
+    .url('DATABASE_URL must be a valid URL')
+    .min(1, 'DATABASE_URL is required'),
 
   // Authentication
-  NEXTAUTH_SECRET: z.string().min(32, 'NEXTAUTH_SECRET must be at least 32 characters for security'),
+  NEXTAUTH_SECRET: z
+    .string()
+    .min(32, 'NEXTAUTH_SECRET must be at least 32 characters for security'),
   NEXTAUTH_URL: z.string().url('NEXTAUTH_URL must be a valid URL').optional(),
 
   // Node Environment
@@ -28,7 +33,10 @@ const envSchema = z.object({
   SWAGGER_DOCS_PASSWORD: z.string().optional(),
 
   // Optional: Rate Limiting (future)
-  DISABLE_RATE_LIMIT: z.string().transform(val => val === 'true').optional(),
+  DISABLE_RATE_LIMIT: z
+    .string()
+    .transform((val) => val === 'true')
+    .optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

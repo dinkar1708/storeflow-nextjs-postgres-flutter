@@ -28,20 +28,12 @@ import { createErrorResponse, ErrorCodes, handleApiError } from '@/lib/error-han
  *       403:
  *         description: Unauthorized
  */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { productId: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: { params: { productId: string } }) {
   try {
     const user = await getApiUser(request);
 
     if (!user || user.role !== UserRole.CUSTOMER) {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Customer access required',
-        undefined,
-        403
-      );
+      return createErrorResponse(ErrorCodes.FORBIDDEN, 'Customer access required', undefined, 403);
     }
 
     const { productId } = params;
@@ -53,22 +45,14 @@ export async function DELETE(
     });
 
     if (!existing) {
-      return createErrorResponse(
-        ErrorCodes.NOT_FOUND,
-        'Wishlist entry not found',
-        undefined,
-        404
-      );
+      return createErrorResponse(ErrorCodes.NOT_FOUND, 'Wishlist entry not found', undefined, 404);
     }
 
     await prisma.wishlist.delete({
       where: { id: existing.id },
     });
 
-    return NextResponse.json(
-      { message: 'Removed from wishlist' },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: 'Removed from wishlist' }, { status: 200 });
   } catch (error) {
     return handleApiError(error);
   }

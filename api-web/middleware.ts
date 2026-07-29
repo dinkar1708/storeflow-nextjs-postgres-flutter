@@ -1,25 +1,16 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { getRequestId, REQUEST_ID_HEADER } from './lib/request-id';
 
 const SWAGGER_REALM = 'StoreFlow API docs';
 
 // CORS Configuration
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
-  : [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:3002',
-    ];
+  ? process.env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim())
+  : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'];
 
 const ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
-const ALLOWED_HEADERS = [
-  'Content-Type',
-  'Authorization',
-  'X-Requested-With',
-  'Accept',
-  'Origin',
-];
+const ALLOWED_HEADERS = ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'];
 
 function swaggerDocsAuthRequired(pathname: string): boolean {
   return pathname === '/api-docs' || pathname === '/api/swagger';
@@ -147,9 +138,13 @@ export function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const origin = request.headers.get('origin');
 
+  // Generate or extract request ID for tracing
+  const requestId = getRequestId(request);
+
   // Handle preflight OPTIONS request
   if (request.method === 'OPTIONS' && pathname.startsWith('/api')) {
     const preflightResponse = new NextResponse(null, { status: 204 });
+    preflightResponse.headers.set(REQUEST_ID_HEADER, requestId);
     return addCorsHeaders(preflightResponse, origin);
   }
 
@@ -177,13 +172,14 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  // Development logging
+  // Development logging with request ID
   if (process.env.NODE_ENV === 'development' && pathname.startsWith('/api')) {
-    console.log(`[API] ${request.method} ${pathname}${search}`);
+    console.log(`[${requestId}] ${request.method} ${pathname}${search}`);
   }
 
-  // Continue with request and add CORS headers
+  // Continue with request and add CORS headers + request ID
   const response = NextResponse.next();
+  response.headers.set(REQUEST_ID_HEADER, requestId);
   return addCorsHeaders(response, origin);
 }
 

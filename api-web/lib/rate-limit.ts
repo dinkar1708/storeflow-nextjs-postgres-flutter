@@ -13,14 +13,17 @@ interface RateLimitStore {
 const store: RateLimitStore = {};
 
 // Clean up expired entries every 5 minutes
-setInterval(() => {
-  const now = Date.now();
-  Object.keys(store).forEach(key => {
-    if (store[key].resetTime < now) {
-      delete store[key];
-    }
-  });
-}, 5 * 60 * 1000);
+setInterval(
+  () => {
+    const now = Date.now();
+    Object.keys(store).forEach((key) => {
+      if (store[key].resetTime < now) {
+        delete store[key];
+      }
+    });
+  },
+  5 * 60 * 1000
+);
 
 export interface RateLimitConfig {
   /**
@@ -48,7 +51,7 @@ export interface RateLimitConfig {
  * Clear all rate limit data (useful for testing)
  */
 export function clearRateLimitStore() {
-  Object.keys(store).forEach(key => delete store[key]);
+  Object.keys(store).forEach((key) => delete store[key]);
 }
 
 export async function rateLimit(

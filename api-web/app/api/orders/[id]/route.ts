@@ -31,10 +31,7 @@ import { updateOrderStatusSchema } from '@/lib/validations';
  *         description: Order not found
  */
 // GET - Fetch single order by ID
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const user = await getApiUser(request);
 
@@ -78,12 +75,7 @@ export async function GET(
     });
 
     if (!order) {
-      return createErrorResponse(
-        ErrorCodes.NOT_FOUND,
-        'Order not found',
-        undefined,
-        404
-      );
+      return createErrorResponse(ErrorCodes.NOT_FOUND, 'Order not found', undefined, 404);
     }
 
     // Customers can only view their own orders
@@ -138,10 +130,7 @@ export async function GET(
  *         description: Unauthorized
  */
 // PATCH - Update order status (Admin/Staff only)
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const user = await getApiUser(request);
 

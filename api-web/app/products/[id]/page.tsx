@@ -171,7 +171,9 @@ export default function ProductDetailPage() {
                   <span className="text-gray-700">
                     <strong>{session.user?.name}</strong>
                   </span>
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getRoleBadge()}`}>
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getRoleBadge()}`}
+                  >
                     {userRole || 'GUEST'}
                   </span>
                 </>
@@ -206,9 +208,7 @@ export default function ProductDetailPage() {
                   </span>
                 </div>
 
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                  {product.name}
-                </h1>
+                <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
 
                 <p className="text-4xl font-bold text-green-600 mb-6">
                   ${Number(product.price).toFixed(2)}
@@ -227,13 +227,17 @@ export default function ProductDetailPage() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Stock:</span>
-                    <span className={`font-medium ${product.stock > 10 ? 'text-green-600' : 'text-orange-600'}`}>
+                    <span
+                      className={`font-medium ${product.stock > 10 ? 'text-green-600' : 'text-orange-600'}`}
+                    >
                       {product.stock} units
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Status:</span>
-                    <span className={`font-medium ${product.isActive ? 'text-green-600' : 'text-red-600'}`}>
+                    <span
+                      className={`font-medium ${product.isActive ? 'text-green-600' : 'text-red-600'}`}
+                    >
                       {product.isActive ? 'Active' : 'Inactive'}
                     </span>
                   </div>
@@ -266,9 +270,7 @@ export default function ProductDetailPage() {
                             +
                           </button>
                         </div>
-                        <span className="text-sm text-gray-500">
-                          Max: {product.stock}
-                        </span>
+                        <span className="text-sm text-gray-500">Max: {product.stock}</span>
                       </div>
                       <button
                         onClick={handleAddToCart}

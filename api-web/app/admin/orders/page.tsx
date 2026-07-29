@@ -123,12 +123,16 @@ export default function AdminOrdersPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <nav className={`bg-white shadow-sm border-b-4 ${userRole === UserRole.ADMIN ? 'border-red-600' : 'border-blue-600'}`}>
+      <nav
+        className={`bg-white shadow-sm border-b-4 ${userRole === UserRole.ADMIN ? 'border-red-600' : 'border-blue-600'}`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => router.push(userRole === UserRole.ADMIN ? '/admin/dashboard' : '/staff/dashboard')}
+                onClick={() =>
+                  router.push(userRole === UserRole.ADMIN ? '/admin/dashboard' : '/staff/dashboard')
+                }
                 className="text-gray-600 hover:text-gray-900"
               >
                 ← Back to Dashboard
@@ -136,7 +140,9 @@ export default function AdminOrdersPage() {
               <h1 className="text-xl font-bold text-gray-900">Order Management</h1>
             </div>
             <div className="flex items-center">
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${userRole === UserRole.ADMIN ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>
+              <span
+                className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${userRole === UserRole.ADMIN ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}
+              >
                 {userRole}
               </span>
             </div>
@@ -200,7 +206,9 @@ export default function AdminOrdersPage() {
                         ${Number(order.total).toFixed(2)}
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                        <span
+                          className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}
+                        >
                           {order.status}
                         </span>
                       </td>

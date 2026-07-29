@@ -90,8 +90,8 @@ export default function DemoLanding() {
           of StoreFlow.
         </h1>
         <p className="mt-5 text-lg text-slate-600 max-w-2xl mx-auto">
-          Pick a role below to walk through the screens. Every page is a static preview
-          of what the real product looks like in production.
+          Pick a role below to walk through the screens. Every page is a static preview of what the
+          real product looks like in production.
         </p>
         <div className="mt-8 flex justify-center gap-3 flex-wrap">
           <Link
@@ -130,7 +130,9 @@ export default function DemoLanding() {
 
       {/* Role tiles */}
       <section id="roles" className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pb-20">
-        <h2 className="text-3xl font-bold text-slate-900 text-center mb-2">Pick a role to explore</h2>
+        <h2 className="text-3xl font-bold text-slate-900 text-center mb-2">
+          Pick a role to explore
+        </h2>
         <p className="text-center text-slate-600 mb-10">Each role sees a different StoreFlow.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

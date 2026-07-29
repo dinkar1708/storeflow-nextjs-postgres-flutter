@@ -14,7 +14,7 @@
 if (process.env.NODE_ENV === 'production') {
   throw new Error(
     'SECURITY: demo-login-accounts.ts should never be imported in production. ' +
-    'Check your build configuration and imports.'
+      'Check your build configuration and imports.'
   );
 }
 

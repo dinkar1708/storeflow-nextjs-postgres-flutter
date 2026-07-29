@@ -42,11 +42,7 @@ interface SalesData {
 
 function formatTooltipCurrency(value: ValueType | undefined) {
   const amount =
-    typeof value === 'number'
-      ? value
-      : typeof value === 'string'
-        ? Number(value)
-        : NaN;
+    typeof value === 'number' ? value : typeof value === 'string' ? Number(value) : NaN;
 
   return Number.isFinite(amount) ? `$${amount.toFixed(2)}` : '$0.00';
 }
@@ -114,7 +110,7 @@ export default function AnalyticsPage() {
   const getChartData = () => {
     switch (viewMode) {
       case 'daily':
-        return salesData.daily.map(item => ({
+        return salesData.daily.map((item) => ({
           name: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
           sales: item.sales,
           cost: item.cost,
@@ -122,15 +118,18 @@ export default function AnalyticsPage() {
           orders: item.orders,
         }));
       case 'monthly':
-        return salesData.monthly.map(item => ({
-          name: new Date(item.month + '-01').toLocaleDateString('en-US', { year: 'numeric', month: 'short' }),
+        return salesData.monthly.map((item) => ({
+          name: new Date(item.month + '-01').toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+          }),
           sales: item.sales,
           cost: item.cost,
           profit: item.profit,
           orders: item.orders,
         }));
       case 'yearly':
-        return salesData.yearly.map(item => ({
+        return salesData.yearly.map((item) => ({
           name: item.year,
           sales: item.sales,
           cost: item.cost,
@@ -299,13 +298,12 @@ export default function AnalyticsPage() {
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue and Profit</h3>
               <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={getChartData()} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <LineChart
+                  data={getChartData()}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis
-                    dataKey="name"
-                    stroke="#6b7280"
-                    style={{ fontSize: '12px' }}
-                  />
+                  <XAxis dataKey="name" stroke="#6b7280" style={{ fontSize: '12px' }} />
                   <YAxis
                     stroke="#6b7280"
                     style={{ fontSize: '12px' }}
@@ -313,13 +311,14 @@ export default function AnalyticsPage() {
                   />
                   <Tooltip
                     formatter={formatTooltipCurrency}
-                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
+                    contentStyle={{
+                      backgroundColor: '#fff',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '6px',
+                    }}
                     labelStyle={{ color: '#111827', fontWeight: 'bold' }}
                   />
-                  <Legend
-                    wrapperStyle={{ paddingTop: '20px' }}
-                    iconType="line"
-                  />
+                  <Legend wrapperStyle={{ paddingTop: '20px' }} iconType="line" />
                   <Line
                     type="monotone"
                     dataKey="sales"
@@ -346,13 +345,12 @@ export default function AnalyticsPage() {
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Cost Analysis</h3>
               <ResponsiveContainer width="100%" height={350}>
-                <LineChart data={getChartData()} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <LineChart
+                  data={getChartData()}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis
-                    dataKey="name"
-                    stroke="#6b7280"
-                    style={{ fontSize: '12px' }}
-                  />
+                  <XAxis dataKey="name" stroke="#6b7280" style={{ fontSize: '12px' }} />
                   <YAxis
                     stroke="#6b7280"
                     style={{ fontSize: '12px' }}
@@ -360,13 +358,14 @@ export default function AnalyticsPage() {
                   />
                   <Tooltip
                     formatter={formatTooltipCurrency}
-                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
+                    contentStyle={{
+                      backgroundColor: '#fff',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '6px',
+                    }}
                     labelStyle={{ color: '#111827', fontWeight: 'bold' }}
                   />
-                  <Legend
-                    wrapperStyle={{ paddingTop: '20px' }}
-                    iconType="line"
-                  />
+                  <Legend wrapperStyle={{ paddingTop: '20px' }} iconType="line" />
                   <Line
                     type="monotone"
                     dataKey="cost"
@@ -382,15 +381,13 @@ export default function AnalyticsPage() {
 
             {/* Revenue vs Cost vs Profit per Period */}
             <div className="mb-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue vs Cost vs Profit</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Revenue vs Cost vs Profit
+              </h3>
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={getChartData()} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis
-                    dataKey="name"
-                    stroke="#6b7280"
-                    style={{ fontSize: '12px' }}
-                  />
+                  <XAxis dataKey="name" stroke="#6b7280" style={{ fontSize: '12px' }} />
                   <YAxis
                     stroke="#6b7280"
                     style={{ fontSize: '12px' }}
@@ -398,31 +395,18 @@ export default function AnalyticsPage() {
                   />
                   <Tooltip
                     formatter={formatTooltipCurrency}
-                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
+                    contentStyle={{
+                      backgroundColor: '#fff',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '6px',
+                    }}
                     labelStyle={{ color: '#111827', fontWeight: 'bold' }}
                     cursor={{ fill: 'rgba(59, 130, 246, 0.1)' }}
                   />
-                  <Legend
-                    wrapperStyle={{ paddingTop: '20px' }}
-                  />
-                  <Bar
-                    dataKey="sales"
-                    fill="#10b981"
-                    name="Revenue"
-                    radius={[6, 6, 0, 0]}
-                  />
-                  <Bar
-                    dataKey="cost"
-                    fill="#f97316"
-                    name="Cost"
-                    radius={[6, 6, 0, 0]}
-                  />
-                  <Bar
-                    dataKey="profit"
-                    fill="#3b82f6"
-                    name="Profit"
-                    radius={[6, 6, 0, 0]}
-                  />
+                  <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                  <Bar dataKey="sales" fill="#10b981" name="Revenue" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="cost" fill="#f97316" name="Cost" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="profit" fill="#3b82f6" name="Profit" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -433,29 +417,19 @@ export default function AnalyticsPage() {
               <ResponsiveContainer width="100%" height={350}>
                 <BarChart data={getChartData()} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis
-                    dataKey="name"
-                    stroke="#6b7280"
-                    style={{ fontSize: '12px' }}
-                  />
-                  <YAxis
-                    stroke="#6b7280"
-                    style={{ fontSize: '12px' }}
-                  />
+                  <XAxis dataKey="name" stroke="#6b7280" style={{ fontSize: '12px' }} />
+                  <YAxis stroke="#6b7280" style={{ fontSize: '12px' }} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '6px' }}
+                    contentStyle={{
+                      backgroundColor: '#fff',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '6px',
+                    }}
                     labelStyle={{ color: '#111827', fontWeight: 'bold' }}
                     cursor={{ fill: 'rgba(59, 130, 246, 0.1)' }}
                   />
-                  <Legend
-                    wrapperStyle={{ paddingTop: '20px' }}
-                  />
-                  <Bar
-                    dataKey="orders"
-                    fill="#8b5cf6"
-                    name="Orders"
-                    radius={[6, 6, 0, 0]}
-                  />
+                  <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                  <Bar dataKey="orders" fill="#8b5cf6" name="Orders" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

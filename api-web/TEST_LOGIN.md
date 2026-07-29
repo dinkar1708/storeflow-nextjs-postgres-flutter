@@ -7,6 +7,7 @@ IMPORTANT: Admin accounts CANNOT be created via public signup. They are created 
 ## Admin Accounts
 
 ### Admin 1 - System Admin
+
 - Email: `admin@storeflow.com`
 - Password: `Admin@123`
 - Role: ADMIN
@@ -15,6 +16,7 @@ IMPORTANT: Admin accounts CANNOT be created via public signup. They are created 
 - Dashboard: /admin/dashboard
 
 ### Admin 2 - John Anderson
+
 - Email: `john.admin@storeflow.com`
 - Password: `JohnAdmin@456`
 - Role: ADMIN
@@ -23,6 +25,7 @@ IMPORTANT: Admin accounts CANNOT be created via public signup. They are created 
 - Dashboard: /admin/dashboard
 
 ### Admin 3 - Sarah Wilson
+
 - Email: `sarah.admin@storeflow.com`
 - Password: `SarahAdmin@789`
 - Role: ADMIN
@@ -35,6 +38,7 @@ IMPORTANT: Admin accounts CANNOT be created via public signup. They are created 
 ## Staff Accounts
 
 ### Staff 1 - Staff User
+
 - Email: `staff@storeflow.com`
 - Password: `Staff@123`
 - Role: STAFF
@@ -43,6 +47,7 @@ IMPORTANT: Admin accounts CANNOT be created via public signup. They are created 
 - Dashboard: /staff/dashboard
 
 ### Staff 2 - Mike Johnson
+
 - Email: `mike.staff@storeflow.com`
 - Password: `MikeStaff@456`
 - Role: STAFF
@@ -55,6 +60,7 @@ IMPORTANT: Admin accounts CANNOT be created via public signup. They are created 
 ## Customer Accounts
 
 ### Customer 1 - Customer User
+
 - Email: `customer@storeflow.com`
 - Password: `Customer@123`
 - Role: CUSTOMER
@@ -63,6 +69,7 @@ IMPORTANT: Admin accounts CANNOT be created via public signup. They are created 
 - Dashboard: /customer/dashboard
 
 ### Customer 2 - Emma Davis
+
 - Email: `emma.customer@storeflow.com`
 - Password: `EmmaCustomer@456`
 - Role: CUSTOMER
@@ -106,6 +113,7 @@ npm run db:seed
 ```
 
 This will create:
+
 - 3 Admin accounts
 - 2 Staff accounts
 - 2 Customer accounts
@@ -123,6 +131,7 @@ Try logging in with any account above to test role-based redirects.
 ## Public Signup Restrictions
 
 NOTE: Public signup page (http://localhost:3001/register) allows ONLY:
+
 - CUSTOMER role (default)
 - STAFF role (if enabled with approval)
 
@@ -135,10 +144,12 @@ Admin accounts CANNOT be created via public signup for security reasons.
 After seeding, you'll have demo products to test:
 
 ### Categories
+
 - Electronics
 - Clothing
 
 ### Products
+
 1. Laptop
    - Price: $999.99
    - Stock: 10 units
@@ -152,6 +163,7 @@ After seeding, you'll have demo products to test:
    - Category: Clothing
 
 ### Product Management URLs
+
 - Admin Product Management: http://localhost:3001/admin/products
 - Customer Product Listing: http://localhost:3001/customer/products
 
@@ -160,12 +172,14 @@ After seeding, you'll have demo products to test:
 ## Password Requirements
 
 All passwords must meet these criteria:
+
 - Minimum 8 characters
 - At least 1 uppercase letter
 - At least 1 number
 - At least 1 special character (@$!%*?&)
 
 Examples of valid passwords:
+
 - Admin@123
 - MyPassword1!
 - SecurePass@2024
@@ -213,12 +227,14 @@ Examples of valid passwords:
 ## Troubleshooting
 
 If login fails:
+
 1. Verify database is seeded: `npm run db:seed`
 2. Check server is running: `npm run dev`
 3. Clear browser cache and cookies
 4. Check console for errors
 
 If redirect fails:
+
 1. Verify role is correctly set in database
 2. Check NextAuth session configuration
 3. Verify middleware is protecting routes
@@ -230,6 +246,7 @@ If redirect fails:
 ## Current Setup Status
 
 You are currently running:
+
 - Database: Docker PostgreSQL on port 5433
 - Next.js: http://localhost:3001
 - Database has seeded data including:

@@ -27,11 +27,13 @@ Visit: http://localhost:3000
 ## Testing
 
 This project uses Vitest for testing, following industry-standard patterns recommended by:
+
 - Vitest Official Documentation: https://vitest.dev/
 - Testing Pyramid - Martin Fowler: https://martinfowler.com/articles/practical-test-pyramid.html
 - Kent C. Dodds - Testing Best Practices: https://kentcdodds.com/blog/write-tests
 
 Quick Start:
+
 ```bash
 # Start dev server first
 npm run dev
@@ -48,11 +50,13 @@ npm run test:ui
 
 Test Results:
 Results are automatically saved to `docs/test-result/` after each test run:
+
 - test-results.json - JSON format
 - index.html - Interactive HTML report
 
 Complete Testing Guide:
 See `docs/TESTING.md` for:
+
 - Testing strategy and approach
 - Writing new tests
 - Standard patterns (beforeEach, afterEach, etc.)
@@ -60,6 +64,7 @@ See `docs/TESTING.md` for:
 - Official documentation links
 
 Test Coverage:
+
 - Auth API: 100% (register, login)
 - Products API: TODO
 - Orders API: TODO

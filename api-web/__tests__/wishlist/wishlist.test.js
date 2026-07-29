@@ -259,10 +259,7 @@ describe('Wishlist API', () => {
         await prisma.wishlist.create({
           data: { userId: otherCustomer.id, productId: outOfStockProduct.id },
         });
-        const otherLogin = await jwtApiLogin(
-          otherCustomer.email,
-          otherCustomer.plainPassword
-        );
+        const otherLogin = await jwtApiLogin(otherCustomer.email, otherCustomer.plainPassword);
         const otherToken = otherLogin.data?.token;
 
         const res = await makeRequest('/api/wishlist', {

@@ -50,12 +50,7 @@ export async function GET() {
     });
 
     if (!user) {
-      return createErrorResponse(
-        ErrorCodes.NOT_FOUND,
-        'User not found',
-        undefined,
-        404
-      );
+      return createErrorResponse(ErrorCodes.NOT_FOUND, 'User not found', undefined, 404);
     }
 
     return NextResponse.json({ user });
@@ -126,12 +121,7 @@ export async function PATCH(request: NextRequest) {
     });
 
     if (!user) {
-      return createErrorResponse(
-        ErrorCodes.NOT_FOUND,
-        'User not found',
-        undefined,
-        404
-      );
+      return createErrorResponse(ErrorCodes.NOT_FOUND, 'User not found', undefined, 404);
     }
 
     // Prepare update data

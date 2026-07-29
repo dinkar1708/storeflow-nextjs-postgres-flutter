@@ -34,7 +34,9 @@ export default function AdminProductsPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
-  const [filterStatus, setFilterStatus] = useState<typeof STATUS_FILTER_ALL | 'active' | 'inactive'>(STATUS_FILTER_ALL);
+  const [filterStatus, setFilterStatus] = useState<
+    typeof STATUS_FILTER_ALL | 'active' | 'inactive'
+  >(STATUS_FILTER_ALL);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -168,12 +170,16 @@ export default function AdminProductsPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <nav className={`bg-white shadow-sm border-b-4 ${userRole === UserRole.ADMIN ? 'border-red-600' : 'border-blue-600'}`}>
+      <nav
+        className={`bg-white shadow-sm border-b-4 ${userRole === UserRole.ADMIN ? 'border-red-600' : 'border-blue-600'}`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => router.push(userRole === UserRole.ADMIN ? '/admin/dashboard' : '/staff/dashboard')}
+                onClick={() =>
+                  router.push(userRole === UserRole.ADMIN ? '/admin/dashboard' : '/staff/dashboard')
+                }
                 className="text-gray-600 hover:text-gray-900"
               >
                 ← Back to Dashboard
@@ -181,7 +187,9 @@ export default function AdminProductsPage() {
               <h1 className="text-xl font-bold text-gray-900">Product Management</h1>
             </div>
             <div className="flex items-center">
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${userRole === UserRole.ADMIN ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>
+              <span
+                className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${userRole === UserRole.ADMIN ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}
+              >
                 {userRole}
               </span>
             </div>
@@ -210,9 +218,7 @@ export default function AdminProductsPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Search Input */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Search
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
                 <input
                   type="text"
                   placeholder="Search by name or SKU..."
@@ -224,9 +230,7 @@ export default function AdminProductsPage() {
 
               {/* Category Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Category
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                 <select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
@@ -243,12 +247,14 @@ export default function AdminProductsPage() {
 
               {/* Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Status
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <select
                   value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value as typeof STATUS_FILTER_ALL | 'active' | 'inactive')}
+                  onChange={(e) =>
+                    setFilterStatus(
+                      e.target.value as typeof STATUS_FILTER_ALL | 'active' | 'inactive'
+                    )
+                  }
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-red-500"
                 >
                   <option value="all">All Products</option>
@@ -282,9 +288,7 @@ export default function AdminProductsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Category *
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
                   <select
                     required
                     value={formData.categoryId}
@@ -415,18 +419,12 @@ export default function AdminProductsPage() {
                         <div className="text-sm text-gray-500">{product.description}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      {product.category.name}
-                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">{product.category.name}</td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       ${Number(product.price).toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      {product.stock}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
-                      {product.sku || '-'}
-                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">{product.stock}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{product.sku || '-'}</td>
                     <td className="px-6 py-4">
                       <span
                         className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${

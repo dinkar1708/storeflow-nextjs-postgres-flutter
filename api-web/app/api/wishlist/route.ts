@@ -25,12 +25,7 @@ export async function GET(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== UserRole.CUSTOMER) {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Customer access required',
-        undefined,
-        403
-      );
+      return createErrorResponse(ErrorCodes.FORBIDDEN, 'Customer access required', undefined, 403);
     }
 
     const items = await prisma.wishlist.findMany({
@@ -85,12 +80,7 @@ export async function POST(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== UserRole.CUSTOMER) {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Customer access required',
-        undefined,
-        403
-      );
+      return createErrorResponse(ErrorCodes.FORBIDDEN, 'Customer access required', undefined, 403);
     }
 
     const body = await request.json().catch(() => ({}));
@@ -140,10 +130,7 @@ export async function POST(request: NextRequest) {
       include: { product: { include: { category: true } } },
     });
 
-    return NextResponse.json(
-      { message: 'Product added to wishlist', item },
-      { status: 201 }
-    );
+    return NextResponse.json({ message: 'Product added to wishlist', item }, { status: 201 });
   } catch (error) {
     return handleApiError(error);
   }

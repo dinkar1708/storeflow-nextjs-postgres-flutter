@@ -60,12 +60,7 @@ export async function POST(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== UserRole.CUSTOMER) {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Customer access required',
-        undefined,
-        403
-      );
+      return createErrorResponse(ErrorCodes.FORBIDDEN, 'Customer access required', undefined, 403);
     }
 
     const body = await request.json();
@@ -81,7 +76,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Calculate total from items (or use provided total for backwards compatibility)
-    const total = requestTotal ||items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
+    const total =
+      requestTotal || items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
 
     // Generate unique order number
     const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
@@ -100,7 +96,9 @@ export async function POST(request: NextRequest) {
         }
 
         if (product.stock < item.quantity) {
-          throw new Error(`Insufficient stock for ${product.name}. Available: ${product.stock}, Requested: ${item.quantity}`);
+          throw new Error(
+            `Insufficient stock for ${product.name}. Available: ${product.stock}, Requested: ${item.quantity}`
+          );
         }
       }
 
@@ -228,12 +226,7 @@ export async function GET(request: NextRequest) {
         },
       });
     } else {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Invalid user role',
-        undefined,
-        403
-      );
+      return createErrorResponse(ErrorCodes.FORBIDDEN, 'Invalid user role', undefined, 403);
     }
 
     return NextResponse.json({ orders }, { status: 200 });

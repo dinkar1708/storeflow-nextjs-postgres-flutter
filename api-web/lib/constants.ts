@@ -71,7 +71,7 @@ export const ORDER_STATUS = {
   CANCELLED: 'CANCELLED',
 } as const;
 
-export type OrderStatus = typeof ORDER_STATUS[keyof typeof ORDER_STATUS];
+export type OrderStatus = (typeof ORDER_STATUS)[keyof typeof ORDER_STATUS];
 
 // ============================================================================
 // HTTP Status Codes (commonly used)

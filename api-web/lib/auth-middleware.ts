@@ -21,21 +21,11 @@ export async function requireAuth(request: NextRequest): Promise<NextResponse | 
   const user = await getApiUser(request);
 
   if (!user) {
-    return createErrorResponse(
-      ErrorCodes.UNAUTHORIZED,
-      'Authentication required',
-      undefined,
-      401
-    );
+    return createErrorResponse(ErrorCodes.UNAUTHORIZED, 'Authentication required', undefined, 401);
   }
 
   if (!user.isActive) {
-    return createErrorResponse(
-      ErrorCodes.FORBIDDEN,
-      'Account is inactive',
-      undefined,
-      403
-    );
+    return createErrorResponse(ErrorCodes.FORBIDDEN, 'Account is inactive', undefined, 403);
   }
 
   return user as AuthorizedUser;
@@ -86,7 +76,9 @@ export async function requireStaff(request: NextRequest): Promise<NextResponse |
 /**
  * Require customer role
  */
-export async function requireCustomer(request: NextRequest): Promise<NextResponse | AuthorizedUser> {
+export async function requireCustomer(
+  request: NextRequest
+): Promise<NextResponse | AuthorizedUser> {
   return requireRole(request, [UserRole.CUSTOMER]);
 }
 

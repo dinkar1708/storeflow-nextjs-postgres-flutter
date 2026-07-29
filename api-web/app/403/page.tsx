@@ -43,7 +43,8 @@ export default function ForbiddenPage() {
 
         <h1 className="text-3xl font-bold text-gray-900 mb-2">403 Forbidden</h1>
         <p className="text-gray-600 mb-6">
-          You do not have permission to access this page. This area is restricted to specific user roles.
+          You do not have permission to access this page. This area is restricted to specific user
+          roles.
         </p>
 
         {session?.user && (

@@ -62,24 +62,30 @@ export const updatePasswordSchema = z.object({
 // User Management Schemas
 // ============================================================================
 
-export const updateProfileSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(100, 'Name must be less than 100 characters').optional(),
-  email: z.string().email('Invalid email format').optional(),
-  newPassword: passwordSchema.optional(),
-  currentPassword: z.string().optional(),
-}).refine(
-  (data) => {
-    // If newPassword is provided, currentPassword must also be provided
-    if (data.newPassword && !data.currentPassword) {
-      return false;
+export const updateProfileSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, 'Name is required')
+      .max(100, 'Name must be less than 100 characters')
+      .optional(),
+    email: z.string().email('Invalid email format').optional(),
+    newPassword: passwordSchema.optional(),
+    currentPassword: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // If newPassword is provided, currentPassword must also be provided
+      if (data.newPassword && !data.currentPassword) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: 'Current password is required when changing password',
+      path: ['currentPassword'],
     }
-    return true;
-  },
-  {
-    message: 'Current password is required when changing password',
-    path: ['currentPassword'],
-  }
-);
+  );
 
 export const createUserSchema = z.object({
   email: z.string().email('Invalid email format'),
@@ -91,7 +97,11 @@ export const createUserSchema = z.object({
 });
 
 export const updateUserSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(100, 'Name must be less than 100 characters').optional(),
+  name: z
+    .string()
+    .min(1, 'Name is required')
+    .max(100, 'Name must be less than 100 characters')
+    .optional(),
   email: z.string().email('Invalid email format').optional(),
   role: z.enum(['ADMIN', 'STAFF', 'CUSTOMER']).optional(),
   isActive: z.boolean().optional(),
@@ -102,52 +112,77 @@ export const updateUserSchema = z.object({
 // ============================================================================
 
 export const createProductSchema = z.object({
-  name: z.string().min(1, 'Product name is required').max(200, 'Product name must be less than 200 characters'),
+  name: z
+    .string()
+    .min(1, 'Product name is required')
+    .max(200, 'Product name must be less than 200 characters'),
   description: z.string().optional(),
   price: z.union([
     z.number().positive('Price must be greater than 0'),
     z.string().transform((val, ctx) => {
       const num = parseFloat(val);
       if (isNaN(num) || num <= 0) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Price must be a valid positive number' });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Price must be a valid positive number',
+        });
         return z.NEVER;
       }
       return num;
-    })
+    }),
   ]),
-  costPrice: z.union([
-    z.number().positive().nullable(),
-    z.string().transform((val, ctx) => {
-      if (!val || val === '') return null;
-      const num = parseFloat(val);
-      if (isNaN(num) || num <= 0) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Cost price must be a valid positive number' });
-        return z.NEVER;
-      }
-      return num;
-    })
-  ]).optional().nullable(),
-  stock: z.union([
-    z.number().int().min(0, 'Stock cannot be negative'),
-    z.string().transform((val, ctx) => {
-      const num = parseInt(val, 10);
-      if (isNaN(num) || num < 0) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Stock must be a valid non-negative integer' });
-        return z.NEVER;
-      }
-      return num;
-    })
-  ]).optional(),
+  costPrice: z
+    .union([
+      z.number().positive().nullable(),
+      z.string().transform((val, ctx) => {
+        if (!val || val === '') return null;
+        const num = parseFloat(val);
+        if (isNaN(num) || num <= 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Cost price must be a valid positive number',
+          });
+          return z.NEVER;
+        }
+        return num;
+      }),
+    ])
+    .optional()
+    .nullable(),
+  stock: z
+    .union([
+      z.number().int().min(0, 'Stock cannot be negative'),
+      z.string().transform((val, ctx) => {
+        const num = parseInt(val, 10);
+        if (isNaN(num) || num < 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Stock must be a valid non-negative integer',
+          });
+          return z.NEVER;
+        }
+        return num;
+      }),
+    ])
+    .optional(),
   categoryId: z.string().min(1, 'Category is required'),
   sku: z.string().optional().nullable(),
   isActive: z.boolean().optional().default(true),
 });
 
 export const updateProductSchema = z.object({
-  name: z.string().min(1, 'Product name is required').max(200, 'Product name must be less than 200 characters').optional(),
+  name: z
+    .string()
+    .min(1, 'Product name is required')
+    .max(200, 'Product name must be less than 200 characters')
+    .optional(),
   description: z.string().min(1, 'Description is required').optional(),
   price: z.number().positive('Price must be greater than 0').optional(),
-  stock: z.number().int('Stock must be a whole number').min(0, 'Stock cannot be negative').optional(),
+  stock: z
+    .number()
+    .int('Stock must be a whole number')
+    .min(0, 'Stock cannot be negative')
+    .optional(),
   categoryId: z.string().uuid('Invalid category ID').optional(),
   imageUrl: z.string().url('Invalid image URL').optional(),
   isActive: z.boolean().optional(),
@@ -158,12 +193,19 @@ export const updateProductSchema = z.object({
 // ============================================================================
 
 export const createCategorySchema = z.object({
-  name: z.string().min(1, 'Category name is required').max(100, 'Category name must be less than 100 characters'),
+  name: z
+    .string()
+    .min(1, 'Category name is required')
+    .max(100, 'Category name must be less than 100 characters'),
   description: z.string().optional(),
 });
 
 export const updateCategorySchema = z.object({
-  name: z.string().min(1, 'Category name is required').max(100, 'Category name must be less than 100 characters').optional(),
+  name: z
+    .string()
+    .min(1, 'Category name is required')
+    .max(100, 'Category name must be less than 100 characters')
+    .optional(),
   description: z.string().optional(),
 });
 
@@ -173,7 +215,10 @@ export const updateCategorySchema = z.object({
 
 export const orderItemSchema = z.object({
   productId: z.string().uuid('Invalid product ID'),
-  quantity: z.number().int('Quantity must be a whole number').positive('Quantity must be greater than 0'),
+  quantity: z
+    .number()
+    .int('Quantity must be a whole number')
+    .positive('Quantity must be greater than 0'),
   price: z.number().positive('Price must be greater than 0'),
 });
 

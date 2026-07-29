@@ -31,7 +31,7 @@ export default function CartPage() {
       setPlacing(true);
 
       const orderData = {
-        items: cart.map(item => ({
+        items: cart.map((item) => ({
           productId: item.id,
           quantity: item.quantity,
           price: item.price,
@@ -49,7 +49,9 @@ export default function CartPage() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(`Order placed successfully!\nOrder ID: ${data.order.id}\nTotal: $${getCartTotal().toFixed(2)}\n\nPayment Method: ${paymentMethod.toUpperCase()}`);
+        alert(
+          `Order placed successfully!\nOrder ID: ${data.order.id}\nTotal: $${getCartTotal().toFixed(2)}\n\nPayment Method: ${paymentMethod.toUpperCase()}`
+        );
         clearCart();
         router.push('/customer/orders');
       } else {
@@ -213,9 +215,7 @@ export default function CartPage() {
                     onClick={handlePlaceOrder}
                     disabled={placing}
                     className={`w-full px-6 py-3 rounded-md font-medium text-lg mb-3 ${
-                      placing
-                        ? 'bg-gray-400 cursor-not-allowed'
-                        : 'bg-green-600 hover:bg-green-700'
+                      placing ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
                     } text-white`}
                   >
                     {placing ? 'Placing Order...' : 'Place Order'}

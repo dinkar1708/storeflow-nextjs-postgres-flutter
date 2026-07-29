@@ -43,10 +43,11 @@ export async function validateRequest<T>(
     // Handle Zod validation errors
     if (error instanceof ZodError) {
       // Format Zod errors into user-friendly messages
-      const errors = error.issues?.map((err) => ({
-        field: err.path.join('.'),
-        message: err.message,
-      })) || [];
+      const errors =
+        error.issues?.map((err) => ({
+          field: err.path.join('.'),
+          message: err.message,
+        })) || [];
 
       // In development, include detailed error information
       const isDevelopment = process.env.NODE_ENV === 'development';
@@ -69,23 +70,13 @@ export async function validateRequest<T>(
     // Handle JSON parsing errors
     if (error instanceof SyntaxError) {
       return {
-        error: createErrorResponse(
-          ErrorCodes.INVALID_INPUT,
-          'Invalid JSON format',
-          error,
-          400
-        ),
+        error: createErrorResponse(ErrorCodes.INVALID_INPUT, 'Invalid JSON format', error, 400),
       };
     }
 
     // Handle other unexpected errors
     return {
-      error: createErrorResponse(
-        ErrorCodes.INVALID_INPUT,
-        'Invalid request body',
-        error,
-        400
-      ),
+      error: createErrorResponse(ErrorCodes.INVALID_INPUT, 'Invalid request body', error, 400),
     };
   }
 }
@@ -97,19 +88,17 @@ export async function validateRequest<T>(
  * @param schema - Zod schema to validate against
  * @returns Validated data or error response
  */
-export function validateParams<T>(
-  params: unknown,
-  schema: z.ZodSchema<T>
-): ValidationResult<T> {
+export function validateParams<T>(params: unknown, schema: z.ZodSchema<T>): ValidationResult<T> {
   try {
     const validatedData = schema.parse(params);
     return { data: validatedData };
   } catch (error) {
     if (error instanceof ZodError) {
-      const errors = error.issues?.map((err) => ({
-        field: err.path.join('.'),
-        message: err.message,
-      })) || [];
+      const errors =
+        error.issues?.map((err) => ({
+          field: err.path.join('.'),
+          message: err.message,
+        })) || [];
 
       const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -129,12 +118,7 @@ export function validateParams<T>(
     }
 
     return {
-      error: createErrorResponse(
-        ErrorCodes.INVALID_INPUT,
-        'Invalid parameters',
-        error,
-        400
-      ),
+      error: createErrorResponse(ErrorCodes.INVALID_INPUT, 'Invalid parameters', error, 400),
     };
   }
 }
@@ -163,10 +147,11 @@ export function validateQuery<T>(
     return { data: validatedData };
   } catch (error) {
     if (error instanceof ZodError) {
-      const errors = error.issues?.map((err) => ({
-        field: err.path.join('.'),
-        message: err.message,
-      })) || [];
+      const errors =
+        error.issues?.map((err) => ({
+          field: err.path.join('.'),
+          message: err.message,
+        })) || [];
 
       const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -186,12 +171,7 @@ export function validateQuery<T>(
     }
 
     return {
-      error: createErrorResponse(
-        ErrorCodes.INVALID_INPUT,
-        'Invalid query parameters',
-        error,
-        400
-      ),
+      error: createErrorResponse(ErrorCodes.INVALID_INPUT, 'Invalid query parameters', error, 400),
     };
   }
 }

@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getApiUser } from '@/lib/api-session';
 import { prisma } from '@/lib/prisma';
-import { createErrorResponse, ErrorCodes, handleApiError, handlePrismaError } from '@/lib/error-handler';
+import {
+  createErrorResponse,
+  ErrorCodes,
+  handleApiError,
+  handlePrismaError,
+} from '@/lib/error-handler';
 import { validateRequestBody } from '@/lib/validate-request';
 import { createProductSchema } from '@/lib/validations';
 
@@ -27,12 +32,7 @@ export async function GET(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== 'ADMIN') {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Admin access required',
-        undefined,
-        403
-      );
+      return createErrorResponse(ErrorCodes.FORBIDDEN, 'Admin access required', undefined, 403);
     }
 
     const products = await prisma.product.findMany({
@@ -99,12 +99,7 @@ export async function POST(request: NextRequest) {
     const user = await getApiUser(request);
 
     if (!user || user.role !== 'ADMIN') {
-      return createErrorResponse(
-        ErrorCodes.FORBIDDEN,
-        'Admin access required',
-        undefined,
-        403
-      );
+      return createErrorResponse(ErrorCodes.FORBIDDEN, 'Admin access required', undefined, 403);
     }
 
     const body = await request.json();

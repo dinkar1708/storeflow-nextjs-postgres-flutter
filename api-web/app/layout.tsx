@@ -7,11 +7,7 @@ export const metadata: Metadata = {
   description: 'Production-ready inventory and order management platform',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className="antialiased">

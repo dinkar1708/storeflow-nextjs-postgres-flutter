@@ -1,10 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, afterAll } from 'vitest';
-import {
-  createTestUser,
-  deleteTestUser,
-  loginUser,
-  closePrisma,
-} from '../helpers/test-utils.js';
+import { createTestUser, deleteTestUser, loginUser, closePrisma } from '../helpers/test-utils.js';
 
 describe('Login API', () => {
   let testUser;
@@ -46,10 +41,7 @@ describe('Login API', () => {
     });
 
     it('should handle login with non-existent user', async () => {
-      const response = await loginUser(
-        'nonexistent@example.com',
-        'SomePassword123'
-      );
+      const response = await loginUser('nonexistent@example.com', 'SomePassword123');
 
       // NextAuth returns 200 but auth fails
       expect(response.status).toBeGreaterThanOrEqual(200);

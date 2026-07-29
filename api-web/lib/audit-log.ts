@@ -79,11 +79,12 @@ export function getIpAddress(request: NextRequest): string | null {
 export async function createAuditLog(data: AuditLogData): Promise<void> {
   try {
     // Convert details object to JSON string if needed
-    const detailsString = typeof data.details === 'string'
-      ? data.details
-      : data.details
-        ? JSON.stringify(data.details)
-        : null;
+    const detailsString =
+      typeof data.details === 'string'
+        ? data.details
+        : data.details
+          ? JSON.stringify(data.details)
+          : null;
 
     await prisma.auditLog.create({
       data: {
@@ -105,7 +106,11 @@ export async function createAuditLog(data: AuditLogData): Promise<void> {
  * Log authentication events
  */
 export async function logAuthEvent(
-  action: AuditAction.LOGIN_SUCCESS | AuditAction.LOGIN_FAILED | AuditAction.LOGOUT | AuditAction.REGISTER,
+  action:
+    | AuditAction.LOGIN_SUCCESS
+    | AuditAction.LOGIN_FAILED
+    | AuditAction.LOGOUT
+    | AuditAction.REGISTER,
   userId: string | null,
   email: string,
   ipAddress: string | null

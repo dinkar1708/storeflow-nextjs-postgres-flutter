@@ -64,7 +64,9 @@ export default function StaffDashboard() {
           <div className="relative overflow-hidden rounded-2xl px-6 py-7 mb-6 text-white bg-gradient-to-br from-sky-600 via-blue-700 to-indigo-800 shadow-xl shadow-sky-500/30">
             <div className="pointer-events-none absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_white,_transparent_55%)]" />
             <div className="relative">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200">Fulfillment</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200">
+                Fulfillment
+              </span>
               <h2 className="mt-1 text-3xl font-bold">Welcome, {session.user?.name} 🚚</h2>
               <p className="text-white/80 mt-1">Inventory and order management workspace.</p>
 
@@ -111,7 +113,6 @@ export default function StaffDashboard() {
               <p className="mt-1 text-xs text-gray-500">Below 10 items</p>
             </div>
           </div>
-
         </div>
       </main>
     </div>

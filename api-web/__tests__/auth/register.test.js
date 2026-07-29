@@ -1,9 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest';
-import {
-  registerUser,
-  deleteTestUserByEmail,
-  closePrisma,
-} from '../helpers/test-utils.js';
+import { registerUser, deleteTestUserByEmail, closePrisma } from '../helpers/test-utils.js';
 
 describe('Registration API', () => {
   const testEmails = [];
