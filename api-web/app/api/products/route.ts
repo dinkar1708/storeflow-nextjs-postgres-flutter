@@ -56,8 +56,26 @@ export async function GET(request: NextRequest) {
       where: {
         isActive: true,
       },
-      include: {
-        category: true,
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        // Exclude costPrice for security - only admins should see it
+        stock: true,
+        sku: true,
+        images: true,
+        isActive: true,
+        categoryId: true,
+        createdAt: true,
+        updatedAt: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',
