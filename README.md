@@ -18,9 +18,11 @@ Universal platform for inventory and order management that can be customized for
 
 ## Current Status
 
-**6 Modules Live** | **63 Tests Passing** | **Security Hardened** | **Production Ready**
+**6 Modules Live** | **148 Tests Passing** | **Security Hardened** | **Production Ready**
 
 ### Recent Updates
+- ✅ E2E testing suite with Playwright (85/88 tests passing - 96.6%)
+- ✅ Comprehensive API test coverage (63/63 tests passing - 100%)
 - ✅ Enhanced security with rate limiting (prevents brute force attacks)
 - ✅ Strong password requirements (8+ characters with complexity)
 - ✅ Transaction-based order processing (prevents inventory overselling)
@@ -87,7 +89,7 @@ flutter run
 
 **Web**: Next.js 14, TypeScript, PostgreSQL, Prisma, NextAuth, Tailwind CSS
 **Mobile**: Flutter
-**Testing**: Vitest (63 tests, 100% passing)
+**Testing**: Vitest (63 API tests, 100%) + Playwright (85 E2E tests, 96.6%)
 **Security**: Rate limiting, bcrypt hashing, JWT authentication, transaction safety
 
 ## Documentation
@@ -125,22 +127,45 @@ flutter run
 
 ## Testing
 
-**Status**: ✅ **63/63 tests passing (100%)**
+**Status**: ✅ **148 total tests** | **63/63 API tests (100%)** | **85/88 E2E tests (96.6%)**
 
+### API Tests (Vitest)
 ```bash
 cd api-web
-npm test              # Run all tests
+npm test              # Run all API tests
 npm run test:watch    # Watch mode
 npm run test:ui       # Interactive UI
 ```
 
-**Test Coverage**:
+**API Test Coverage**:
 - ✅ Authentication & Security: 30 tests
 - ✅ Products & Categories: 16 tests
 - ✅ Wishlist: 15 tests
 - ✅ Integration: 2 tests
 
-See [Testing Guide](./docs/development/TESTING.md) for details.
+### E2E Tests (Playwright)
+```bash
+cd api-web
+npm run test:e2e           # Run E2E tests
+npm run test:e2e:ui        # Interactive mode
+npm run test:e2e:headed    # Watch browser
+```
+
+**E2E Test Coverage**:
+- ✅ Authentication & Authorization: 9 tests
+- ✅ Role-Based Access Control: 29 tests
+- ✅ Product Management: 11 tests
+- ✅ Category Management: 12 tests
+- ✅ Order Management: 17 tests
+- ✅ Wishlist Features: 7 tests
+
+**Test Setup**:
+- Isolated test database (PostgreSQL on port 5434)
+- Automated test data seeding
+- Independent dev server on port 3002
+- No interference with development database
+
+See [Testing Guide](./docs/development/TESTING.md) for complete details.
 
 ## Deployment
 

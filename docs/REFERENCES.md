@@ -76,11 +76,27 @@ This document lists official documentation and best practices we follow for buil
 
 14. **Vitest Documentation**
     - https://vitest.dev
-    - **Why:** Testing framework (Vite-native)
+    - **Why:** API integration testing framework (Vite-native)
 
 15. **Supertest**
     - https://github.com/ladjs/supertest
     - **Why:** HTTP API endpoint testing
+
+16. **Playwright Documentation**
+    - https://playwright.dev
+    - **Why:** End-to-end (E2E) testing framework
+
+17. **Playwright Best Practices**
+    - https://playwright.dev/docs/best-practices
+    - **Why:** E2E testing patterns and strategies
+
+18. **Testing Pyramid - Martin Fowler**
+    - https://martinfowler.com/articles/practical-test-pyramid.html
+    - **Why:** Testing strategy (Unit → Integration → E2E)
+
+19. **Kent C. Dodds - Testing Best Practices**
+    - https://kentcdodds.com/blog/write-tests
+    - **Why:** Test writing philosophy and patterns
 
 ---
 
@@ -137,8 +153,10 @@ This document lists official documentation and best practices we follow for buil
 - Add **indexes** for frequently queried fields
 
 ### Testing
-- Use **Vitest** for all tests
+- Use **Vitest** for API integration tests
 - Test API endpoints with **Supertest**
+- Use **Playwright** for E2E tests with real database
+- Follow **Testing Pyramid**: Unit → Integration → E2E
 - Target **80%+ code coverage**
 
 ### Code Quality
@@ -173,13 +191,21 @@ This document lists official documentation and best practices we follow for buil
 
 ## Project Documentation
 
+### Core Guides
 - [Security Guide](/docs/security/SECURITY.md)
 - [Error Handling Guide](/docs/development/ERROR_HANDLING.md)
 - [Setup with Docker](/docs/getting-started/SETUP_WITH_DOCKER.md)
 - [Production Deployment](/docs/core/deployment/PROD_DEPLOYMENT.md)
 
+### Testing Documentation
+- [Testing Overview](/docs/testing/README.md) - Main testing guide
+- [API Testing](/docs/testing/api-testing.md) - Vitest + Supertest guide
+- [E2E Testing](/docs/testing/e2e-testing/README.md) - Playwright guide
+- [Running Tests](/docs/testing/running-tests.md) - Quick reference
+- [Test Isolation Setup](/docs/testing/test-isolation-setup.md) - Isolated test database
+
 ---
 
-**Last Updated**: 2026-07-28
+**Last Updated**: 2026-07-30
 
 **Note:** Update this document when adopting new tools or finding broken links.

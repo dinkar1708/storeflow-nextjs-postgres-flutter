@@ -6,6 +6,7 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     setupFiles: [],
+    exclude: ['**/node_modules/**', '**/e2e/**'], // Exclude E2E tests (use Playwright)
     env: {
       NODE_ENV: 'test',
     },

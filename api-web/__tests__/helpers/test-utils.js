@@ -4,7 +4,13 @@ import bcrypt from 'bcryptjs';
 import { UserRole } from '../../lib/enums.ts';
 
 const prisma = new PrismaClient();
-const BASE_URL = 'http://localhost:3001';
+
+// BASE_URL must come from environment (NEXTAUTH_URL)
+// This ensures tests use correct environment (dev or test)
+if (!process.env.NEXTAUTH_URL) {
+  throw new Error('NEXTAUTH_URL environment variable is required for tests');
+}
+const BASE_URL = process.env.NEXTAUTH_URL;
 
 // Test user management
 export async function createTestUser(overrides = {}) {

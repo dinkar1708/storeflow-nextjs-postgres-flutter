@@ -11,9 +11,16 @@ interface Product {
   description: string;
   price: number;
   stock: number;
+  sku: string;
+  images: string[];
+  isActive: boolean;
+  categoryId: string;
+  createdAt: string;
+  updatedAt: string;
   category: {
     id: string;
     name: string;
+    description: string;
   };
 }
 

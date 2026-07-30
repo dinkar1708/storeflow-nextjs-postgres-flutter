@@ -1,0 +1,36 @@
+import { defineConfig, devices } from '@playwright/test';
+
+/**
+ * Playwright configuration for StoreFlow E2E tests
+ * See https://playwright.dev/docs/test-configuration
+ */
+export default defineConfig({
+  testDir: './e2e',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
+  globalSetup: require.resolve('./e2e/global-setup'),
+  use: {
+    baseURL: process.env.NEXTAUTH_URL || 'http://localhost:3002',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+  },
+
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+
+  /* Run your local dev server before starting the tests */
+  webServer: {
+    command: 'npm run dev',
+    url: process.env.NEXTAUTH_URL || 'http://localhost:3002',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+  },
+});

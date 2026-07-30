@@ -26,7 +26,9 @@ Visit: http://localhost:3000
 
 ## Testing
 
-This project uses Vitest for testing, following industry-standard patterns recommended by:
+### API Integration Tests (Vitest)
+
+This project uses Vitest for API integration testing, following industry-standard patterns recommended by:
 
 - Vitest Official Documentation: https://vitest.dev/
 - Testing Pyramid - Martin Fowler: https://martinfowler.com/articles/practical-test-pyramid.html
@@ -38,7 +40,7 @@ Quick Start:
 # Start dev server first
 npm run dev
 
-# Run tests (in another terminal)
+# Run API tests (in another terminal)
 npm test
 
 # Watch mode
@@ -47,6 +49,41 @@ npm run test:watch
 # Interactive UI
 npm run test:ui
 ```
+
+### E2E Tests (Playwright)
+
+**Full end-to-end testing with real database operations**
+
+```bash
+# One-time setup: Seed database
+npm run db:seed
+
+# Run E2E tests (tests all user roles and pages)
+npm run test:e2e
+
+# Run with UI mode (best for development)
+npm run test:e2e:ui
+
+# View test report
+npx playwright show-report
+```
+
+**What's Tested:**
+- ✅ All user roles: Customer, Admin, Staff, Guest
+- ✅ All pages: Dashboard, Products, Orders, Cart, Wishlist, Profile, Analytics
+- ✅ Real database operations: CRUD, transactions, RBAC
+- ✅ Complete user flows: Login → Browse → Checkout
+
+**Test Users:**
+```
+Customer: customer@storeflow.com / Customer@123
+Admin:    admin@storeflow.com    / Admin@123
+Staff:    staff@storeflow.com    / Staff@123
+```
+
+📖 **Full E2E Documentation:**
+- [Quick Start Guide](./docs/testing/e2e/E2E_QUICK_START.md)
+- [Complete E2E Testing Guide](./docs/testing/e2e/E2E_TESTING.md)
 
 Test Results:
 Results are automatically saved to `docs/test-result/` after each test run:

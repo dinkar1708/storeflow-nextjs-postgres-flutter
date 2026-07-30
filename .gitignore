@@ -13,3 +13,11 @@ api-web/.env.development
 # OS files
 .DS_Store
 Thumbs.db
+
+# Playwright test artifacts
+test-results/
+playwright-report/
+.last-run.json
+api-web/test-results/
+api-web/playwright-report/
+api-web/.last-run.json
